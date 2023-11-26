@@ -7,6 +7,15 @@ class Light extends MovableObject {
         super().loadImage('img/3. Background/Layers/1. Light/1.png');
 
         this.x = Math.random() * 500; // starting point: 200px; pufferfish will spawn somewhere between 200 and 700
+        this.animate();
 
+    }
+
+
+    animate() {
+        setInterval(() => {
+            this.x -= 0.15;
+        }, 1000 / 60); // 60 FPS
+        // 0,15px werden 60 mal pro Sekunde abgezogen
     }
 }
