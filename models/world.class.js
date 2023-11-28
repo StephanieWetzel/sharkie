@@ -16,11 +16,20 @@ class World {
     ];
     canvas;
     ctx;
+    keyboard;
 
-    constructor(canvas) { // Variable aus game.js wird übergeben
+
+    constructor(canvas, keyboard) { // Variable aus game.js wird übergeben
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas; // Wert von canvas aus der game.js wird an das World-canvas übergeben (this.canvas bezieht sich auf Variable, die oben definiert ist)
+        this.keyboard = keyboard;
         this.draw();
+        this.setWorld();
+    }
+
+
+    setWorld() {
+        this.character.world = this; // this greift auf diese Welt zu
     }
 
 
