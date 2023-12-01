@@ -7,6 +7,7 @@ class MovableObject {
     imageCache = {}; // JSON benutzt, da somit auf eine Stelle direkt zugegriffen werden kann
     currentImage = 0; // Variable, um aktuelles Bild anzuzeigen bzw. zu verändern
     speed = 0.15;
+    otherDirection = false; // sagt aus, ob Bild gespiegelt wird
 
 
     // how to use: loadImage('img/test.png');

@@ -1,46 +1,38 @@
 class World {
     character = new Character();
-    enemies = [
-        new PufferFish(),
-        new PufferFish(),
-        new PufferFish()
-    ];
-    lights = [
-        new Light()
-    ];
-    backgroundObjects = [
-        new BackgroundObject('img/3. Background/Layers/5. Water/D.png', 0),
-        new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D.png', 0),
-        new BackgroundObject('img/3. Background/Layers/3.Fondo 1/D.png', 0),
-        new BackgroundObject('img/3. Background/Layers/2. Floor/D.png', 0)
-    ];
+    level = level1; // damit können wir auf die Variablen aus level1 zugreifen (enemies, lights und backgroundobjects)
     canvas;
     ctx;
     keyboard;
+    camera_x = 0; // damit können wir die Welt auf der X-Achse verschieben
 
 
     constructor(canvas, keyboard) { // Variable aus game.js wird übergeben
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas; // Wert von canvas aus der game.js wird an das World-canvas übergeben (this.canvas bezieht sich auf Variable, die oben definiert ist)
-        this.keyboard = keyboard;
+        this.keyboard = keyboard; // keyboard aus dieser Klasse bekommt den Wert von keyboard aus game.js übergeben
         this.draw();
         this.setWorld();
     }
 
 
-    setWorld() {
-        this.character.world = this; // this greift auf diese Welt zu
+    setWorld() { // Klasse World an den character übergeben
+        this.character.world = this; // this.character.world -> auf world in character zugreifen; = this -> world in character bekommt Wert aus DIESER world (somit kann auf Variablen wie keyboard zugegriffen werden)
     }
 
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // this.canvas = canvas -> wird zu Beginn geleert
-        // draw figures (order matters!! - backgroundObjects first):
-        this.addObjectsToMap(this.backgroundObjects);
-        this.addToMap(this.character);
-        this.addObjectsToMap(this.enemies);
-        this.addObjectsToMap(this.lights);
+        // this.camera_x hat den Wert von der Klasse Character und wird entsprechend dem Character verschoben (s. Klasse Character)
+        this.ctx.translate(this.camera_x, 0); // schiebt ctx nach links; 0 bezeht sich darauf, wie weit die y-Achse verschoben werden soll (translate benötigt immer zwei Argumente, also (x, y))
 
+        // draw figures (order matters!! - backgroundObjects first):
+        this.addObjectsToMap(this.level.backgroundObjects);
+        this.addToMap(this.character);
+        this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.level.lights);
+
+        this.ctx.translate(-this.camera_x, 0); // -this bewirkt das Gegenteil = schiebt ctx wieder nach rechts; wird benötigt, da Welt ansonsten bei jedem Aufruf von draw() weiter nach links geschoben wird - Programm stürzt ab
 
         // draw() wird immer wieder aufgerufen / wird benötigt, um die Charaktere gleich zu Beginn (sobald die Seite fertig geladen hat) anzuzeigen
         let self = this;
@@ -58,6 +50,28 @@ class World {
 
 
     addToMap(mo) { // mo = movableObject
-        this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height);
+        if (mo.otherDirection) {
+            this.flipImage(mo);
+        }
+
+        this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height); // setzt Bild spiegelverkehrt ins Canvas
+
+        if (mo.otherDirection) {
+            this.flipImageBack(mo); // ctx wird wieder normal angezeigt (sorgt dafür, dass alle anderen Bilder NICHT spiegelverkehrt gezeichnet werden)
+        }
+    }
+
+
+    flipImage(mo) {
+        this.ctx.save(); // speichert Eigenschaften von ctx (dass alle Bilder standardmäßig NICHT spiegelverkehrt gezeichnet werden)
+        this.ctx.translate(mo.width, 0); // Canvas wird um die Breite des Charakters nach rechts verschoben, da nun rechts oben (und nicht mehr links oben) angefangen wird zu zeichnen -> Canvas wird um die Differenz dieser zwei Punkte verschoben
+        this.ctx.scale(-1, 1); // Bild wird horizontal gespiegelt
+        mo.x = mo.x * -1; // X-Koordinate wird umgedreht (notwendig, da wir zuvor mit scale -1 das Bild gespiegelt haben)
+    }
+
+
+    flipImageBack(mo) {
+        mo.x = mo.x * -1;
+        this.ctx.restore(); // setzt ctx wieder zurück auf den Stand von save() (s. flipImage())
     }
 }
