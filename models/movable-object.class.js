@@ -41,4 +41,13 @@ class MovableObject {
         }, 1000 / 60); // 60 FPS
         // 0,15px werden 60 mal pro Sekunde abgezogen
     }
+
+
+    playAnimation(images) {
+        let i = this.currentImage % this.IMAGES_SWIMMING.length; // modulo = mathematischer Rest => Bsp. 6 % 6 (Länge Array) = 6 : 6 = 1, Rest 0 => modulo hebt nur Rest auf, also ist currentImage wieder 0
+        // i = 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 1, ... => fängt immer wieder von vorn an (character bleibt in Bewegung)
+        let path = images[i];
+        this.img = this.imageCache[path]; // this.img refers to movableObjects; current img being replaced
+        this.currentImage++; // next img
+    }
 }
