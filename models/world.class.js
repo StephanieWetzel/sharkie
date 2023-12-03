@@ -57,7 +57,6 @@ class World {
         mo.draw(this.ctx);
         mo.drawFrame(this.ctx);
 
-
         if (mo.otherDirection) {
             this.flipImageBack(mo); // ctx wird wieder normal angezeigt (sorgt dafür, dass alle anderen Bilder NICHT spiegelverkehrt gezeichnet werden)
         }
