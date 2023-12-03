@@ -27,13 +27,13 @@ class Character extends MovableObject {
         // character moves right or left (forward or backward)
         setInterval(() => {
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-                this.x += this.speed;
+                this.moveRight();
                 this.otherDirection = false; // img not mirrored
                 this.swimming_sound.play();
             }
 
             if (this.world.keyboard.LEFT && this.x > 0) {
-                this.x -= this.speed;
+                this.moveLeft();
                 this.otherDirection = true; // img mirrored
                 this.swimming_sound.play();
             }

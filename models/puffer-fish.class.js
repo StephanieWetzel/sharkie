@@ -22,7 +22,10 @@ class PufferFish extends MovableObject {
 
 
     animate() { // aktuelles Bild wird immer wieder ausgetauscht, damit character sich bewegt
-        this.moveLeft();
+        setInterval(() => {
+            this.moveLeft();
+        }, 1000 / 60); // 60 FPS
+
         setInterval(() => {
             this.playAnimation(this.IMAGES_SWIMMING); // s. movable-objects.js
         }, 200);
