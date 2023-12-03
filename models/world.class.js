@@ -54,14 +54,9 @@ class World {
             this.flipImage(mo);
         }
 
-        this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height); // setzt Bild spiegelverkehrt ins Canvas
+        mo.draw(this.ctx);
+        mo.drawFrame(this.ctx);
 
-        // Red rectangle
-        this.ctx.beginPath();
-        this.ctx.lineWidth = '5';
-        this.ctx.strokeStyle = 'red';
-        this.ctx.rect(mo.x, mo.y, mo.x + mo.width, mo.y + mo.height); // mo.x + mo.width, mo.y + mo.height = endpoints of rectangle
-        this.ctx.stroke();
 
         if (mo.otherDirection) {
             this.flipImageBack(mo); // ctx wird wieder normal angezeigt (sorgt dafür, dass alle anderen Bilder NICHT spiegelverkehrt gezeichnet werden)
