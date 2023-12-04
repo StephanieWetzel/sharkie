@@ -21,10 +21,10 @@ class World {
         setInterval(() => {
             this.level.enemies.forEach((enemy) => { // das Gleiche wie for-Schleife
                 if (this.character.isColliding(enemy)) {
-                    console.log('Collision with Character', enemy);
+                    this.character.hit();
                 }
             });
-        }, 1000);
+        }, 200);
     }
 
 
