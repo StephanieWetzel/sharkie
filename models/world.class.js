@@ -13,6 +13,18 @@ class World {
         this.keyboard = keyboard; // keyboard aus dieser Klasse bekommt den Wert von keyboard aus game.js übergeben
         this.draw();
         this.setWorld();
+        this.checkCollisions();
+    }
+
+
+    checkCollisions() {
+        setInterval(() => {
+            this.level.enemies.forEach((enemy) => { // das Gleiche wie for-Schleife
+                if (this.character.isColliding(enemy)) {
+                    console.log('Collision with Character', enemy);
+                }
+            });
+        }, 1000);
     }
 
 

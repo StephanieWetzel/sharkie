@@ -34,6 +34,14 @@ class MovableObject {
     }
 
 
+    isColliding(mo) {
+        return (this.x + this.width) >= mo.x && this.x <= (mo.x + mo.width) &&
+            (this.y + this.height) >= mo.y &&
+            (this.y) <= (mo.y + mo.height);
+        // mo.onCollisionCourse; // Optional: hiermit könnten wir schauen, ob ein Objekt sich in die richtige Richtung bewegt. Nur dann kollidieren wir. Nützlich bei Gegenständen, auf denen man stehen kann.
+    }
+
+
     /**
      * 
      * @param {Array} arr - ['img/image1.png', 'img/image2.png', ...]
@@ -54,6 +62,15 @@ class MovableObject {
 
     moveLeft() {
         this.x -= this.speed;
+    }
+
+
+    moveUp() {
+        this.y -= this.speed;
+    }
+
+    moveDown() {
+        this.y += this.speed;
     }
 
 
