@@ -5,6 +5,7 @@ class World {
     ctx;
     keyboard;
     camera_x = 0; // damit können wir die Welt auf der X-Achse verschieben
+    statusBar = new StatusBar();
 
 
     constructor(canvas, keyboard) { // Variable aus game.js wird übergeben
@@ -22,6 +23,7 @@ class World {
             this.level.enemies.forEach((enemy) => { // das Gleiche wie for-Schleife
                 if (this.character.isColliding(enemy)) {
                     this.character.hit();
+                    this.statusBar.setPercentage(this.character.health); // health bar now shows current health of character
                 }
             });
         }, 200);
@@ -40,9 +42,14 @@ class World {
 
         // draw figures (order matters!! - backgroundObjects first):
         this.addObjectsToMap(this.level.backgroundObjects);
+
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.lights);
+        // statusbar:
+        this.ctx.translate(-this.camera_x, 0); // Koordinatensystem wird zurückverschoben (Originalposition)
+        this.addToMap(this.statusBar); // StatusBar wird gezeichnet
+        this.ctx.translate(this.camera_x, 0); // Koordinatensystem wird nach vorne geschoben, damit Objekte mit dem Charakter wandern
 
         this.ctx.translate(-this.camera_x, 0); // -this bewirkt das Gegenteil = schiebt ctx wieder nach rechts; wird benötigt, da Welt ansonsten bei jedem Aufruf von draw() weiter nach links geschoben wird - Programm stürzt ab
 
