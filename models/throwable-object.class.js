@@ -11,24 +11,24 @@ class ThrowableObject extends MovableObject {
     ];
 
 
-    constructor(x, y) {
+    constructor() {
         super();
-        this.loadImage('img/4. Marcadores/Posión/Animada/1.png');
+        // this.loadImage('img/4. Marcadores/Posión/Animada/1.png');
         this.loadImages(this.IMAGES_POISON_BOTTLE);
-        // this.playAnimation(this.IMAGES_POISON_BOTTLE);
-        this.x = x;
-        this.y = y;
+        this.playAnimation(this.IMAGES_POISON_BOTTLE);
+        this.x = 500 + Math.random() * 2000;
+        this.y = Math.random() * 500;
         this.height = 60;
         this.width = 50;
-        this.shoot();
+        // this.shoot();
     }
 
 
-    shoot() {
-        // this.speed = 3;
-        setInterval(() => {
-            this.x += 30;
-        }, 25);
+    // shoot() {
+    //     // this.speed = 3;
+    //     setInterval(() => {
+    //         this.x += 30;
+    //     }, 25);
 
-    }
+    // }
 }

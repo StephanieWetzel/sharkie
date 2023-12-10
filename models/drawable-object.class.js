@@ -21,7 +21,7 @@ class DrawableObject {
 
 
     drawFrame(ctx) {
-        if (this instanceof Character || this instanceof PufferFish) { // instanceof = only executes function for character and pufferfish
+        if (this instanceof Character || this instanceof PufferFish || this instanceof Endboss) { // instanceof = only executes function for character and pufferfish
             // Red rectangle
             ctx.beginPath();
             ctx.lineWidth = '5';

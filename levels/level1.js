@@ -9,6 +9,16 @@ const level1 = new Level(
         new Light()
     ],
     [
+        new ThrowableObject(),
+        new ThrowableObject(),
+        new ThrowableObject(),
+        new ThrowableObject(),
+        new ThrowableObject(),
+        new ThrowableObject(),
+        new ThrowableObject(),
+        new ThrowableObject()
+    ],
+    [
         // evtl. mit for-Schleife lösen
         new BackgroundObject('img/3. Background/Layers/5. Water/D.png', -1500),
         new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D.png', -1500),

@@ -1,5 +1,5 @@
 class StatusBarBottles extends DrawableObject {
-    IMAGES_STATUS_BAR_BOTTLES = [
+    IMAGES = [
         'img/4. Marcadores/green/poisoned bubbles/0_ copia 2.png', // img 0
         'img/4. Marcadores/green/poisoned bubbles/20_ copia 3.png',
         'img/4. Marcadores/green/poisoned bubbles/40_ copia 2.png',
@@ -13,18 +13,18 @@ class StatusBarBottles extends DrawableObject {
 
     constructor() {
         super();
-        this.loadImages(this.IMAGES_STATUS_BAR_BOTTLES);
+        this.loadImages(this.IMAGES);
         this.x = 40;
         this.y = 0;
         this.width = 200;
         this.height = 60;
-        this.setPercentage(100);
+        this.setPercentage(0);
     }
 
 
     setPercentage(percentage) {
         this.percentage = percentage;
-        let path = this.IMAGES_STATUS_BAR_BOTTLES[this.getImageIndex()];
+        let path = this.IMAGES[this.getImageIndex()];
         this.img = this.imageCache[path]; // current img is replaced, depending on the status of health bar
     }
 
