@@ -5,7 +5,9 @@ class World {
     ctx;
     keyboard;
     camera_x = 0; // damit können wir die Welt auf der X-Achse verschieben
-    statusBar = new StatusBar();
+    statusBarHealth = new StatusBarHealth();
+    statusBarBottles = new StatusBarBottles();
+    throwableObjects = [];
 
 
     constructor(canvas, keyboard) { // Variable aus game.js wird übergeben
@@ -14,19 +16,33 @@ class World {
         this.keyboard = keyboard; // keyboard aus dieser Klasse bekommt den Wert von keyboard aus game.js übergeben
         this.draw();
         this.setWorld();
-        this.checkCollisions();
+        this.runIntervals();
+    }
+
+
+    runIntervals() {
+        setInterval(() => {
+            this.checkCollisions();
+            this.checkForThrownObjects();
+        }, 200);
+    }
+
+
+    checkForThrownObjects() {
+        if (this.keyboard.SPACE) {
+            let bottle = new ThrowableObject(this.character.x + 120, this.character.y + 80); // places bottle in position of character
+            this.throwableObjects.push(bottle);
+        }
     }
 
 
     checkCollisions() {
-        setInterval(() => {
-            this.level.enemies.forEach((enemy) => { // das Gleiche wie for-Schleife
-                if (this.character.isColliding(enemy)) {
-                    this.character.hit();
-                    this.statusBar.setPercentage(this.character.health); // health bar now shows current health of character
-                }
-            });
-        }, 200);
+        this.level.enemies.forEach((enemy) => { // das Gleiche wie for-Schleife
+            if (this.character.isColliding(enemy)) {
+                this.character.hit();
+                this.statusBarHealth.setPercentage(this.character.health); // health bar now shows current health of character
+            }
+        });
     }
 
 
@@ -46,13 +62,16 @@ class World {
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.lights);
+        this.addObjectsToMap(this.throwableObjects);
+
         // statusbar:
         this.ctx.translate(-this.camera_x, 0); // Koordinatensystem wird zurückverschoben (Originalposition)
-        this.addToMap(this.statusBar); // StatusBar wird gezeichnet
+        this.addToMap(this.statusBarBottles);
+        this.addToMap(this.statusBarHealth); // StatusBar wird gezeichnet
         this.ctx.translate(this.camera_x, 0); // Koordinatensystem wird nach vorne geschoben, damit Objekte mit dem Charakter wandern
 
-        this.ctx.translate(-this.camera_x, 0); // -this bewirkt das Gegenteil = schiebt ctx wieder nach rechts; wird benötigt, da Welt ansonsten bei jedem Aufruf von draw() weiter nach links geschoben wird - Programm stürzt ab
 
+        this.ctx.translate(-this.camera_x, 0); // -this bewirkt das Gegenteil = schiebt ctx wieder nach rechts; wird benötigt, da Welt ansonsten bei jedem Aufruf von draw() weiter nach links geschoben wird - Programm stürzt ab
         // draw() wird immer wieder aufgerufen / wird benötigt, um die Charaktere gleich zu Beginn (sobald die Seite fertig geladen hat) anzuzeigen
         let self = this;
         requestAnimationFrame(function () {

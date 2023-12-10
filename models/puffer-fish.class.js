@@ -15,7 +15,7 @@ class PufferFish extends MovableObject {
         super();
         this.loadImage(this.IMAGES_SWIMMING[0]);
         this.loadImages(this.IMAGES_SWIMMING);
-        this.x = 200 + Math.random() * 500; // starting point: 200px; pufferfish will spawn somewhere between 200 and 700
+        this.x = 500 + Math.random() * 500; // starting point: 200px; pufferfish will spawn somewhere between 200 and 700
         this.speed = 0.15 + Math.random() * 0.5; // Pufferfish bewegt sich mit mind. 0.15 Geschwindigkeit; Geschwindigkeit variiert aber bei jedem Fisch
         this.animate();
     }
