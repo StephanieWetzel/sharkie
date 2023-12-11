@@ -212,7 +212,7 @@ class Character extends MovableObject {
         this.playAnimation(this.IMAGES_LONG_IDLE);
         if (secondsPassed >= 11) {
             this.playAnimation(this.IMAGES_SLEEPING);
-            if (this.y < 280) {
+            if (this.y < 500) {
                 this.y++;
             }
         }

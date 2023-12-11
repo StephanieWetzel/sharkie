@@ -5,9 +5,11 @@ class World {
     ctx;
     keyboard;
     camera_x = 0; // damit können wir die Welt auf der X-Achse verschieben
-    statusBarHealth = new StatusBarHealth();
     statusBarBottles = new StatusBarBottles();
-    throwableObjects = [];
+    statusBarHealth = new StatusBarHealth();
+    statusBarCoins = new StatusBarCoins();
+
+    collectableObjects = [];
 
 
     constructor(canvas, keyboard) { // Variable aus game.js wird übergeben
@@ -17,22 +19,40 @@ class World {
         this.draw();
         this.setWorld();
         this.runIntervals();
+        this.checkForCollectedObjects();
     }
 
 
     runIntervals() {
         setInterval(() => {
             this.checkCollisions();
-            this.checkForThrownObjects();
+            // this.checkForThrownObjects();
         }, 200);
     }
 
 
-    checkForThrownObjects() {
-        if (this.keyboard.SPACE) {
-            let bottle = new ThrowableObject(this.character.x + 120, this.character.y + 80); // places bottle in position of character
-            this.throwableObjects.push(bottle);
-        }
+    // checkForThrownObjects() {
+    //     if (this.keyboard.SPACE) {
+    //         let bottle = new ThrowableObject(this.character.x + 120, this.character.y + 80); // places bottle in position of character
+    //         this.throwableObjects.push(bottle);
+    //     }
+    // }
+
+
+    checkForCollectedObjects() {
+        this.level.collectableObjects.forEach((object) => {
+            if (this.character.isColliding(object)) {
+                this.collectableObjects.push(object);
+                console.log(this.collectableObjects);
+                if (object === PoisonBottle) {
+                    this.statusBarBottles.setPercentage = 10;
+                    console.log(this.statusBarBottles.percentage)
+                }
+            } else {
+                return;
+            }
+        });
+
     }
 
 
@@ -62,12 +82,13 @@ class World {
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.lights);
-        this.addObjectsToMap(this.level.throwableObjects);
+        this.addObjectsToMap(this.level.collectableObjects);
 
         // statusbar:
         this.ctx.translate(-this.camera_x, 0); // Koordinatensystem wird zurückverschoben (Originalposition)
         this.addToMap(this.statusBarBottles);
         this.addToMap(this.statusBarHealth); // StatusBar wird gezeichnet
+        this.addToMap(this.statusBarCoins);
         this.ctx.translate(this.camera_x, 0); // Koordinatensystem wird nach vorne geschoben, damit Objekte mit dem Charakter wandern
 
 

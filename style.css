@@ -6,7 +6,7 @@ body {
     font-family: 'Luckiest Guy';
     height: 100vh;
     margin: 0;
-    background-image: url('img/3. Background/bg_underwater.png');
+    background-image: url('img/3. Background/bg_1.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -18,24 +18,30 @@ h1 {
     margin-bottom: 24px; */
     font-size: 56px;
     position: absolute;
-    top: 16px;
+    top: 0;
+    color: #EFFAFB;
+    text-shadow: #3FBED7 0px 8px 24px, #3FBED7 0px 16px 56px, #3FBED7 0px 24px 80px;
 }
 
 canvas {
     background-color: black;
     display: block;
+    /* box-shadow: #3FBED7 0px 22px 70px 4px; */
+    /* box-shadow: #3FBED7 0px 8px 24px, #3FBED7 0px 16px 56px, #3FBED7 0px 24px 80px; */
+    /* box-shadow: #AAE6EF 0px 1px 0px, #AAE6EF 0px 8px 24px, #AAE6EF 0px 16px 48px; */
+    box-shadow: #AAE6EF 0px 2px 4px 0px, #AAE6EF 0px 2px 16px 0px;
 }
 
 
 /* Smartphones -------- */
-@media only screen and (max-width: 720px) {
+@media only screen and (max-width: 1100px) {
     canvas {
         width: 100%;
     }
 }
 
 /* Smartphones -------- */
-@media only screen and (max-height: 480px) {
+@media only screen and (max-height: 700px) {
     canvas {
         height: 100vh;
     }

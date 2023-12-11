@@ -1,15 +1,15 @@
 class Level {
     enemies;
     lights;
-    throwableObjects;
+    collectableObjects;
     backgroundObjects;
-    map_end_x = 2200; // bis hier kann Character gehen, dann stoppt er
-    map_end_y = 300;
+    map_end_x = 6000; // bis hier kann Character gehen, dann stoppt er
+    map_end_y = 520;
 
-    constructor(enemies, lights, throwableObjects, backgroundObjects) {
+    constructor(enemies, lights, collectableObjects, backgroundObjects) {
         this.enemies = enemies;
         this.lights = lights;
-        this.throwableObjects = throwableObjects;
+        this.collectableObjects = collectableObjects;
         this.backgroundObjects = backgroundObjects;
     }
 }
