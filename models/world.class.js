@@ -8,8 +8,11 @@ class World {
     statusBarBottles = new StatusBarBottles();
     statusBarHealth = new StatusBarHealth();
     statusBarCoins = new StatusBarCoins();
+    percentage = 0;
 
     collectableObjects = [];
+    collectedBottles = 0;
+    collectedCoins = 0;
 
 
     constructor(canvas, keyboard) { // Variable aus game.js wird übergeben
@@ -19,7 +22,7 @@ class World {
         this.draw();
         this.setWorld();
         this.runIntervals();
-        this.checkForCollectedObjects();
+        this.collect();
     }
 
 
@@ -39,20 +42,33 @@ class World {
     // }
 
 
-    checkForCollectedObjects() {
-        this.level.collectableObjects.forEach((object) => {
-            if (this.character.isColliding(object)) {
-                this.collectableObjects.push(object);
-                console.log(this.collectableObjects);
-                if (object === PoisonBottle) {
-                    this.statusBarBottles.setPercentage = 10;
-                    console.log(this.statusBarBottles.percentage)
-                }
-            } else {
-                return;
-            }
-        });
+    collect() {
+        setInterval(() => {
+            this.level.collectableObjects.forEach((object) => {
+                if (this.character.isColliding(object) && this.collectableObjects) {
+                    this.collectableObjects.push(object);
+                    console.log(this.collectableObjects);
+                    // checks of what kind object is
+                    if (object instanceof PoisonBottle && this.collectedBottles <= 9) {
+                        this.collectableObjects.forEach(() => {
+                            this.collectedBottles++;
+                            console.log(this.collectedBottles)
+                            this.statusBarBottles.setPercentage(this.percentage += 10);
+                            // remove img from canvas:
+                            this.ctx.clearRect(object.x, object.y, object.x + object.width, object.y + object.height);
+                        });
+                    }
 
+                    if (object instanceof Coin && this.collectedCoins <= 9) {
+                        this.collectableObjects.forEach(() => {
+                            this.collectedCoins++;
+                            this.statusBarCoins.setPercentage(this.percentage += 10);
+                            console.log(this.percentage)
+                        });
+                    }
+                }
+            });
+        }, 500);
     }
 
 
