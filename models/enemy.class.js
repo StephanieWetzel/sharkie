@@ -32,40 +32,6 @@ class PufferFish extends MovableObject {
 }
 
 
-class JellyFishPurple extends MovableObject {
-    height = 70;
-    width = 60;
-    IMAGES_SWIMMING_JELLYFISH_PURPLE = [
-        'img/2.Enemy/2 Jelly fish/Regular damage/Lila 1.png',
-        'img/2.Enemy/2 Jelly fish/Regular damage/Lila 2.png',
-        'img/2.Enemy/2 Jelly fish/Regular damage/Lila 3.png',
-        'img/2.Enemy/2 Jelly fish/Regular damage/Lila 4.png'
-    ];
-
-    constructor() {
-        super();
-        this.loadImage(this.IMAGES_SWIMMING_JELLYFISH_PURPLE[0]);
-        this.loadImages(this.IMAGES_SWIMMING_JELLYFISH_PURPLE);
-        this.x = 500 + Math.random() * 4000;
-        this.y = Math.random() * 600;
-        this.speed = 0.15 + Math.random() * 1;
-        this.animate();
-    }
-
-
-    animate() {
-        setInterval(() => {
-            this.moveUp();
-            this.moveDown();
-        }, 1000 / 60);
-
-        setInterval(() => {
-            this.playAnimation(this.IMAGES_SWIMMING_JELLYFISH_PURPLE); // s. movable-objects.js
-        }, 150);
-    }
-}
-
-
 class JellyFishYellow extends MovableObject {
     height = 70;
     width = 60;
@@ -95,7 +61,7 @@ class JellyFishYellow extends MovableObject {
 
         setInterval(() => {
             this.playAnimation(this.IMAGES_SWIMMING_JELLYFISH_YELLOW); // s. movable-objects.js
-        }, 150);
+        }, 130);
     }
 }
 
@@ -129,40 +95,6 @@ class JellyFishDangerousGreen extends MovableObject {
 
         setInterval(() => {
             this.playAnimation(this.IMAGES_SWIMMING_JELLYFISH_GREEN); // s. movable-objects.js
-        }, 150);
-    }
-}
-
-
-class JellyFishDangerousPink extends MovableObject {
-    height = 70;
-    width = 60;
-    IMAGES_SWIMMING_JELLYFISH_PINK = [
-        'img/2.Enemy/2 Jelly fish/Súper dangerous/Pink 1.png',
-        'img/2.Enemy/2 Jelly fish/Súper dangerous/Pink 2.png',
-        'img/2.Enemy/2 Jelly fish/Súper dangerous/Pink 3.png',
-        'img/2.Enemy/2 Jelly fish/Súper dangerous/Pink 4.png'
-    ];
-
-    constructor() {
-        super();
-        this.loadImage(this.IMAGES_SWIMMING_JELLYFISH_PINK[0]);
-        this.loadImages(this.IMAGES_SWIMMING_JELLYFISH_PINK);
-        this.x = 500 + Math.random() * 4000;
-        this.y = Math.random() * 600;
-        this.speed = 0.15 + Math.random() * 1;
-        this.animate();
-    }
-
-
-    animate() {
-        setInterval(() => {
-            this.moveUp();
-            this.moveDown();
-        }, 1000 / 60);
-
-        setInterval(() => {
-            this.playAnimation(this.IMAGES_SWIMMING_JELLYFISH_PINK); // s. movable-objects.js
         }, 150);
     }
 }

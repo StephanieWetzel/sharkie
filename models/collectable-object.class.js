@@ -25,7 +25,7 @@ class PoisonBottle extends MovableObject {
     animate() { // aktuelles Bild wird immer wieder ausgetauscht, damit character sich bewegt
         setInterval(() => {
             this.playAnimation(this.IMAGES_POISON_BOTTLE); // s. movable-objects.js
-        }, 150);
+        }, 100);
     }
 }
 
@@ -53,6 +53,6 @@ class Coin extends MovableObject {
     animate() { // aktuelles Bild wird immer wieder ausgetauscht, damit character sich bewegt
         setInterval(() => {
             this.playAnimation(this.IMAGES_COIN); // s. movable-objects.js
-        }, 150);
+        }, 130);
     }
 }

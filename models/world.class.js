@@ -45,26 +45,36 @@ class World {
     collect() {
         setInterval(() => {
             this.level.collectableObjects.forEach((object) => {
-                if (this.character.isColliding(object) && this.collectableObjects) {
+                if (this.character.isColliding(object)) {
                     this.collectableObjects.push(object);
+
                     console.log(this.collectableObjects);
+
                     // checks of what kind object is
-                    if (object instanceof PoisonBottle && this.collectedBottles <= 9) {
-                        this.collectableObjects.forEach(() => {
-                            this.collectedBottles++;
-                            console.log(this.collectedBottles)
-                            this.statusBarBottles.setPercentage(this.percentage += 10);
-                            // remove img from canvas:
-                            this.ctx.clearRect(object.x, object.y, object.x + object.width, object.y + object.height);
-                        });
+                    if (object instanceof PoisonBottle) {
+                        if (this.collectedBottles <= 9) {
+                            this.collectableObjects.forEach(() => {
+                                this.collectedBottles++;
+
+                                console.log(this.collectedBottles);
+
+                                this.statusBarBottles.setPercentage(this.percentage += 10);
+                                // remove img from canvas:
+                                this.ctx.clearRect(object.x, object.y, object.x + object.width, object.y + object.height);
+                            });
+                        }
                     }
 
-                    if (object instanceof Coin && this.collectedCoins <= 9) {
-                        this.collectableObjects.forEach(() => {
-                            this.collectedCoins++;
-                            this.statusBarCoins.setPercentage(this.percentage += 10);
-                            console.log(this.percentage)
-                        });
+                    else if (object instanceof Coin) {
+                        if (this.collectedCoins <= 9) {
+                            this.collectableObjects.forEach(() => {
+                                this.collectedCoins++;
+
+                                console.log(this.collectedCoins);
+
+                                this.statusBarCoins.setPercentage(this.percentage += 10);
+                            });
+                        }
                     }
                 }
             });
@@ -130,7 +140,9 @@ class World {
         }
 
         mo.draw(this.ctx);
-        mo.drawFrame(this.ctx);
+        mo.drawFrameAroundCharacter(this.ctx);
+        mo.drawFrameAroundEnemies(this.ctx);
+        mo.drawFrameAroundEndboss(this.ctx);
 
         if (mo.otherDirection) {
             this.flipImageBack(mo); // ctx wird wieder normal angezeigt (sorgt dafür, dass alle anderen Bilder NICHT spiegelverkehrt gezeichnet werden)
