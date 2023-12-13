@@ -9,10 +9,8 @@ class World {
     statusBarHealth = new StatusBarHealth();
     statusBarCoins = new StatusBarCoins();
     percentage = 0;
-
-    collectableObjects = [];
-    collectedBottles = 0;
-    collectedCoins = 0;
+    collectedBottles = [];
+    collectedCoins = [];
 
 
     constructor(canvas, keyboard) { // Variable aus game.js wird übergeben
@@ -22,7 +20,7 @@ class World {
         this.draw();
         this.setWorld();
         this.runIntervals();
-        this.collect();
+        this.collectObjects();
     }
 
 
@@ -42,48 +40,48 @@ class World {
     // }
 
 
-    collect() {
+    collectObjects() {
         setInterval(() => {
             this.level.collectableObjects.forEach((object) => {
                 if (this.character.isColliding(object)) {
-                    this.collectableObjects.push(object);
-
-                    console.log(this.collectableObjects);
-
-                    // checks of what kind object is
                     if (object instanceof PoisonBottle) {
-                        if (this.collectedBottles <= 9) {
-                            this.collectableObjects.forEach(() => {
-                                this.collectedBottles++;
-
-                                console.log(this.collectedBottles);
-
-                                this.statusBarBottles.setPercentage(this.percentage += 10);
-                                // remove img from canvas:
-                                this.ctx.clearRect(object.x, object.y, object.x + object.width, object.y + object.height);
-                            });
-                        }
+                        this.collectBottle(object);
                     }
-
-                    else if (object instanceof Coin) {
-                        if (this.collectedCoins <= 9) {
-                            this.collectableObjects.forEach(() => {
-                                this.collectedCoins++;
-
-                                console.log(this.collectedCoins);
-
-                                this.statusBarCoins.setPercentage(this.percentage += 10);
-                            });
-                        }
+                    if (object instanceof Coin) {
+                        this.collectCoin(object);
                     }
                 }
             });
-        }, 500);
+        }, 50);
+    }
+
+
+    collectBottle(object) {
+        if (this.collectedBottles.length < 10) { // character can collect up to 10 bottles
+            this.collectedBottles.push(object);
+            this.statusBarBottles.setPercentage(this.percentage += 10);
+            this.removeObjectFromCanvas(object);
+        };
+    }
+
+
+    collectCoin(object) {
+        if (this.collectedCoins.length < 10) {
+            this.collectedCoins.push(object);
+            this.statusBarCoins.setPercentage(this.percentage += 10);
+            this.removeObjectFromCanvas(object);
+        };
+    }
+
+
+    removeObjectFromCanvas(object) {
+        let index = this.level.collectableObjects.indexOf(object);
+        this.level.collectableObjects.splice(index, 1);
     }
 
 
     checkCollisions() {
-        this.level.enemies.forEach((enemy) => { // das Gleiche wie for-Schleife
+        this.level.enemies.forEach((enemy) => { // ähnlich wie for-Schleife
             if (this.character.isColliding(enemy)) {
                 this.character.hit();
                 this.statusBarHealth.setPercentage(this.character.health); // health bar now shows current health of character
@@ -105,9 +103,9 @@ class World {
         // draw figures (order matters!! - backgroundObjects first):
         this.addObjectsToMap(this.level.backgroundObjects);
 
+        this.addObjectsToMap(this.level.lights);
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.enemies);
-        this.addObjectsToMap(this.level.lights);
         this.addObjectsToMap(this.level.collectableObjects);
 
         // statusbar:

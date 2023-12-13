@@ -3,12 +3,11 @@ class MovableObject extends DrawableObject {
     otherDirection = false; // sagt aus, ob Bild gespiegelt wird
     health = 100;
     lastHit = 0;
-    collectableObjects = 0;
 
 
-    // collect() {
-    //     this.collectableObjects += 10;
-    // }
+    constructor() {
+        super();
+    }
 
 
     isColliding(mo) {

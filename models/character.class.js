@@ -149,7 +149,7 @@ class Character extends MovableObject {
                     this.playAnimation(this.IMAGES_SWIMMING);
                 }
             }
-        }, 120);
+        }, 110);
     }
 
     // CLEAN CODING

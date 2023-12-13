@@ -95,6 +95,6 @@ class JellyFishDangerousGreen extends MovableObject {
 
         setInterval(() => {
             this.playAnimation(this.IMAGES_SWIMMING_JELLYFISH_GREEN); // s. movable-objects.js
-        }, 150);
+        }, 130);
     }
 }
