@@ -15,7 +15,7 @@ class PoisonBottle extends MovableObject {
         this.loadImage('img/4. Marcadores/Posión/Animada/1.png');
         this.loadImages(this.IMAGES_POISON_BOTTLE);
         this.x = 400 + Math.random() * 4000;
-        this.y = Math.random() * 600;
+        this.y = Math.random() * 400;
         this.height = 60;
         this.width = 50;
         this.animate();
@@ -43,7 +43,7 @@ class Coin extends MovableObject {
         this.loadImage('img/4. Marcadores/1. Coins/1.png');
         this.loadImages(this.IMAGES_COIN);
         this.x = 400 + Math.random() * 4000;
-        this.y = Math.random() * 600;
+        this.y = Math.random() * 400;
         this.height = 40;
         this.width = 40;
         this.animate();

@@ -8,7 +8,9 @@ class World {
     statusBarBottles = new StatusBarBottles();
     statusBarHealth = new StatusBarHealth();
     statusBarCoins = new StatusBarCoins();
-    percentage = 0;
+    // collect:
+    percentageBottles = 0;
+    percentageCoins = 0;
     collectedBottles = [];
     collectedCoins = [];
 
@@ -52,25 +54,32 @@ class World {
                     }
                 }
             });
-        }, 50);
+        }, 200);
     }
 
 
     collectBottle(object) {
-        if (this.collectedBottles.length < 10) { // character can collect up to 10 bottles
+        if (this.collectedBottles.length <= 9) { // character can collect up to 10 bottles
             this.collectedBottles.push(object);
-            this.statusBarBottles.setPercentage(this.percentage += 10);
+            this.percentageBottles += 10;
+            this.statusBarBottles.setPercentage(this.percentageBottles);
             this.removeObjectFromCanvas(object);
         };
     }
 
 
     collectCoin(object) {
-        if (this.collectedCoins.length < 10) {
+        if (this.collectedCoins.length <= 9) {
             this.collectedCoins.push(object);
-            this.statusBarCoins.setPercentage(this.percentage += 10);
+            this.percentageCoins += 10;
+            this.statusBarCoins.setPercentage(this.percentageCoins);
             this.removeObjectFromCanvas(object);
         };
+
+        if (this.collectedCoins.length > 9) {
+            this.statusBarHealth.setPercentage(100); // character gets full health back
+            this.statusBarCoins.setPercentage(0); // coins are emptied in exchange
+        }
     }
 
 
