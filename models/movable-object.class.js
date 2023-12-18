@@ -3,10 +3,22 @@ class MovableObject extends DrawableObject {
     otherDirection = false; // sagt aus, ob Bild gespiegelt wird
     health = 100;
     lastHit = 0;
+    speedY = 0;
+    acceleration = 1; // sagt, wie schnell Objekt beschleunigt
 
 
     constructor() {
         super();
+    }
+
+
+    applyGravity() {
+        setInterval(() => {
+            if (this.speedY > 0) {
+                this.y += this.speedY;
+                this.speedY -= this.acceleration;
+            }
+        }, 1000 / 25);
     }
 
 
@@ -36,6 +48,7 @@ class MovableObject extends DrawableObject {
         return timepassed < 1; // if the time that´s passed is less than 1 second - function becomes TRUE, else it´s FALSE
     }
 
+
     isDead() {
         return this.health == 0;
     }
@@ -54,6 +67,7 @@ class MovableObject extends DrawableObject {
     moveUp() {
         this.y -= this.speed;
     }
+
 
     moveDown() {
         this.y += this.speed;

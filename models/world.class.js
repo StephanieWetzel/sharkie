@@ -5,6 +5,7 @@ class World {
     ctx;
     keyboard;
     camera_x = 0; // damit können wir die Welt auf der X-Achse verschieben
+
     statusBarBottles = new StatusBarBottles();
     statusBarHealth = new StatusBarHealth();
     statusBarCoins = new StatusBarCoins();
@@ -13,6 +14,8 @@ class World {
     percentageCoins = 0;
     collectedBottles = [];
     collectedCoins = [];
+    // throw:
+    bubbles = [];
 
 
     constructor(canvas, keyboard) { // Variable aus game.js wird übergeben
@@ -22,39 +25,38 @@ class World {
         this.draw();
         this.setWorld();
         this.runIntervals();
-        this.collectObjects();
     }
 
 
     runIntervals() {
         setInterval(() => {
             this.checkCollisions();
-            // this.checkForThrownObjects();
+            this.collectObjects();
+            this.throwObjects();
         }, 200);
     }
 
 
-    // checkForThrownObjects() {
-    //     if (this.keyboard.SPACE) {
-    //         let bottle = new ThrowableObject(this.character.x + 120, this.character.y + 80); // places bottle in position of character
-    //         this.throwableObjects.push(bottle);
-    //     }
-    // }
+    throwObjects() {
+        if (this.keyboard.B) {
+            let bubble = new Bubble(this.character.x + 120, this.character.y + 80);
+            this.bubbles.push(bubble);
+        }
+    }
 
 
+    // COLLECT
     collectObjects() {
-        setInterval(() => {
-            this.level.collectableObjects.forEach((object) => {
-                if (this.character.isColliding(object)) {
-                    if (object instanceof PoisonBottle) {
-                        this.collectBottle(object);
-                    }
-                    if (object instanceof Coin) {
-                        this.collectCoin(object);
-                    }
+        this.level.collectableObjects.forEach((object) => {
+            if (this.character.isColliding(object)) {
+                if (object instanceof PoisonBottle) {
+                    this.collectBottle(object);
                 }
-            });
-        }, 200);
+                if (object instanceof Coin) {
+                    this.collectCoin(object);
+                }
+            }
+        });
     }
 
 
@@ -75,9 +77,9 @@ class World {
             this.statusBarCoins.setPercentage(this.percentageCoins);
             this.removeObjectFromCanvas(object);
         };
-
+        // reward system
         if (this.collectedCoins.length > 9) {
-            this.statusBarHealth.setPercentage(100); // character gets full health back
+            this.statusBarHealth.setPercentage(100); // character gets full health
             this.statusBarCoins.setPercentage(0); // coins are emptied in exchange
         }
     }
@@ -89,6 +91,7 @@ class World {
     }
 
 
+    // COLLISIONS
     checkCollisions() {
         this.level.enemies.forEach((enemy) => { // ähnlich wie for-Schleife
             if (this.character.isColliding(enemy)) {
@@ -116,6 +119,7 @@ class World {
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.collectableObjects);
+        this.addObjectsToMap(this.bubbles);
 
         // statusbar:
         this.ctx.translate(-this.camera_x, 0); // Koordinatensystem wird zurückverschoben (Originalposition)
@@ -123,7 +127,6 @@ class World {
         this.addToMap(this.statusBarHealth); // StatusBar wird gezeichnet
         this.addToMap(this.statusBarCoins);
         this.ctx.translate(this.camera_x, 0); // Koordinatensystem wird nach vorne geschoben, damit Objekte mit dem Charakter wandern
-
 
         this.ctx.translate(-this.camera_x, 0); // -this bewirkt das Gegenteil = schiebt ctx wieder nach rechts; wird benötigt, da Welt ansonsten bei jedem Aufruf von draw() weiter nach links geschoben wird - Programm stürzt ab
         // draw() wird immer wieder aufgerufen / wird benötigt, um die Charaktere gleich zu Beginn (sobald die Seite fertig geladen hat) anzuzeigen
@@ -147,13 +150,18 @@ class World {
         }
 
         mo.draw(this.ctx);
-        mo.drawFrameAroundCharacter(this.ctx);
-        mo.drawFrameAroundEnemies(this.ctx);
-        mo.drawFrameAroundEndboss(this.ctx);
+        this.drawFrames(mo);
 
         if (mo.otherDirection) {
             this.flipImageBack(mo); // ctx wird wieder normal angezeigt (sorgt dafür, dass alle anderen Bilder NICHT spiegelverkehrt gezeichnet werden)
         }
+    }
+
+
+    drawFrames(mo) {
+        mo.drawFrameAroundCharacter(this.ctx);
+        mo.drawFrameAroundEnemies(this.ctx);
+        mo.drawFrameAroundEndboss(this.ctx);
     }
 
 

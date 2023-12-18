@@ -60,6 +60,14 @@ class Character extends MovableObject {
         'img/1.Sharkie/3.Swim/6.png'
     ];
 
+    IMAGES_HURT_PUFFERFISH = [
+        'img/1.Sharkie/5.Hurt/1.Poisoned/1.png',
+        'img/1.Sharkie/5.Hurt/1.Poisoned/2.png',
+        'img/1.Sharkie/5.Hurt/1.Poisoned/3.png',
+        'img/1.Sharkie/5.Hurt/1.Poisoned/4.png',
+        'img/1.Sharkie/5.Hurt/1.Poisoned/5.png'
+    ];
+
     IMAGES_DEAD_PUFFERFISH = [
         'img/1.Sharkie/6.dead/1.Poisoned/1.png',
         'img/1.Sharkie/6.dead/1.Poisoned/2.png',
@@ -75,13 +83,16 @@ class Character extends MovableObject {
         'img/1.Sharkie/6.dead/1.Poisoned/12.png'
     ];
 
-    IMAGES_HURT_PUFFERFISH = [
-        'img/1.Sharkie/5.Hurt/1.Poisoned/1.png',
-        'img/1.Sharkie/5.Hurt/1.Poisoned/2.png',
-        'img/1.Sharkie/5.Hurt/1.Poisoned/3.png',
-        'img/1.Sharkie/5.Hurt/1.Poisoned/4.png',
-        'img/1.Sharkie/5.Hurt/1.Poisoned/5.png'
-    ];
+    IMAGES_ATTACK_BUBBLE = [
+        'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/1.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/2.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/3.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/4.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/5.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/6.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/7.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/8.png'
+    ]
 
     world; // greift auf World Klasse zu
     swimming_sound = new Audio('audio/swimming.mp3');
@@ -96,6 +107,7 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_SWIMMING);
         this.loadImages(this.IMAGES_HURT_PUFFERFISH);
         this.loadImages(this.IMAGES_DEAD_PUFFERFISH);
+        this.loadImages(this.IMAGES_ATTACK_BUBBLE);
         this.animate();
     }
 
@@ -136,6 +148,10 @@ class Character extends MovableObject {
             }
             else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT_PUFFERFISH);
+            }
+            //BUBBLE ATTACK
+            else if (this.world.keyboard.B) {
+                this.playAnimation(this.IMAGES_ATTACK_BUBBLE);
             }
             // transition from IDLE to LONG_IDLE to SLEEPING if no arrow key is pressed
             else if (this.noArrowKeyDown()) {
@@ -200,12 +216,12 @@ class Character extends MovableObject {
 
 
     arrowKeyDown() {
-        return this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.UP || this.world.keyboard.DOWN;
+        return this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.UP || this.world.keyboard.DOWN || this.world.keyboard.B;
     }
 
 
     noArrowKeyDown() {
-        return !(this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.UP || this.world.keyboard.DOWN);
+        return !(this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.UP || this.world.keyboard.DOWN || this.world.keyboard.B);
     }
 
     transitionToSleeping(secondsPassed) {

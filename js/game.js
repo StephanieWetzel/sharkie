@@ -14,23 +14,21 @@ function init() {
 window.addEventListener('keydown', (e) => {
     if (e.keyCode == 37) {
         keyboard.LEFT = true;
-        // left arrow
     }
     else if (e.keyCode == 39) {
         keyboard.RIGHT = true;
-        // right arrow
     }
     else if (e.keyCode == 38) {
         keyboard.UP = true;
-        // up arrow
     }
     else if (e.keyCode == 40) {
         keyboard.DOWN = true;
-        // down arrow
     }
     else if (e.keyCode == 32) {
         keyboard.SPACE = true;
-        // down arrow
+    }
+    else if (e.keyCode == 66) {
+        keyboard.B = true;
     }
 })
 
@@ -55,5 +53,8 @@ window.addEventListener('keyup', (e) => {
     else if (e.keyCode == 32) {
         keyboard.SPACE = false;
         // down arrow
+    }
+    else if (e.keyCode == 66) {
+        keyboard.B = false;
     }
 })
