@@ -5,7 +5,7 @@ class World {
     ctx;
     keyboard;
     camera_x = 0; // damit können wir die Welt auf der X-Achse verschieben
-
+    // statusbars:
     statusBarBottles = new StatusBarBottles();
     statusBarHealth = new StatusBarHealth();
     statusBarCoins = new StatusBarCoins();
@@ -37,11 +37,32 @@ class World {
     }
 
 
+    // THROW
     throwObjects() {
         if (this.keyboard.B) {
             let bubble = new Bubble(this.character.x + 120, this.character.y + 80);
             this.bubbles.push(bubble);
+            this.checkForBubbleCollision(bubble);
         }
+    }
+
+
+    checkForBubbleCollision(bubble) {
+        this.level.enemies.forEach((enemy) => {
+            if (enemy instanceof JellyFishYellow || enemy instanceof JellyFishDangerousGreen) {
+                if (bubble.isColliding(enemy)) {
+                    console.log('Enemy has been hit!');
+                    this.removeBubbleFromCanvas(bubble);
+                }
+            }
+        })
+
+    }
+
+
+    removeBubbleFromCanvas(bubble) {
+        let index = this.bubbles.indexOf(bubble);
+        this.bubbles.splice(index, 1);
     }
 
 

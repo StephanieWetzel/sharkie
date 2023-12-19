@@ -83,7 +83,7 @@ class Character extends MovableObject {
         'img/1.Sharkie/6.dead/1.Poisoned/12.png'
     ];
 
-    IMAGES_ATTACK_BUBBLE = [
+    IMAGES_BUBBLE_ATTACK = [
         'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/1.png',
         'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/2.png',
         'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/3.png',
@@ -92,7 +92,16 @@ class Character extends MovableObject {
         'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/6.png',
         'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/7.png',
         'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/8.png'
-    ]
+    ];
+
+    IMAGES_FIN_ATTACK = [
+        'img/1.Sharkie/4.Attack/Fin slap/1.png',
+        'img/1.Sharkie/4.Attack/Fin slap/4.png',
+        'img/1.Sharkie/4.Attack/Fin slap/5.png',
+        'img/1.Sharkie/4.Attack/Fin slap/6.png',
+        'img/1.Sharkie/4.Attack/Fin slap/7.png',
+        'img/1.Sharkie/4.Attack/Fin slap/8.png'
+    ];
 
     world; // greift auf World Klasse zu
     swimming_sound = new Audio('audio/swimming.mp3');
@@ -107,7 +116,8 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_SWIMMING);
         this.loadImages(this.IMAGES_HURT_PUFFERFISH);
         this.loadImages(this.IMAGES_DEAD_PUFFERFISH);
-        this.loadImages(this.IMAGES_ATTACK_BUBBLE);
+        this.loadImages(this.IMAGES_BUBBLE_ATTACK);
+        this.loadImages(this.IMAGES_FIN_ATTACK);
         this.animate();
     }
 
@@ -149,9 +159,12 @@ class Character extends MovableObject {
             else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT_PUFFERFISH);
             }
-            //BUBBLE ATTACK
+            // ATTACKS
             else if (this.world.keyboard.B) {
-                this.playAnimation(this.IMAGES_ATTACK_BUBBLE);
+                this.playAnimation(this.IMAGES_BUBBLE_ATTACK);
+            }
+            else if (this.world.keyboard.SPACE) {
+                this.playAnimation(this.IMAGES_FIN_ATTACK);
             }
             // transition from IDLE to LONG_IDLE to SLEEPING if no arrow key is pressed
             else if (this.noArrowKeyDown()) {

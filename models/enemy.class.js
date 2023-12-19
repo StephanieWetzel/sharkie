@@ -42,10 +42,19 @@ class JellyFishYellow extends MovableObject {
         'img/2.Enemy/2 Jelly fish/Regular damage/Yellow 4.png'
     ];
 
+    IMAGES_DEAD_JELLYFISH_YELLOW = [
+        'img/2.Enemy/2 Jelly fish/Dead/Yellow/y1.png',
+        'img/2.Enemy/2 Jelly fish/Dead/Yellow/y2.png',
+        'img/2.Enemy/2 Jelly fish/Dead/Yellow/y3.png',
+        'img/2.Enemy/2 Jelly fish/Dead/Yellow/y4.png'
+
+    ];
+
     constructor() {
         super();
         this.loadImage(this.IMAGES_SWIMMING_JELLYFISH_YELLOW[0]);
         this.loadImages(this.IMAGES_SWIMMING_JELLYFISH_YELLOW);
+        this.loadImages(this.IMAGES_DEAD_JELLYFISH_YELLOW);
         this.x = 500 + Math.random() * 4000;
         this.y = Math.random() * 600;
         this.speed = 0.15 + Math.random() * 1;
@@ -54,10 +63,10 @@ class JellyFishYellow extends MovableObject {
 
 
     animate() {
-        setInterval(() => {
-            this.moveUp();
-            this.moveDown();
-        }, 1000 / 60);
+        // setInterval(() => {
+        //     this.moveUp();
+        //     this.moveDown();
+        // }, 1000 / 60);
 
         setInterval(() => {
             this.playAnimation(this.IMAGES_SWIMMING_JELLYFISH_YELLOW); // s. movable-objects.js
