@@ -6,9 +6,9 @@ class World {
     keyboard;
     camera_x = 0; // damit können wir die Welt auf der X-Achse verschieben
     // statusbars:
-    statusBarBottles = new StatusBarBottles();
-    statusBarHealth = new StatusBarHealth();
-    statusBarCoins = new StatusBarCoins();
+    statusbarBottles = new StatusbarBottles();
+    statusbarHealth = new StatusbarHealth();
+    statusbarCoins = new StatusbarCoins();
     // collect:
     percentageBottles = 0;
     percentageCoins = 0;
@@ -89,7 +89,7 @@ class World {
             collectBottles.play();
             this.collectedBottles.push(object);
             this.percentageBottles += 10;
-            this.statusBarBottles.setPercentage(this.percentageBottles);
+            this.statusbarBottles.setPercentage(this.percentageBottles);
             this.removeObjectFromCanvas(object);
         };
     }
@@ -100,14 +100,14 @@ class World {
             collectCoins.play();
             this.collectedCoins.push(object);
             this.percentageCoins += 10;
-            this.statusBarCoins.setPercentage(this.percentageCoins);
+            this.statusbarCoins.setPercentage(this.percentageCoins);
             this.removeObjectFromCanvas(object);
         }
         // reward system
         if (this.collectedCoins.length > 9 && this.character.health < 100) {
             getLifeBack.play();
-            this.statusBarHealth.setPercentage(100); // character gets full health
-            this.statusBarCoins.setPercentage(0); // coins are emptied in exchange
+            this.statusbarHealth.setPercentage(100); // character gets full health
+            this.statusbarCoins.setPercentage(0); // coins are emptied in exchange
         }
     }
 
@@ -123,7 +123,7 @@ class World {
         this.level.enemies.forEach((enemy) => { // ähnlich wie for-Schleife
             if (this.character.isColliding(enemy)) {
                 this.character.hit();
-                this.statusBarHealth.setPercentage(this.character.health); // health bar now shows current health of character
+                this.statusbarHealth.setPercentage(this.character.health); // health bar now shows current health of character
             }
         });
     }
@@ -150,9 +150,9 @@ class World {
 
         // statusbar:
         this.ctx.translate(-this.camera_x, 0); // Koordinatensystem wird zurückverschoben (Originalposition)
-        this.addToMap(this.statusBarBottles);
-        this.addToMap(this.statusBarHealth); // StatusBar wird gezeichnet
-        this.addToMap(this.statusBarCoins);
+        this.addToMap(this.statusbarBottles);
+        this.addToMap(this.statusbarHealth); // StatusBar wird gezeichnet
+        this.addToMap(this.statusbarCoins);
         this.ctx.translate(this.camera_x, 0); // Koordinatensystem wird nach vorne geschoben, damit Objekte mit dem Charakter wandern
 
         this.ctx.translate(-this.camera_x, 0); // -this bewirkt das Gegenteil = schiebt ctx wieder nach rechts; wird benötigt, da Welt ansonsten bei jedem Aufruf von draw() weiter nach links geschoben wird - Programm stürzt ab

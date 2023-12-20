@@ -1,4 +1,4 @@
-class StatusBarHealth extends DrawableObject {
+class StatusbarHealth extends DrawableObject {
     IMAGES_STATUS_BAR_HEALTH = [
         'img/4. Marcadores/green/Life/0_  copia 3.png', // img 0
         'img/4. Marcadores/green/Life/20_ copia 4.png',
