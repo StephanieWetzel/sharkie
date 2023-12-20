@@ -16,6 +16,8 @@ class World {
     collectedCoins = [];
     // throw:
     bubbles = [];
+    jellyfishYellow = new JellyFishYellow();
+    jellyfishDangerousGreen = new JellyFishDangerousGreen();
 
 
     constructor(canvas, keyboard) { // Variable aus game.js wird übergeben
@@ -42,17 +44,26 @@ class World {
         if (this.keyboard.B) {
             let bubble = new Bubble(this.character.x + 120, this.character.y + 80);
             this.bubbles.push(bubble);
-            this.checkForBubbleCollision(bubble);
         }
+        this.bubbles.forEach((bubble) => {
+            this.checkForBubbleCollision(bubble);
+        });
     }
 
 
     checkForBubbleCollision(bubble) {
         this.level.enemies.forEach((enemy) => {
-            if (enemy instanceof JellyFishYellow || enemy instanceof JellyFishDangerousGreen) {
-                if (bubble.isColliding(enemy)) {
+            if (bubble.isColliding(enemy)) {
+                if (enemy instanceof JellyFishYellow || enemy instanceof JellyFishDangerousGreen) {
                     console.log('Enemy has been hit!');
                     this.removeBubbleFromCanvas(bubble);
+                    // dead-animations for different jellyfish
+                    if (enemy instanceof JellyFishYellow) {
+                        enemy.IMAGES_DEAD; // yellow jellyfish animation
+                    }
+                    if (enemy instanceof JellyFishDangerousGreen) {
+                        enemy.IMAGES_DEAD; // dangerous jellyfish animation
+                    }
                 }
             }
         })
@@ -83,6 +94,7 @@ class World {
 
     collectBottle(object) {
         if (this.collectedBottles.length <= 9) { // character can collect up to 10 bottles
+            collectBottles.play();
             this.collectedBottles.push(object);
             this.percentageBottles += 10;
             this.statusBarBottles.setPercentage(this.percentageBottles);
@@ -93,13 +105,15 @@ class World {
 
     collectCoin(object) {
         if (this.collectedCoins.length <= 9) {
+            collectCoins.play();
             this.collectedCoins.push(object);
             this.percentageCoins += 10;
             this.statusBarCoins.setPercentage(this.percentageCoins);
             this.removeObjectFromCanvas(object);
-        };
+        }
         // reward system
-        if (this.collectedCoins.length > 9) {
+        if (this.collectedCoins.length > 9 && this.character.health < 100) {
+            getLifeBack.play();
             this.statusBarHealth.setPercentage(100); // character gets full health
             this.statusBarCoins.setPercentage(0); // coins are emptied in exchange
         }

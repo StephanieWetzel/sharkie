@@ -4,6 +4,7 @@ class Character extends MovableObject {
     height = 160;
     width = 150;
     speed = 10;
+    world; // greift auf World Klasse zu
 
     IMAGES_IDLE = [
         'img/1.Sharkie/1.IDLE/1.png',
@@ -103,9 +104,6 @@ class Character extends MovableObject {
         'img/1.Sharkie/4.Attack/Fin slap/8.png'
     ];
 
-    world; // greift auf World Klasse zu
-    swimming_sound = new Audio('audio/swimming.mp3');
-
 
     constructor() {
         super();
@@ -190,7 +188,7 @@ class Character extends MovableObject {
     goRight() {
         this.moveRight();
         this.otherDirection = false; // img not mirrored
-        this.swimming_sound.play();
+        characterSwimming.play();
     }
 
 
@@ -202,7 +200,7 @@ class Character extends MovableObject {
     goLeftAndMirrorImage() {
         this.moveLeft();
         this.otherDirection = true; // img mirrored
-        this.swimming_sound.play();
+        characterSwimming.play();
     }
 
 
@@ -213,7 +211,7 @@ class Character extends MovableObject {
 
     goUp() {
         this.moveUp();
-        this.swimming_sound.play();
+        characterSwimming.play();
     }
 
 
@@ -224,7 +222,7 @@ class Character extends MovableObject {
 
     goDown() {
         this.moveDown();
-        this.swimming_sound.play();
+        characterSwimming.play();
     }
 
 

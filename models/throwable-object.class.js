@@ -10,15 +10,6 @@ class Bubble extends MovableObject {
     }
 
 
-    // shoot() {
-    //     // this.speed = 3;
-    //     setInterval(() => {
-    //         this.x += 30;
-    //     }, 25);
-
-    // }
-
-
     throw() {
         this.speedY = 10;
         this.applyGravity();
@@ -26,9 +17,6 @@ class Bubble extends MovableObject {
             this.x += 20;
             this.y -= 2;
         }, 25);
-        // let bubble = new Bubble(this.character.x + 120, this.character.y + 80); // places bubble in position of character
-        // // this.throwableObjects.push(bottle);
-        // this.shoot;
     }
 }
 
