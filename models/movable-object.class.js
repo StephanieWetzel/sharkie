@@ -24,11 +24,20 @@ class MovableObject extends DrawableObject {
 
     isColliding(mo) {
         // checks if coordinates of two objects match = collision
-        (this.x + 25, this.y + 70, this.width - 50, this.height - 95);
-        return ((this.x + 25) + (this.width - 50)) >= mo.x && this.x + 25 <= (mo.x + mo.width) &&
-            ((this.y + 70) + (this.height - 95)) >= mo.y &&
-            (this.y + 70) <= (mo.y + mo.height);
-        // mo.onCollisionCourse; // Optional: hiermit könnten wir schauen, ob ein Objekt sich in die richtige Richtung bewegt. Nur dann kollidieren wir. Nützlich bei Gegenständen, auf denen man stehen kann.
+        if (mo instanceof Jellyfish || mo instanceof JellyfishDangerous) {
+            (this.x, this.y, this.width, this.height);
+            return ((this.x) + (this.width)) >= mo.x && this.x <= (mo.x + mo.width) &&
+                ((this.y) + (this.height)) >= mo.y &&
+                (this.y) <= (mo.y + mo.height);
+        }
+        else {
+            (this.x + 25, this.y + 70, this.width - 50, this.height - 95);
+            return ((this.x + 25) + (this.width - 50)) >= mo.x && this.x + 25 <= (mo.x + mo.width) &&
+                ((this.y + 70) + (this.height - 95)) >= mo.y &&
+                (this.y + 70) <= (mo.y + mo.height);
+            // mo.onCollisionCourse; // Optional: hiermit könnten wir schauen, ob ein Objekt sich in die richtige Richtung bewegt. Nur dann kollidieren wir. Nützlich bei Gegenständen, auf denen man stehen kann.
+        }
+
     }
 
 

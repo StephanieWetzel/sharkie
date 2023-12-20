@@ -16,8 +16,6 @@ class World {
     collectedCoins = [];
     // throw:
     bubbles = [];
-    jellyfishYellow = new JellyFishYellow();
-    jellyfishDangerousGreen = new JellyFishDangerousGreen();
 
 
     constructor(canvas, keyboard) { // Variable aus game.js wird übergeben
@@ -35,7 +33,7 @@ class World {
             this.checkCollisions();
             this.collectObjects();
             this.throwObjects();
-        }, 200);
+        }, 50);
     }
 
 
@@ -54,16 +52,10 @@ class World {
     checkForBubbleCollision(bubble) {
         this.level.enemies.forEach((enemy) => {
             if (bubble.isColliding(enemy)) {
-                if (enemy instanceof JellyFishYellow || enemy instanceof JellyFishDangerousGreen) {
-                    console.log('Enemy has been hit!');
+                if (enemy instanceof Jellyfish || enemy instanceof JellyfishDangerous) {
+                    console.log('Hit!');
                     this.removeBubbleFromCanvas(bubble);
-                    // dead-animations for different jellyfish
-                    if (enemy instanceof JellyFishYellow) {
-                        enemy.IMAGES_DEAD; // yellow jellyfish animation
-                    }
-                    if (enemy instanceof JellyFishDangerousGreen) {
-                        enemy.IMAGES_DEAD; // dangerous jellyfish animation
-                    }
+                    enemy.health = 0;
                 }
             }
         })
@@ -197,6 +189,7 @@ class World {
         mo.drawFrameAroundCharacter(this.ctx);
         mo.drawFrameAroundEnemies(this.ctx);
         mo.drawFrameAroundEndboss(this.ctx);
+        mo.drawFrameAroundBubble(this.ctx);
     }
 
 

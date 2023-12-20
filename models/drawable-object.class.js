@@ -33,7 +33,7 @@ class DrawableObject {
 
 
     drawFrameAroundEnemies(ctx) {
-        if (this instanceof PufferFish || this instanceof JellyFishYellow || this instanceof JellyFishDangerousGreen) { // instanceof = only executes function for character and pufferfish
+        if (this instanceof Pufferfish || this instanceof Jellyfish || this instanceof JellyfishDangerous) { // instanceof = only executes function for character and pufferfish
             // Red rectangle
             ctx.beginPath();
             ctx.lineWidth = '5';
@@ -51,6 +51,18 @@ class DrawableObject {
             ctx.lineWidth = '5';
             ctx.strokeStyle = 'red';
             ctx.rect(this.x + 25, this.y + 190, this.width - 60, this.height - 270);
+            ctx.stroke();
+        }
+    }
+
+
+    drawFrameAroundBubble(ctx) {
+        if (this instanceof Bubble || this instanceof PoisonBubble) {
+            // Red rectangle
+            ctx.beginPath();
+            ctx.lineWidth = '5';
+            ctx.strokeStyle = 'red';
+            ctx.rect(this.x, this.y, this.width, this.height);
             ctx.stroke();
         }
     }
