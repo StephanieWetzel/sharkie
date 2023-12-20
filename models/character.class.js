@@ -205,7 +205,7 @@ class Character extends MovableObject {
 
 
     upArrowDownAndNotAtTop() {
-        return this.world.keyboard.UP && this.y > 0;
+        return this.world.keyboard.UP && this.y >= -25;
     }
 
 
