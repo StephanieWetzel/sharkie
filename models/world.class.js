@@ -33,7 +33,7 @@ class World {
             this.checkCollisions();
             this.collectObjects();
             this.throwObjects();
-        }, 50);
+        }, 100);
     }
 
 
