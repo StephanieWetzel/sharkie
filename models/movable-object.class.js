@@ -34,15 +34,15 @@ class MovableObject extends DrawableObject {
             return this.x + this.width >= mo.x + 25 &&
                 this.x <= (mo.x + 25) + (mo.width - 50) &&
                 this.y + this.height >= mo.y + 25 &&
-                this.y <= (mo.y + 25) + (mo.height - 100);
+                this.y <= (mo.y + 25) + (mo.height - 70); // mo.height also important for bubble collision
         }
 
         else {
             // used these dimensions: this.x + 25, this.y + 70, this.width - 50, this.height - 95 = from draw frame in drawable-object.class.js
-            return ((this.x + 25) + (this.width - 50)) >= mo.x &&
-                this.x + 25 <= (mo.x + mo.width) &&
-                ((this.y + 70) + (this.height - 95)) >= mo.y &&
-                (this.y + 70) <= (mo.y + mo.height);
+            return (this.x + 25) + (this.width - 50) >= mo.x &&
+                this.x + 25 <= mo.x + mo.width &&
+                (this.y + 70) + (this.height - 95) >= mo.y &&
+                this.y + 70 <= mo.y + mo.height;
         }
 
         // mo.onCollisionCourse -> Optional = hiermit könnten wir schauen, ob ein Objekt sich in die richtige Richtung bewegt. Nur dann kollidieren wir. Nützlich bei Gegenständen, auf denen man stehen kann.

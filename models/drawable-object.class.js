@@ -21,7 +21,7 @@ class DrawableObject {
 
 
     drawFrameAroundCharacter(ctx) {
-        if (this instanceof Character) { // instanceof = only executes function for character and pufferfish
+        if (this instanceof Character) { // instanceof = only executes function for character
             // Red rectangle
             ctx.beginPath();
             ctx.lineWidth = '5';
@@ -33,7 +33,7 @@ class DrawableObject {
 
 
     drawFrameAroundEnemies(ctx) {
-        if (this instanceof Pufferfish || this instanceof Jellyfish || this instanceof JellyfishDangerous) { // instanceof = only executes function for character and pufferfish
+        if (this instanceof Pufferfish || this instanceof Jellyfish || this instanceof JellyfishDangerous) {
             // Red rectangle
             ctx.beginPath();
             ctx.lineWidth = '5';

@@ -30,10 +30,17 @@ class World {
 
     runIntervals() {
         setInterval(() => {
-            this.checkCollisions();
+            this.checkForBubbleCollision();
             this.collectObjects();
+        }, 50);
+
+        setInterval(() => {
+            this.checkCollisions();
+        }, 200);
+
+        setInterval(() => {
             this.throwObjects();
-        }, 100);
+        }, 600);
     }
 
 
@@ -43,23 +50,20 @@ class World {
             let bubble = new Bubble(this.character.x + 120, this.character.y + 80);
             this.bubbles.push(bubble);
         }
-        this.bubbles.forEach((bubble) => {
-            this.checkForBubbleCollision(bubble);
-        });
     }
 
 
-    checkForBubbleCollision(bubble) {
-        this.level.enemies.forEach((enemy) => {
-            if (bubble.isColliding(enemy)) {
-                if (enemy instanceof Jellyfish || enemy instanceof JellyfishDangerous) {
-                    console.log('Hit!');
-                    this.removeBubbleFromCanvas(bubble);
-                    enemy.health = 0;
+    checkForBubbleCollision() {
+        this.bubbles.forEach((bubble) => {
+            this.level.enemies.forEach((enemy) => {
+                if (bubble.isColliding(enemy)) {
+                    if (enemy instanceof Jellyfish || enemy instanceof JellyfishDangerous) {
+                        enemy.health = 0;
+                        this.removeBubbleFromCanvas(bubble);
+                    }
                 }
-            }
-        })
-
+            });
+        });
     }
 
 
