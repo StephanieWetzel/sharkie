@@ -23,21 +23,29 @@ class MovableObject extends DrawableObject {
 
 
     isColliding(mo) {
-        // checks if coordinates of two objects match = collision
-        if (mo instanceof Jellyfish || mo instanceof JellyfishDangerous) {
-            (this.x, this.y, this.width, this.height);
-            return ((this.x) + (this.width)) >= mo.x && this.x <= (mo.x + mo.width) &&
-                ((this.y) + (this.height)) >= mo.y &&
-                (this.y) <= (mo.y + mo.height);
-        }
-        else {
-            (this.x + 25, this.y + 70, this.width - 50, this.height - 95);
-            return ((this.x + 25) + (this.width - 50)) >= mo.x && this.x + 25 <= (mo.x + mo.width) &&
-                ((this.y + 70) + (this.height - 95)) >= mo.y &&
-                (this.y + 70) <= (mo.y + mo.height);
-            // mo.onCollisionCourse; // Optional: hiermit könnten wir schauen, ob ein Objekt sich in die richtige Richtung bewegt. Nur dann kollidieren wir. Nützlich bei Gegenständen, auf denen man stehen kann.
+        if (mo instanceof Endboss) {
+            return this.x + this.width >= mo.x + 50 &&
+                this.x <= (mo.x + 50) + (mo.width - 125) &&
+                this.y + this.height >= mo.y + 225 &&
+                this.y <= (mo.y + 225) + (mo.height - 380);
         }
 
+        else if (mo instanceof Jellyfish || mo instanceof JellyfishDangerous || mo instanceof Pufferfish) {
+            return this.x + this.width >= mo.x + 25 &&
+                this.x <= (mo.x + 25) + (mo.width - 50) &&
+                this.y + this.height >= mo.y + 25 &&
+                this.y <= (mo.y + 25) + (mo.height - 100);
+        }
+
+        else {
+            // used these dimensions: this.x + 25, this.y + 70, this.width - 50, this.height - 95 = from draw frame in drawable-object.class.js
+            return ((this.x + 25) + (this.width - 50)) >= mo.x &&
+                this.x + 25 <= (mo.x + mo.width) &&
+                ((this.y + 70) + (this.height - 95)) >= mo.y &&
+                (this.y + 70) <= (mo.y + mo.height);
+        }
+
+        // mo.onCollisionCourse -> Optional = hiermit könnten wir schauen, ob ein Objekt sich in die richtige Richtung bewegt. Nur dann kollidieren wir. Nützlich bei Gegenständen, auf denen man stehen kann.
     }
 
 

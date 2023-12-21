@@ -28,10 +28,10 @@ class JellyfishDangerous extends MovableObject {
 
 
     animate() {
-        setInterval(() => {
-            // this.moveUp();
-            this.moveDown();
-        }, 1000 / 60);
+        // setInterval(() => {
+        //     this.moveUp();
+        //     this.moveDown();
+        // }, 1000 / 60);
 
         setInterval(() => {
             if (this.isDead()) {
