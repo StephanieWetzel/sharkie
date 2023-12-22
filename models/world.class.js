@@ -31,6 +31,7 @@ class World {
     runIntervals() {
         setInterval(() => {
             this.checkForBubbleCollision();
+            this.checkForFinCollision();
             this.collectObjects();
         }, 50);
 
@@ -59,6 +60,7 @@ class World {
                 if (bubble.isColliding(enemy)) {
                     if (enemy instanceof Jellyfish || enemy instanceof JellyfishDangerous) {
                         enemy.health = 0;
+                        jellyfish_defeated.play();
                         this.removeBubbleFromCanvas(bubble);
                     }
                 }
@@ -70,6 +72,17 @@ class World {
     removeBubbleFromCanvas(bubble) {
         let index = this.bubbles.indexOf(bubble);
         this.bubbles.splice(index, 1);
+    }
+
+
+    checkForFinCollision() {
+        this.level.enemies.forEach((enemy) => {
+            if (this.character.isColliding(enemy) && this.keyboard.SPACE) {
+                if (enemy instanceof Pufferfish) {
+                    enemy.health = 0;
+                }
+            }
+        });
     }
 
 

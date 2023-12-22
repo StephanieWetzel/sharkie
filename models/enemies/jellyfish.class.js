@@ -38,8 +38,8 @@ class Jellyfish extends MovableObject {
                 this.playAnimation(this.IMAGES_DEAD);
                 this.applyGravity();
                 setInterval(() => {
-                    this.x += 5;
-                    this.y -= 5;
+                    this.x += 4;
+                    this.y -= 3;
                 }, 25);
             } else {
                 this.playAnimation(this.IMAGES_SWIMMING);

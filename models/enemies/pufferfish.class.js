@@ -26,7 +26,19 @@ class Pufferfish extends MovableObject {
         }, 1000 / 60);
 
         setInterval(() => {
-            this.playAnimation(this.IMAGES_SWIMMING); // s. movable-objects.js
-        }, 200);
+            if (this.isDead()) {
+                this.loadImage('img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 1 (can animate by going up).png');
+                this.applyGravity();
+                setInterval(() => {
+                    this.x += 5;
+                    this.y -= 10;
+                }, 15);
+            } else {
+                this.playAnimation(this.IMAGES_SWIMMING);
+            }
+        }, 130);
+
+
+
     }
 }
