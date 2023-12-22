@@ -33,8 +33,8 @@ class MovableObject extends DrawableObject {
         else if (mo instanceof Jellyfish || mo instanceof JellyfishDangerous || mo instanceof Pufferfish) {
             return this.x + this.width >= mo.x + 25 &&
                 this.x <= (mo.x + 25) + (mo.width - 50) &&
-                this.y + this.height >= mo.y + 25 &&
-                this.y <= (mo.y + 25) + (mo.height - 60); // mo.height also important for bubble collision
+                this.y + this.height >= mo.y + 20 &&
+                this.y <= (mo.y + 20) + (mo.height - 65); // mo.height also important for bubble collision
         }
 
         else {
@@ -49,8 +49,8 @@ class MovableObject extends DrawableObject {
     }
 
 
-    hit() {
-        this.health -= 5;
+    hit(damage) {
+        this.health -= damage;
         if (this.health < 0) {
             this.health = 0;
         } else { // if character still has health left when hit

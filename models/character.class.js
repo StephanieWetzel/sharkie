@@ -104,6 +104,8 @@ class Character extends MovableObject {
         'img/1.Sharkie/4.Attack/Fin slap/8.png'
     ];
 
+    dead = false;
+
 
     constructor() {
         super();
@@ -152,7 +154,18 @@ class Character extends MovableObject {
             let secondsPassed = (currentTimeStamp - lastTimeStamp) / 1000;
 
             if (this.isDead()) {
-                this.playAnimation(this.IMAGES_DEAD_PUFFERFISH);
+                if (!this.dead) {
+                    this.playAnimation(this.IMAGES_DEAD_PUFFERFISH);
+                }
+                setTimeout(() => {
+                    this.dead = true;
+                }, 1000);
+
+                this.applyGravity();
+                setInterval(() => {
+                    this.y -= 5;
+                }, 1000);
+
             }
             else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT_PUFFERFISH);
@@ -160,9 +173,11 @@ class Character extends MovableObject {
             // ATTACKS
             else if (this.world.keyboard.B) {
                 this.playAnimation(this.IMAGES_BUBBLE_ATTACK);
+                bubble_breath.play();
             }
             else if (this.world.keyboard.SPACE) {
                 this.playAnimation(this.IMAGES_FIN_ATTACK);
+                fin_attack.play();
             }
             // transition from IDLE to LONG_IDLE to SLEEPING if no arrow key is pressed
             else if (this.noArrowKeyDown()) {

@@ -40,8 +40,8 @@ class World {
         }, 50);
 
         setInterval(() => {
-            this.checkCollisions();
-        }, 200);
+            this.checkCollisionsWithEnemies();
+        }, 300);
 
         setInterval(() => {
             this.throwObjects();
@@ -53,6 +53,7 @@ class World {
     throwObjects() {
         if (this.keyboard.B) {
             let bubble = new Bubble(this.character.x + 120, this.character.y + 80);
+            new_bubble.play();
             this.bubbles.push(bubble);
         }
     }
@@ -82,9 +83,10 @@ class World {
 
 
     cannotBeHarmed(bubble, enemy) {
-        enemy.playAnimation(enemy.IMAGES_TRANSITION);
+        // enemy.playAnimation(enemy.IMAGES_TRANSITION);
         enemy.playAnimation(enemy.IMAGES_BUBBLESWIM);
         this.removeBubbleFromCanvas(bubble);
+        bubble_popped.play();
     }
 
 
@@ -99,6 +101,7 @@ class World {
             if (this.character.isColliding(enemy) && this.keyboard.SPACE) {
                 if (enemy instanceof Pufferfish) {
                     enemy.health = 0;
+                    jellyfish_defeated.play();
                 }
             }
         });
@@ -155,11 +158,19 @@ class World {
 
 
     // COLLISIONS
-    checkCollisions() {
+    checkCollisionsWithEnemies() {
         this.level.enemies.forEach((enemy) => { // ähnlich wie for-Schleife
             if (this.character.isColliding(enemy)) {
-                this.character.hit();
-                this.statusbarHealth.setPercentage(this.character.health); // health bar now shows current health of character
+                if (enemy instanceof Endboss) {
+                    this.character.hit(50);
+                }
+                if (enemy instanceof JellyfishDangerous) {
+                    this.character.hit(30);
+                } else {
+                    this.character.hit(10);
+                }
+                console.log(this.character.health);
+                this.statusbarHealth.setPercentage(this.character.health);
             }
         });
     }
