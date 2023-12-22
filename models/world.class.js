@@ -16,6 +16,10 @@ class World {
     collectedCoins = [];
     // throw:
     bubbles = [];
+    // duration of animations:
+    // lastTimeStamp = new Date();
+    // currentTimeStamp = new Date();
+    // secondsPassed = (this.currentTimeStamp - this.lastTimeStamp) / 1000;
 
 
     constructor(canvas, keyboard) { // Variable aus game.js wird übergeben
@@ -54,18 +58,33 @@ class World {
     }
 
 
-    checkForBubbleCollision() {
+    async checkForBubbleCollision() {
         this.bubbles.forEach((bubble) => {
             this.level.enemies.forEach((enemy) => {
                 if (bubble.isColliding(enemy)) {
                     if (enemy instanceof Jellyfish || enemy instanceof JellyfishDangerous) {
-                        enemy.health = 0;
-                        jellyfish_defeated.play();
-                        this.removeBubbleFromCanvas(bubble);
+                        this.jellyfishDefeated(bubble, enemy);
+                    }
+                    if (enemy instanceof Pufferfish) {
+                        this.cannotBeHarmed(bubble, enemy);
                     }
                 }
             });
         });
+    }
+
+
+    jellyfishDefeated(bubble, enemy) {
+        enemy.health = 0;
+        jellyfish_defeated.play();
+        this.removeBubbleFromCanvas(bubble);
+    }
+
+
+    cannotBeHarmed(bubble, enemy) {
+        enemy.playAnimation(enemy.IMAGES_TRANSITION);
+        enemy.playAnimation(enemy.IMAGES_BUBBLESWIM);
+        this.removeBubbleFromCanvas(bubble);
     }
 
 
