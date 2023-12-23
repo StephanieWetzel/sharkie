@@ -49,6 +49,11 @@ class World {
     }
 
 
+    setWorld() { // Klasse World an den character übergeben
+        this.character.world = this; // this.character.world -> auf world in character zugreifen; = this -> world in character bekommt Wert aus DIESER world (somit kann auf Variablen wie keyboard zugegriffen werden)
+    }
+
+
     // THROW
     throwObjects() {
         if (this.keyboard.B) {
@@ -59,7 +64,7 @@ class World {
     }
 
 
-    async checkForBubbleCollision() {
+    checkForBubbleCollision() {
         this.bubbles.forEach((bubble) => {
             this.level.enemies.forEach((enemy) => {
                 if (bubble.isColliding(enemy)) {
@@ -173,11 +178,6 @@ class World {
                 this.statusbarHealth.setPercentage(this.character.health);
             }
         });
-    }
-
-
-    setWorld() { // Klasse World an den character übergeben
-        this.character.world = this; // this.character.world -> auf world in character zugreifen; = this -> world in character bekommt Wert aus DIESER world (somit kann auf Variablen wie keyboard zugegriffen werden)
     }
 
 

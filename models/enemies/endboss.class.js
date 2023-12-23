@@ -2,6 +2,20 @@ class Endboss extends MovableObject {
     height = 600;
     width = 530;
     y = -50;
+    x = 5000;
+
+    IMAGES_SPAWNING = [
+        'img/2.Enemy/3 Final Enemy/1.Introduce/1.png',
+        'img/2.Enemy/3 Final Enemy/1.Introduce/2.png',
+        'img/2.Enemy/3 Final Enemy/1.Introduce/3.png',
+        'img/2.Enemy/3 Final Enemy/1.Introduce/4.png',
+        'img/2.Enemy/3 Final Enemy/1.Introduce/5.png',
+        'img/2.Enemy/3 Final Enemy/1.Introduce/6.png',
+        'img/2.Enemy/3 Final Enemy/1.Introduce/7.png',
+        'img/2.Enemy/3 Final Enemy/1.Introduce/8.png',
+        'img/2.Enemy/3 Final Enemy/1.Introduce/9.png',
+        'img/2.Enemy/3 Final Enemy/1.Introduce/10.png'
+    ];
 
     IMAGES_SWIMMING = [
         'img/2.Enemy/3 Final Enemy/2.floating/1.png',
@@ -19,20 +33,36 @@ class Endboss extends MovableObject {
         'img/2.Enemy/3 Final Enemy/2.floating/13.png'
     ];
 
+    hadFirstContact = false;
+
 
     constructor() {
         super();
-        this.loadImage(this.IMAGES_SWIMMING[0]);
+        this.loadImage(this.IMAGES_SPAWNING[0]);
+        this.loadImages(this.IMAGES_SPAWNING);
         this.loadImages(this.IMAGES_SWIMMING);
-        this.x = 5000;
         this.animate();
     }
 
 
     animate() { // aktuelles Bild wird immer wieder ausgetauscht, damit character sich bewegt
+        let i = 0;
+
         setInterval(() => {
-            this.playAnimation(this.IMAGES_SWIMMING); // s. movable-objects.js
-        }, 200);
+            if (i < 10) {
+                this.playAnimation(this.IMAGES_SPAWNING);
+            }
+            else {
+                this.playAnimation(this.IMAGES_SWIMMING);
+            }
+            i++;
+            // console.log(i);
+
+            if (world && world.character.x > 4400 && !this.hadFirstContact) {
+                i = 0;
+                this.hadFirstContact = true;
+            }
+        }, 150);
     }
 
 }
