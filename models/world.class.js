@@ -1,6 +1,6 @@
 class World {
     character = new Character();
-    level = level1; // damit können wir auf die Variablen aus level1 zugreifen (enemies, lights und backgroundobjects)
+    level = level1;
     canvas;
     ctx;
     keyboard;
@@ -16,6 +16,8 @@ class World {
     collectedCoins = [];
     // throw:
     bubbles = [];
+    poisonBubbles = [];
+    damageType;
     // duration of animations:
     // lastTimeStamp = new Date();
     // currentTimeStamp = new Date();
@@ -35,6 +37,7 @@ class World {
     runIntervals() {
         setInterval(() => {
             this.checkForBubbleCollision();
+            this.checkForPoisonBubbleCollision();
             this.checkForFinCollision();
             this.collectObjects();
         }, 50);
@@ -49,67 +52,36 @@ class World {
     }
 
 
-    setWorld() { // Klasse World an den character übergeben
-        this.character.world = this; // this.character.world -> auf world in character zugreifen; = this -> world in character bekommt Wert aus DIESER world (somit kann auf Variablen wie keyboard zugegriffen werden)
+    setWorld() { // sets World in character-class
+        this.character.world = this;
+        this.character.damageType = this;
     }
 
 
     // THROW
     throwObjects() {
         if (this.keyboard.B) {
-            let bubble = new Bubble(this.character.x + 120, this.character.y + 80);
-            new_bubble.play();
-            this.bubbles.push(bubble);
+            this.throwBubble();
+        }
+        if (this.keyboard.V && this.percentageBottles != 0) {
+            this.throwPoisonBubble();
         }
     }
 
 
-    checkForBubbleCollision() {
-        this.bubbles.forEach((bubble) => {
-            this.level.enemies.forEach((enemy) => {
-                if (bubble.isColliding(enemy)) {
-                    if (enemy instanceof Jellyfish || enemy instanceof JellyfishDangerous) {
-                        this.jellyfishDefeated(bubble, enemy);
-                    }
-                    if (enemy instanceof Pufferfish) {
-                        this.cannotBeHarmed(bubble, enemy);
-                    }
-                }
-            });
-        });
+    throwBubble() {
+        let bubble = new Bubble(this.character.x + 120, this.character.y + 80);
+        new_bubble.play();
+        this.bubbles.push(bubble);
     }
 
 
-    jellyfishDefeated(bubble, enemy) {
-        enemy.health = 0;
-        jellyfish_defeated.play();
-        this.removeBubbleFromCanvas(bubble);
-    }
-
-
-    cannotBeHarmed(bubble, enemy) {
-        // enemy.playAnimation(enemy.IMAGES_TRANSITION);
-        enemy.playAnimation(enemy.IMAGES_BUBBLESWIM);
-        this.removeBubbleFromCanvas(bubble);
-        bubble_popped.play();
-    }
-
-
-    removeBubbleFromCanvas(bubble) {
-        let index = this.bubbles.indexOf(bubble);
-        this.bubbles.splice(index, 1);
-    }
-
-
-    checkForFinCollision() {
-        this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy) && this.keyboard.SPACE) {
-                if (enemy instanceof Pufferfish) {
-                    enemy.health = 0;
-                    jellyfish_defeated.play();
-                }
-            }
-        });
+    throwPoisonBubble() {
+        let poisonBubble = new PoisonBubble(this.character.x + 120, this.character.y + 80);
+        new_bubble.play();
+        this.poisonBubbles.push(poisonBubble);
+        this.percentageBottles -= 10;
+        this.statusbarBottles.setPercentage(this.percentageBottles);
     }
 
 
@@ -140,7 +112,7 @@ class World {
 
 
     collectCoin(object) {
-        if (this.collectedCoins.length <= 9) {
+        if (this.collectedCoins.length <= 8) {
             collectCoins.play();
             this.collectedCoins.push(object);
             this.percentageCoins += 10;
@@ -148,11 +120,19 @@ class World {
             this.removeObjectFromCanvas(object);
         }
         // reward system
-        if (this.collectedCoins.length > 9 && this.character.health < 100) {
-            getLifeBack.play();
-            this.statusbarHealth.setPercentage(100); // character gets full health
-            this.statusbarCoins.setPercentage(0); // coins are emptied in exchange
+        else if (this.collectedCoins.length > 8 && this.character.health < 100) {
+            this.getLifeBack(object);
         }
+    }
+
+
+    getLifeBack(object) {
+        this.removeObjectFromCanvas(object);
+        getLifeBack.play();
+        this.collectedCoins.length = 0; // empties coin-array
+        this.percentageCoins = 0;
+        this.statusbarHealth.setPercentage(100); // character gets full health
+        this.statusbarCoins.setPercentage(0);
     }
 
 
@@ -164,18 +144,104 @@ class World {
 
     // COLLISIONS
     checkCollisionsWithEnemies() {
-        this.level.enemies.forEach((enemy) => { // ähnlich wie for-Schleife
+        this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy)) {
                 if (enemy instanceof Endboss) {
+                    this.damageType = Pufferfish;
                     this.character.hit(50);
                 }
                 if (enemy instanceof JellyfishDangerous) {
+                    this.damageType = Jellyfish;
                     this.character.hit(30);
-                } else {
+                }
+                if (enemy instanceof Jellyfish) {
+                    this.damageType = Jellyfish;
                     this.character.hit(10);
                 }
-                console.log(this.character.health);
+                if (enemy instanceof Pufferfish) {
+                    this.damageType = Pufferfish;
+                    this.character.hit(10);
+                }
                 this.statusbarHealth.setPercentage(this.character.health);
+            }
+        });
+    }
+
+
+    checkForBubbleCollision() {
+        this.bubbles.forEach((bubble) => {
+            this.level.enemies.forEach((enemy) => {
+                if (bubble.isColliding(enemy)) {
+                    if (enemy instanceof Jellyfish || enemy instanceof JellyfishDangerous) {
+                        this.jellyfishDefeated(bubble, enemy);
+                    }
+                    if (enemy instanceof Pufferfish) {
+                        this.cannotBeHarmed(bubble, enemy);
+                    }
+                    if (enemy instanceof Endboss) {
+                        this.removeBubbleFromCanvas(bubble);
+                        bubble_popped.play();
+                    }
+                }
+            });
+        });
+    }
+
+    checkForPoisonBubbleCollision() {
+        this.poisonBubbles.forEach((poisonBubble) => {
+            this.level.enemies.forEach((enemy) => {
+                if (poisonBubble.isColliding(enemy)) {
+                    if (enemy instanceof Jellyfish || enemy instanceof JellyfishDangerous) {
+                        this.jellyfishDefeated(poisonBubble, enemy);
+                        this.removePoisonBubbleFromCanvas(poisonBubble);
+                    }
+                    if (enemy instanceof Pufferfish) {
+                        this.cannotBeHarmed(poisonBubble, enemy);
+                        this.removePoisonBubbleFromCanvas(poisonBubble);
+                    }
+                    if (enemy instanceof Endboss) {
+                        enemy.hit(20);
+                        console.log(enemy.health);
+                        this.removePoisonBubbleFromCanvas(poisonBubble);
+                    }
+                }
+            });
+        });
+    }
+
+
+    jellyfishDefeated(bubbleType, enemy) {
+        enemy.health = 0;
+        jellyfish_defeated.play();
+        this.removeBubbleFromCanvas(bubbleType);
+    }
+
+
+    cannotBeHarmed(bubbleType, enemy) {
+        enemy.playAnimation(enemy.IMAGES_BUBBLESWIM);
+        this.removeBubbleFromCanvas(bubbleType);
+        bubble_popped.play();
+    }
+
+
+    removeBubbleFromCanvas(bubble) {
+        let index = this.bubbles.indexOf(bubble);
+        this.bubbles.splice(index, 1);
+    }
+
+    removePoisonBubbleFromCanvas(poisonBubble) {
+        let index = this.poisonBubbles.indexOf(poisonBubble);
+        this.poisonBubbles.splice(index, 1);
+    }
+
+
+    checkForFinCollision() {
+        this.level.enemies.forEach((enemy) => {
+            if (this.character.isColliding(enemy) && this.keyboard.SPACE) {
+                if (enemy instanceof Pufferfish) {
+                    enemy.health = 0;
+                    jellyfish_defeated.play();
+                }
             }
         });
     }
@@ -194,6 +260,7 @@ class World {
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.collectableObjects);
         this.addObjectsToMap(this.bubbles);
+        this.addObjectsToMap(this.poisonBubbles);
 
         // statusbar:
         this.ctx.translate(-this.camera_x, 0); // Koordinatensystem wird zurückverschoben (Originalposition)

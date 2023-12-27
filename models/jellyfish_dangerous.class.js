@@ -15,6 +15,10 @@ class JellyfishDangerous extends MovableObject {
         'img/2.Enemy/2 Jelly fish/Dead/green/g4.png'
     ];
 
+    direction = 1; // 1 for up, -1 for down
+    verticalMovementInterval;
+
+
     constructor() {
         super();
         this.loadImage(this.IMAGES_SWIMMING[0]);
@@ -28,19 +32,26 @@ class JellyfishDangerous extends MovableObject {
 
 
     animate() {
-        // setInterval(() => {
-        //     this.moveUp();
-        //     this.moveDown();
-        // }, 1000 / 60);
+        this.verticalMovementInterval = setInterval(() => {
+            // Vertical movement
+            if (this.y >= 600) {
+                this.direction = -1; // up
+            } else if (this.y <= 0) {
+                this.direction = 1; // down
+            }
+            this.y += this.direction * this.speed; // speed
+        }, 1000 / 25);
 
         setInterval(() => {
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
                 this.applyGravity();
+                clearInterval(this.verticalMovementInterval);
                 setInterval(() => {
-                    this.x += 5;
-                    this.y -= 5;
-                }, 25);
+                    this.x += 4;
+                    this.y -= 3;
+                }, 1000 / 25);
+
             } else {
                 this.playAnimation(this.IMAGES_SWIMMING);
             }

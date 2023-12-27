@@ -33,7 +33,33 @@ class Endboss extends MovableObject {
         'img/2.Enemy/3 Final Enemy/2.floating/13.png'
     ];
 
+    IMAGES_ATTACK = [
+        'img/2.Enemy/3 Final Enemy/Attack/1.png',
+        'img/2.Enemy/3 Final Enemy/Attack/2.png',
+        'img/2.Enemy/3 Final Enemy/Attack/3.png',
+        'img/2.Enemy/3 Final Enemy/Attack/4.png',
+        'img/2.Enemy/3 Final Enemy/Attack/5.png',
+        'img/2.Enemy/3 Final Enemy/Attack/6.png'
+    ];
+
+    IMAGES_HURT = [
+        'img/2.Enemy/3 Final Enemy/Hurt/1.png',
+        'img/2.Enemy/3 Final Enemy/Hurt/2.png',
+        'img/2.Enemy/3 Final Enemy/Hurt/3.png',
+        'img/2.Enemy/3 Final Enemy/Hurt/4.png'
+    ];
+
+    IMAGES_DEAD = [
+        'img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 6.png',
+        'img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 7.png',
+        'img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 8.png',
+        'img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 9.png',
+        'img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 10.png'
+
+    ];
+
     hadFirstContact = false;
+    health = 100;
 
 
     constructor() {
@@ -41,6 +67,9 @@ class Endboss extends MovableObject {
         this.loadImage(this.IMAGES_SPAWNING[0]);
         this.loadImages(this.IMAGES_SPAWNING);
         this.loadImages(this.IMAGES_SWIMMING);
+        this.loadImages(this.IMAGES_ATTACK);
+        this.loadImages(this.IMAGES_HURT);
+        this.loadImages(this.IMAGES_DEAD);
         this.animate();
     }
 
@@ -56,11 +85,17 @@ class Endboss extends MovableObject {
                 this.playAnimation(this.IMAGES_SWIMMING);
             }
             i++;
-            // console.log(i);
 
             if (world && world.character.x > 4400 && !this.hadFirstContact) {
                 i = 0;
                 this.hadFirstContact = true;
+            }
+            else if (this.isHurt()) {
+                this.playAnimation(this.IMAGES_HURT);
+            }
+
+            else if (this.isDead()) {
+                this.playAnimation(this.IMAGES_DEAD);
             }
         }, 150);
     }

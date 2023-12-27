@@ -35,7 +35,7 @@ class MovableObject extends DrawableObject {
             return this.x + this.width >= mo.x + 25 &&
                 this.x <= (mo.x + 25) + (mo.width - 50) &&
                 this.y + this.height >= mo.y + 20 &&
-                this.y <= (mo.y + 20) + (mo.height - 65); // mo.height also important for bubble collision
+                this.y <= (mo.y + 20) + (mo.height - 70); // mo.height also important for bubble collision
         }
 
         else {
@@ -96,8 +96,8 @@ class MovableObject extends DrawableObject {
         let i = this.currentImage % images.length; // modulo = mathematischer Rest => Bsp. 6 % 6 (Länge Array) = 6 : 6 = 1, Rest 0 => modulo hebt nur Rest auf, also ist currentImage wieder 0
         // i = 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 1, ... => fängt immer wieder von vorn an (character bleibt in Bewegung)
         let path = images[i];
-        this.img = this.imageCache[path]; // this.img refers to movableObjects; current img being replaced
-        this.currentImage++; // next img
+        this.img = this.imageCache[path];
+        this.currentImage++;
     }
 
 
