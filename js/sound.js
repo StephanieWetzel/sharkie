@@ -9,3 +9,5 @@ let bubble_popped = new Audio('audio/bubble_pop.mp3');
 let fin_attack = new Audio('audio/fin_attack.mp3');
 let bubble_breath = new Audio('audio/takes_breath_for_bubble.mp3');
 let new_bubble = new Audio('audio/new_bubble.mp3');
+
+let soundOn = false;
