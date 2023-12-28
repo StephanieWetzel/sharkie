@@ -4,8 +4,12 @@ let keyboard = new Keyboard();
 
 
 function init() {
+    initLevel();
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
+    let startScreen = document.getElementById('startScreen');
+    canvas.classList.remove('d-None');
+    startScreen.style.display = 'none';
     // console.log('My character is', world.character);
 }
 

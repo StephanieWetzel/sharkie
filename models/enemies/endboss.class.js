@@ -80,8 +80,7 @@ class Endboss extends MovableObject {
         setInterval(() => {
             if (i < 10) {
                 this.playAnimation(this.IMAGES_SPAWNING);
-            }
-            else {
+            } else {
                 this.playAnimation(this.IMAGES_SWIMMING);
             }
             i++;
@@ -90,14 +89,17 @@ class Endboss extends MovableObject {
                 i = 0;
                 this.hadFirstContact = true;
             }
+
             else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
             }
 
             else if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
+                if (this.y < -100) {
+                    this.y -= 4;
+                }
             }
         }, 150);
     }
-
 }

@@ -5,6 +5,7 @@ class MovableObject extends DrawableObject {
     lastHit = 0;
     speedY = 0;
     acceleration = 1; // sagt, wie schnell Objekt beschleunigt
+    currentImage = 0;
     // lastAttack = new Date().getTime();
 
 
@@ -99,10 +100,4 @@ class MovableObject extends DrawableObject {
         this.img = this.imageCache[path];
         this.currentImage++;
     }
-
-
-    // attackCooldown(cooldown) {
-    //     let timePassed = new Date().getTime() - this.lastAttack;
-    //     return timePassed < cooldown;
-    // }
 }

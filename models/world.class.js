@@ -202,6 +202,7 @@ class World {
                     if (enemy instanceof Endboss) {
                         enemy.hit(20);
                         console.log(enemy.health);
+                        bubble_popped.play();
                         this.removePoisonBubbleFromCanvas(poisonBubble);
                     }
                 }

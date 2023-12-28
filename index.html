@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html translate="no" lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -32,11 +32,29 @@
     <script src="levels/level1.js"></script>
 </head>
 
-<body onload="init()">
+<body>
 
     <!-- <h1>Sharkie</h1> -->
+    <div id="startScreen">
+        <img class="start-Screen-Img" src="img/3. Background/Mesa de trabajo 1.png">
+        <img onclick="init()" class="start-Btn" src="img/6.Botones/Start/3.png" alt="">
+        <div class="keybinds-container">
+            <div class="keybinds-column-container">
+                <img class="arrow-keybinds" src="img/6.Botones/Key/arrow keys.png" alt="Pfeiltasten">
+                <span class="keybinds-letters">B</span>
+                <span class="keybinds-letters">V</span>
+                <img class="space-keybind" src="img/6.Botones/Key/Space Bar key.png" alt="Leertaste">
+            </div>
+            <div class="keybinds-column-container">
+                <span class="margin-top-16">Move Shark</span>
+                <span class="margin-top-16">Bubble Attack</span>
+                <span class="margin-top-16">Poison-Bubble Attack</span>
+                <span class="margin-top-16">Fin Attack</span>
+            </div>
+        </div>
+    </div>
 
-    <canvas id="canvas" width="1100" height="700"></canvas>
+    <canvas class="d-None" id="canvas" width="1100" height="700"></canvas>
 
 </body>
 
