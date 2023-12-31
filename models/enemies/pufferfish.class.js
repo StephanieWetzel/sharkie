@@ -19,11 +19,13 @@ class Pufferfish extends MovableObject {
 
     IMAGES_BUBBLESWIM = [
         'img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/1.bubbleswim1.png',
-        'img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/1.bubbleswim1.png',
-        'img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/1.bubbleswim1.png',
-        'img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/1.bubbleswim1.png',
-        'img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/1.bubbleswim1.png'
+        'img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/1.bubbleswim2.png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/1.bubbleswim3.png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/1.bubbleswim4.png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/1.bubbleswim5.png'
     ];
+
+    isHit = false;
 
 
     constructor() {
@@ -54,12 +56,19 @@ class Pufferfish extends MovableObject {
                 }, 15);
             }
 
+            else if (this.isHit) {
+                this.playAnimation(this.IMAGES_TRANSITION);
+
+                this.playAnimation(this.IMAGES_BUBBLESWIM);
+
+                setTimeout(() => {
+                    this.isHit = false; // Zurücksetzen nach einigen Sekunden
+                }, 3000); // Hier kannst du die Dauer der BUBBLESWIM-Animation in Millisekunden einstellen
+            }
+
             else {
                 this.playAnimation(this.IMAGES_SWIMMING);
             }
         }, 130);
-
-
-
     }
 }

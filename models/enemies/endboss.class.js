@@ -60,6 +60,8 @@ class Endboss extends MovableObject {
 
     hadFirstContact = false;
     health = 100;
+    dead = false;
+    // animationInterval;
 
 
     constructor() {
@@ -71,6 +73,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
         this.animate();
+        this.winGame();
     }
 
 
@@ -88,18 +91,67 @@ class Endboss extends MovableObject {
             if (world && world.character.x > 4400 && !this.hadFirstContact) {
                 i = 0;
                 this.hadFirstContact = true;
+                endboss_fight.play();
+                game_music.pause();
+                game_music.currentTime = 0;
             }
 
-            else if (this.isHurt()) {
-                this.playAnimation(this.IMAGES_HURT);
-            }
+            if (this.hadFirstContact) {
+                this.followCharacter();
+                if (this.isHurt()) {
+                    this.playAnimation(this.IMAGES_HURT);
+                }
 
-            else if (this.isDead()) {
-                this.playAnimation(this.IMAGES_DEAD);
-                if (this.y < -100) {
-                    this.y -= 4;
+                else if (this.isDead()) {
+                    this.playAnimation(this.IMAGES_DEAD);
+                    if (this.y < -100) {
+                        this.y -= 4;
+                    }
+                    setTimeout(() => {
+                        // this.dead = true;
+                        clearInterval(this.animationInterval);
+                    }, 500);
                 }
             }
         }, 150);
+    }
+
+
+    followCharacter() {
+        setInterval(() => {
+            // Überprüfe, ob der Charakter in der Nähe ist (z.B., wenn die x-Koordinaten innerhalb eines bestimmten Bereichs liegen)
+
+            // Passe die x-Koordinate des Endbosses an die x-Koordinate des Charakters an
+            if (this.x > world.character.x) {
+                this.moveLeft();
+                this.otherDirection = false;
+            } else if (this.x < world.character.x) {
+                this.moveRight();
+                this.otherDirection = true;
+            }
+
+            // Passe die y-Koordinate des Endbosses an die y-Koordinate des Charakters an
+            if (this.y > world.character.y) {
+                this.moveUp();
+            } else if (this.y < world.character.y) {
+                this.moveDown();
+            }
+        }, 100); // Ändere die Aktualisierungsrate entsprechend deiner Anforderungen
+    }
+
+
+    winGame() {
+        setInterval(() => {
+            if (this.health == 0) {
+                setTimeout(() => {
+                    clearAllIntervals();
+                    let winScreen = document.getElementById('youWinScreen');
+                    winScreen.classList.remove('d-None');
+                    win_game.play();
+                    endboss_fight.pause();
+                    endboss_fight.currentTime = 0;
+                }, 1000);
+            }
+        }, 2000);
     }
 }

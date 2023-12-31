@@ -33,10 +33,14 @@
 </head>
 
 <body>
-    <div id="startScreen">
+    <div id="rotationOverlay" class="d-None">
+        <img class=" rotate-device-img" src="img/screen_rotation_FILL0_wght400_GRAD0_opsz24.svg" alt="">
+    </div>
+
+    <div id="startScreen" class="screen">
         <h1>Sharkie</h1>
-        <img class="start-Screen-Img" src="img/3. Background/Mesa de trabajo 1.png">
-        <img onclick="init()" class="start-Btn" src="img/6.Botones/Start/3.png" alt="">
+        <img class="screen-Img" src="img/3. Background/Mesa de trabajo 1.png">
+        <img onclick="init()" class="start-Img" src="img/6.Botones/Start/3.png" alt="">
         <div class="keybinds-container">
             <div class="keybinds-column-container">
                 <img class="arrow-keybinds" src="img/6.Botones/Key/arrow keys.png" alt="Pfeiltasten">
@@ -53,11 +57,17 @@
         </div>
     </div>
 
-    <div id="rotationOverlay">
-        <img class=" rotate-device-img" src="img/screen_rotation_FILL0_wght400_GRAD0_opsz24.svg" alt="">
+    <canvas class="d-None" id="canvas" width="1100" height="700"></canvas>
+
+    <div id="youWinScreen" class="screen d-None">
+        <img class="screen-Img" src="img/6.Botones/Try again/Mesa de trabajo 1.png">
+        <img onclick="init()" class="try-Again-Img" src="img/6.Botones/Try again/Recurso 15.png">
     </div>
 
-    <canvas class="d-None" id="canvas" width="1100" height="700"></canvas>
+    <div id="gameOverScreen" class="screen d-None">
+        <img class="game-Over-Img" src="img/6.Botones/Tittles/Game Over/Recurso 13.png">
+        <img onclick="init()" class="try-Again-Img" src="img/6.Botones/Try again/Recurso 15.png">
+    </div>
 
 </body>
 

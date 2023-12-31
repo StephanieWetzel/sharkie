@@ -134,6 +134,13 @@ class Character extends MovableObject {
     speed = 10;
     world; // greift auf World Klasse zu
     dead = false;
+    movementInterval;
+    animationInterval;
+    offsetX = 120;
+    // for fin-slap
+    isProtected = false;
+    protectionDuration = 5000;
+
 
 
     constructor() {
@@ -151,6 +158,21 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_POISON_BUBBLE_ATTACK);
         this.loadImages(this.IMAGES_FIN_ATTACK);
         this.animate();
+        this.gameOver();
+    }
+
+
+    moveCameraSmoothly() {
+        const targetCameraX = this.otherDirection ? -this.x + 700 : -this.x + 200; // if (?) otherDirection = true then x + 700, else (:) x + 200
+        const smoothness = 0.05; // the smaller the number, the smoother the camera movement
+
+        this.world.camera_x = this.lerp(this.world.camera_x, targetCameraX, smoothness); // current cameraX position getting updated
+    }
+
+
+    // lerp = linear interpolation; used to make a smooth transition between start- and endpoint; 
+    lerp(start, end, t) { // start = starting point of interpolation; end = where interpolation is supposed to lead; t = value between 0 (start) and 1 (end) that shows the progress of interpolation
+        return start * (1 - t) + end * t;
     }
 
 
@@ -174,7 +196,14 @@ class Character extends MovableObject {
                 this.goDown();
                 lastTimeStamp = new Date();
             }
-            this.world.camera_x = -this.x + 200; // camera_x entspricht immer dem Wert von dem x unseres Characters, aber das GEGENTEIL (Welt bewegt sich um die gleichen Pixel nach links, wie Character sich nach rechts bewegt)
+
+            if (this.otherDirection) {
+                this.moveCameraSmoothly();
+            } else {
+                this.moveCameraSmoothly();
+            }
+
+            this.moveCameraSmoothly();
         }, 1000 / 50); // 60 x pro Sekunde
 
 
@@ -201,12 +230,13 @@ class Character extends MovableObject {
                             }
                         }, 1000);
                     }
-                    setTimeout(() => { // might need to find alternative way
+
+                    setTimeout(() => {
                         this.dead = true;
-                    }, 1000);
+                    }, 800);
                 }
             }
-            else if (this.isHurt()) {
+            else if (this.isHurt() && !this.isProtected) {
                 if (this.world.damageType == Pufferfish) {
                     hit_by_pufferfish.play();
                     this.playAnimation(this.IMAGES_HURT_PUFFERFISH);
@@ -217,6 +247,7 @@ class Character extends MovableObject {
                     this.playAnimation(this.IMAGES_HURT_JELLYFISH);
                     lastTimeStamp = new Date();
                 }
+                console.log(this.health);
             }
             // ATTACKS
             else if (this.world.keyboard.B) {
@@ -307,5 +338,23 @@ class Character extends MovableObject {
 
     arrowKeyDown() {
         return this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.UP || this.world.keyboard.DOWN;
+    }
+
+
+    gameOver() {
+        setInterval(() => {
+            if (this.health == 0) {
+                setTimeout(() => {
+                    clearAllIntervals();
+                    let gameOverScreen = document.getElementById('gameOverScreen');
+                    gameOverScreen.classList.remove('d-None');
+                    game_over.play();
+                    game_music.pause();
+                    game_music.currentTime = 0;
+                    endboss_fight.pause();
+                    endboss_fight.currentTime = 0;
+                }, 1000);
+            }
+        }, 3000);
     }
 }

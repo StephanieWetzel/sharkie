@@ -8,9 +8,29 @@ function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
     let startScreen = document.getElementById('startScreen');
+    let winScreen = document.getElementById('youWinScreen');
+    let gameOverScreen = document.getElementById('gameOverScreen');
     canvas.classList.remove('d-None');
-    startScreen.style.display = 'none';
+    startScreen.classList.add('d-None');
+    winScreen.classList.add('d-None');
+    gameOverScreen.classList.add('d-None');
+    bubble_popped.play();
+    game_music.play();
+    deviceRotated();
     // console.log('My character is', world.character);
+}
+
+
+function deviceRotated() {
+    let rotationOverlay = document.getElementById('rotationOverlay');
+    if (rotationOverlay.style.display == 'flex') {
+        pauseAllAudio();
+    }
+}
+
+
+function clearAllIntervals() {
+    for (let i = 1; i < 9999; i++) window.clearInterval(i);
 }
 
 

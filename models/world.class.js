@@ -44,7 +44,7 @@ class World {
 
         setInterval(() => {
             this.checkCollisionsWithEnemies();
-        }, 300);
+        }, 400);
 
         setInterval(() => {
             this.throwObjects();
@@ -70,14 +70,24 @@ class World {
 
 
     throwBubble() {
-        let bubble = new Bubble(this.character.x + 120, this.character.y + 80);
+        let bubble;
+        if (this.character.otherDirection) {
+            bubble = new Bubble(this.character.x - 10, this.character.y + 80);
+        } else if (!this.character.otherDirection) {
+            bubble = new Bubble(this.character.x + 120, this.character.y + 80);
+        }
         new_bubble.play();
         this.bubbles.push(bubble);
     }
 
 
     throwPoisonBubble() {
-        let poisonBubble = new PoisonBubble(this.character.x + 120, this.character.y + 80);
+        let poisonBubble;
+        if (this.character.otherDirection) {
+            poisonBubble = new PoisonBubble(this.character.x - 10, this.character.y + 80);
+        } else if (!this.character.otherDirection) {
+            poisonBubble = new PoisonBubble(this.character.x + 120, this.character.y + 80);
+        }
         new_bubble.play();
         this.poisonBubbles.push(poisonBubble);
         this.percentageBottles -= 10;
@@ -161,6 +171,7 @@ class World {
                 if (enemy instanceof Pufferfish) {
                     this.damageType = Pufferfish;
                     this.character.hit(10);
+                    enemy.isHit = true;
                 }
                 this.statusbarHealth.setPercentage(this.character.health);
             }
@@ -219,7 +230,7 @@ class World {
 
 
     cannotBeHarmed(bubbleType, enemy) {
-        enemy.playAnimation(enemy.IMAGES_BUBBLESWIM);
+        enemy.isHit = true;
         this.removeBubbleFromCanvas(bubbleType);
         bubble_popped.play();
     }
@@ -240,8 +251,15 @@ class World {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy) && this.keyboard.SPACE) {
                 if (enemy instanceof Pufferfish) {
-                    enemy.health = 0;
-                    jellyfish_defeated.play();
+                    if (!this.character.isProtected) {
+                        this.character.isProtected = true; // protection activated
+                        enemy.isHit = true;
+                        enemy.health = 0;
+                        jellyfish_defeated.play();
+                        setTimeout(() => {
+                            this.character.isProtected = false; // Schutz nach der angegebenen Dauer deaktivieren
+                        }, this.character.protectionDuration);
+                    }
                 }
             }
         });
