@@ -88,10 +88,11 @@ class Endboss extends MovableObject {
             }
             i++;
 
-            if (world && world.character.x > 4400 && !this.hadFirstContact) {
+            if (world && world.character.x > 4400 && !this.hadFirstContact && !endbossMusic) {
                 i = 0;
                 this.hadFirstContact = true;
                 endboss_fight.play();
+                endbossMusic = true;
                 game_music.pause();
                 game_music.currentTime = 0;
             }
@@ -150,6 +151,7 @@ class Endboss extends MovableObject {
                     win_game.play();
                     endboss_fight.pause();
                     endboss_fight.currentTime = 0;
+                    endbossMusic = false;
                 }, 1000);
             }
         }, 2000);

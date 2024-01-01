@@ -139,7 +139,7 @@ class Character extends MovableObject {
     offsetX = 120;
     // for fin-slap
     isProtected = false;
-    protectionDuration = 5000;
+    protectionDuration = 2000;
 
 
 
@@ -163,7 +163,7 @@ class Character extends MovableObject {
 
 
     moveCameraSmoothly() {
-        const targetCameraX = this.otherDirection ? -this.x + 700 : -this.x + 200; // if (?) otherDirection = true then x + 700, else (:) x + 200
+        const targetCameraX = this.otherDirection ? -this.x + 740 : -this.x + 200; // if (?) otherDirection = true then x + 700, else (:) x + 200
         const smoothness = 0.05; // the smaller the number, the smoother the camera movement
 
         this.world.camera_x = this.lerp(this.world.camera_x, targetCameraX, smoothness); // current cameraX position getting updated

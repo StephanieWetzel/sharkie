@@ -16,7 +16,7 @@ body {
 }
 
 h1 {
-    font-size: 72px;
+    font-size: 80px;
     position: absolute;
     top: -16px;
     color: white;
@@ -53,7 +53,7 @@ canvas {
     height: 80px;
     width: 232px;
     position: absolute;
-    top: 160px;
+    top: 168px;
     right: 244px;
     filter: drop-shadow(2px 4px 6px black);
 }
@@ -118,6 +118,29 @@ canvas {
     filter: invert(100%) sepia(2%) saturate(0%) hue-rotate(119deg) brightness(102%) contrast(103%);
 }
 
+/* game-overlay */
+#gameOverlay {
+    position: absolute;
+}
+
+.img-Container {
+    display: flex;
+    gap: 8px;
+    position: relative;
+    top: -320px;
+    right: -480px;
+}
+
+.img-Container img {
+    height: 32px;
+    filter: invert(100%) sepia(2%) saturate(0%) hue-rotate(119deg) brightness(102%) contrast(103%);
+}
+
+.img-Container img:hover {
+    cursor: pointer;
+    scale: 1.2;
+}
+
 /* win */
 .try-Again-Img {
     height: 72px;
@@ -135,11 +158,6 @@ canvas {
 }
 
 /* game over */
-/* #gameOverScreen {
-    position: absolute;
-    z-index: 1000;
-} */
-
 .game-Over-Img {
     width: 100vw;
 }

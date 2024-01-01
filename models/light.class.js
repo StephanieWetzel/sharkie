@@ -1,7 +1,8 @@
 class Light extends MovableObject {
     y = 0;
-    width = 3000;
+    width = 5000;
     height = 800;
+    direction = -1; // left
 
 
     constructor() {
@@ -14,7 +15,11 @@ class Light extends MovableObject {
 
     animate() {
         setInterval(() => {
-            this.moveLeft();
-        }, 1000 / 30);
+            this.x += this.direction * this.speed; // value of x changes depending on direction (1 or -1)
+        }, 1000 / 50);
+
+        setInterval(() => {
+            this.direction *= -1; // changes direction every 6 seconds
+        }, 6000);
     }
 }

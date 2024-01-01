@@ -33,10 +33,11 @@
 </head>
 
 <body>
+    <!-- ROTATION-SCREEN -->
     <div id="rotationOverlay" class="d-None">
-        <img class=" rotate-device-img" src="img/screen_rotation_FILL0_wght400_GRAD0_opsz24.svg" alt="">
+        <img class=" rotate-device-img" src="img/screen_rotation.svg" alt="">
     </div>
-
+    <!-- START-SCREEN -->
     <div id="startScreen" class="screen">
         <h1>Sharkie</h1>
         <img class="screen-Img" src="img/3. Background/Mesa de trabajo 1.png">
@@ -56,14 +57,23 @@
             </div>
         </div>
     </div>
-
+    <!-- CANVAS -->
     <canvas class="d-None" id="canvas" width="1100" height="700"></canvas>
-
+    <!-- GAME-OVERLAY -->
+    <div id="gameOverlay">
+        <div class="img-Container">
+            <img src="img/info.svg" alt="Info">
+            <img onclick="toggleVolume()" id="soundOn" src="img/volume_up.svg" alt="Sound on">
+            <img onclick="toggleVolume()" id="soundOff" class="d-None" src="img/volume_off_.svg" alt="Sound off">
+            <img src="img/fullscreen.svg" alt="Fullscreen">
+        </div>
+    </div>
+    <!-- WIN-SCREEN -->
     <div id="youWinScreen" class="screen d-None">
         <img class="screen-Img" src="img/6.Botones/Try again/Mesa de trabajo 1.png">
         <img onclick="init()" class="try-Again-Img" src="img/6.Botones/Try again/Recurso 15.png">
     </div>
-
+    <!-- GAME-OVER-SCREEN -->
     <div id="gameOverScreen" class="screen d-None">
         <img class="game-Over-Img" src="img/6.Botones/Tittles/Game Over/Recurso 13.png">
         <img onclick="init()" class="try-Again-Img" src="img/6.Botones/Try again/Recurso 15.png">

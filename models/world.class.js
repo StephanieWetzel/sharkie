@@ -257,7 +257,7 @@ class World {
                         enemy.health = 0;
                         jellyfish_defeated.play();
                         setTimeout(() => {
-                            this.character.isProtected = false; // Schutz nach der angegebenen Dauer deaktivieren
+                            this.character.isProtected = false; // protection deactivated after 2 seconds
                         }, this.character.protectionDuration);
                     }
                 }

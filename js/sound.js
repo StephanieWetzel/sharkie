@@ -14,18 +14,47 @@ let game_music = new Audio('audio/game_music.mp3');
 let win_game = new Audio('audio/you_win.mp3');
 let game_over = new Audio('audio/you_lose.mp3');
 
+let audioOn = true;
+let endbossMusic = false;
+
 let allAudio =
     [characterSwimming, collectCoins, getLifeBack, collectBottles, hit_by_pufferfish, hit_by_jellyfish, jellyfish_defeated,
         bubble_popped, fin_attack, bubble_breath, new_bubble, endboss_fight, game_music, win_game, game_over];
 
 
 game_music.volume = 0.2;
+game_music.loop = true;
 endboss_fight.volume = 0.3;
+endboss_fight.loop = true;
 bubble_breath.volume = 0.5;
+
+
+function toggleVolume() {
+    document.getElementById('soundOn').classList.toggle('d-None');
+    document.getElementById('soundOff').classList.toggle('d-None');
+
+    if (audioOn) {
+        pauseAllAudio();
+        audioOn = false;
+    } else {
+        playGameMusic();
+        audioOn = true;
+    }
+}
+
+
+function playGameMusic() {
+    if (endbossMusic) {
+        endboss_fight.play();
+    } else {
+        game_music.play();
+    }
+}
 
 
 function pauseAllAudio() {
     allAudio.forEach((audio) => {
         audio.pause();
+        audio.currentTime = 0;
     })
 }
