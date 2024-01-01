@@ -37,13 +37,21 @@ function toggleVolume() {
         pauseAllAudio();
         audioOn = false;
     } else {
-        playGameMusic();
+        playBackgroundMusic();
         audioOn = true;
     }
 }
 
 
-function playGameMusic() {
+function pauseAllAudio() {
+    allAudio.forEach((audio) => {
+        audio.pause();
+        audioOn = false;
+    })
+}
+
+
+function playBackgroundMusic() { // endboss-music if character and endboss have met, otherwise main-music
     if (endbossMusic) {
         endboss_fight.play();
     } else {
@@ -52,9 +60,8 @@ function playGameMusic() {
 }
 
 
-function pauseAllAudio() {
-    allAudio.forEach((audio) => {
-        audio.pause();
-        audio.currentTime = 0;
-    })
+function playSound(audioName) {
+    if (audioOn) {
+        audioName.play();
+    }
 }

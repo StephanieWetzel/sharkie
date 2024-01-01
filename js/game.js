@@ -14,10 +14,47 @@ function init() {
     startScreen.classList.add('d-None');
     winScreen.classList.add('d-None');
     gameOverScreen.classList.add('d-None');
-    bubble_popped.play();
-    game_music.play();
+    playSound(bubble_popped);
+    playSound(game_music);
     deviceRotated();
-    // console.log('My character is', world.character);
+}
+
+
+// function openFullscreen() {
+//     let fullscreen = document.getElementById('fullscreen');
+//     enterFullscreen(fullscreen);
+// }
+
+
+// function enterFullscreen(element) {
+//     if (element.requestFullscreen) {
+//         element.requestFullscreen();
+//     } else if (element.msRequestFullscreen) {      // for IE11 (remove June 15, 2022)
+//         element.msRequestFullscreen();
+//     } else if (element.webkitRequestFullscreen) {  // iOS Safari
+//         element.webkitRequestFullscreen();
+//     }
+// }
+
+
+// function exitFullscreen() {
+//     if (document.exitFullscreen) {
+//         document.exitFullscreen();
+//     } else if (document.webkitExitFullscreen) {
+//         document.webkitExitFullscreen();
+//     }
+// }
+
+
+function openInfoOverlay() {
+    document.getElementById('infoScreen').classList.remove('d-None');
+    document.getElementById('canvas').classList.add('d-None');
+}
+
+
+function closeInfoOverlay() {
+    document.getElementById('infoScreen').classList.add('d-None');
+    document.getElementById('canvas').classList.remove('d-None');
 }
 
 

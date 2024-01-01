@@ -238,12 +238,12 @@ class Character extends MovableObject {
             }
             else if (this.isHurt() && !this.isProtected) {
                 if (this.world.damageType == Pufferfish) {
-                    hit_by_pufferfish.play();
+                    playSound(hit_by_pufferfish);
                     this.playAnimation(this.IMAGES_HURT_PUFFERFISH);
                     lastTimeStamp = new Date();
                 }
                 if (this.world.damageType == Jellyfish) {
-                    hit_by_jellyfish.play();
+                    playSound(hit_by_jellyfish);
                     this.playAnimation(this.IMAGES_HURT_JELLYFISH);
                     lastTimeStamp = new Date();
                 }
@@ -252,17 +252,17 @@ class Character extends MovableObject {
             // ATTACKS
             else if (this.world.keyboard.B) {
                 this.playAnimation(this.IMAGES_BUBBLE_ATTACK);
-                bubble_breath.play();
+                playSound(bubble_breath);
                 lastTimeStamp = new Date();
             }
             else if (this.world.keyboard.V) {
                 this.playAnimation(this.IMAGES_POISON_BUBBLE_ATTACK);
-                bubble_breath.play();
+                playSound(bubble_breath);
                 lastTimeStamp = new Date();
             }
             else if (this.world.keyboard.SPACE) {
                 this.playAnimation(this.IMAGES_FIN_ATTACK);
-                fin_attack.play();
+                playSound(fin_attack);
                 lastTimeStamp = new Date();
             }
             else if (this.arrowKeyDown()) {
@@ -298,7 +298,7 @@ class Character extends MovableObject {
     goRight() {
         this.moveRight();
         this.otherDirection = false; // img not mirrored
-        characterSwimming.play();
+        playSound(characterSwimming);
     }
 
 
@@ -310,7 +310,7 @@ class Character extends MovableObject {
     goLeftAndMirrorImage() {
         this.moveLeft();
         this.otherDirection = true; // img mirrored
-        characterSwimming.play();
+        playSound(characterSwimming);
     }
 
 
@@ -321,7 +321,7 @@ class Character extends MovableObject {
 
     goUp() {
         this.moveUp();
-        characterSwimming.play();
+        playSound(characterSwimming);
     }
 
 
@@ -332,7 +332,7 @@ class Character extends MovableObject {
 
     goDown() {
         this.moveDown();
-        characterSwimming.play();
+        playSound(characterSwimming);
     }
 
 
@@ -348,7 +348,7 @@ class Character extends MovableObject {
                     clearAllIntervals();
                     let gameOverScreen = document.getElementById('gameOverScreen');
                     gameOverScreen.classList.remove('d-None');
-                    game_over.play();
+                    playSound(game_over);
                     game_music.pause();
                     game_music.currentTime = 0;
                     endboss_fight.pause();

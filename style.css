@@ -128,7 +128,7 @@ canvas {
     gap: 8px;
     position: relative;
     top: -320px;
-    right: -480px;
+    right: -500px;
 }
 
 .img-Container img {
@@ -141,13 +141,72 @@ canvas {
     scale: 1.2;
 }
 
+/* info-overlay */
+.info-container {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    margin-top: 104px;
+    filter: drop-shadow(2px 4px 6px black);
+}
+
+.info-header {
+    position: absolute;
+    top: 32px;
+    font-size: 80px;
+    filter: drop-shadow(2px 4px 6px black);
+}
+
+.close-info-img {
+    position: absolute;
+    filter: invert(100%) sepia(2%) saturate(0%) hue-rotate(119deg) brightness(102%) contrast(103%);
+    height: 40px;
+    top: 32px;
+    right: 32px;
+}
+
+.close-info-img:hover {
+    cursor: pointer;
+    scale: 1.2;
+}
+
+.info-arrow-keybinds {
+    height: 144px;
+}
+
+.info-space-keybind {
+    height: 72px;
+}
+
+.info-keybinds-letters {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #531A82;
+    padding: 28px;
+    background-color: #7FFFE0;
+    border: 3px solid white;
+    border-radius: 20px;
+    height: 8px;
+    width: 8px;
+    font-size: 44px;
+}
+
+.font-size-48 {
+    font-size: 48px;
+}
+
+.margin-top-minus-40 {
+    margin-top: -40px;
+}
+
 /* win */
 .try-Again-Img {
     height: 72px;
     width: 280px;
     position: absolute;
     bottom: 120px;
-    right: 424px;
+    /* right: 368px; */
     filter: drop-shadow(2px 4px 6px black);
 }
 
@@ -188,6 +247,10 @@ canvas {
         width: 100%;
     }
 
+    .screen {
+        width: 100%;
+    }
+
     canvas {
         width: 100%;
     }
@@ -196,6 +259,10 @@ canvas {
 /* Smartphones -------- */
 @media only screen and (max-height: 700px) {
     #startScreen {
+        height: 100vh;
+    }
+
+    .screen {
         height: 100vh;
     }
 

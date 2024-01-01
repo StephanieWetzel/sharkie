@@ -76,7 +76,7 @@ class World {
         } else if (!this.character.otherDirection) {
             bubble = new Bubble(this.character.x + 120, this.character.y + 80);
         }
-        new_bubble.play();
+        playSound(new_bubble)
         this.bubbles.push(bubble);
     }
 
@@ -88,7 +88,7 @@ class World {
         } else if (!this.character.otherDirection) {
             poisonBubble = new PoisonBubble(this.character.x + 120, this.character.y + 80);
         }
-        new_bubble.play();
+        playSound(new_bubble)
         this.poisonBubbles.push(poisonBubble);
         this.percentageBottles -= 10;
         this.statusbarBottles.setPercentage(this.percentageBottles);
@@ -112,7 +112,7 @@ class World {
 
     collectBottle(object) {
         if (this.collectedBottles.length <= 9) { // character can collect up to 10 bottles
-            collectBottles.play();
+            playSound(collectBottles);
             this.collectedBottles.push(object);
             this.percentageBottles += 10;
             this.statusbarBottles.setPercentage(this.percentageBottles);
@@ -123,7 +123,7 @@ class World {
 
     collectCoin(object) {
         if (this.collectedCoins.length <= 8) {
-            collectCoins.play();
+            playSound(collectCoins);
             this.collectedCoins.push(object);
             this.percentageCoins += 10;
             this.statusbarCoins.setPercentage(this.percentageCoins);
@@ -138,7 +138,7 @@ class World {
 
     getLifeBack(object) {
         this.removeObjectFromCanvas(object);
-        getLifeBack.play();
+        playSound(getLifeBack);
         this.collectedCoins.length = 0; // empties coin-array
         this.percentageCoins = 0;
         this.statusbarHealth.setPercentage(100); // character gets full health
@@ -191,7 +191,7 @@ class World {
                     }
                     if (enemy instanceof Endboss) {
                         this.removeBubbleFromCanvas(bubble);
-                        bubble_popped.play();
+                        playSound(bubble_popped);
                     }
                 }
             });
@@ -213,7 +213,7 @@ class World {
                     if (enemy instanceof Endboss) {
                         enemy.hit(20);
                         console.log(enemy.health);
-                        bubble_popped.play();
+                        playSound(bubble_popped);
                         this.removePoisonBubbleFromCanvas(poisonBubble);
                     }
                 }
@@ -224,7 +224,7 @@ class World {
 
     jellyfishDefeated(bubbleType, enemy) {
         enemy.health = 0;
-        jellyfish_defeated.play();
+        playSound(jellyfish_defeated);
         this.removeBubbleFromCanvas(bubbleType);
     }
 
@@ -232,7 +232,7 @@ class World {
     cannotBeHarmed(bubbleType, enemy) {
         enemy.isHit = true;
         this.removeBubbleFromCanvas(bubbleType);
-        bubble_popped.play();
+        playSound(bubble_popped);
     }
 
 
@@ -255,7 +255,7 @@ class World {
                         this.character.isProtected = true; // protection activated
                         enemy.isHit = true;
                         enemy.health = 0;
-                        jellyfish_defeated.play();
+                        playSound(jellyfish_defeated);
                         setTimeout(() => {
                             this.character.isProtected = false; // protection deactivated after 2 seconds
                         }, this.character.protectionDuration);

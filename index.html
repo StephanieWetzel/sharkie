@@ -62,10 +62,29 @@
     <!-- GAME-OVERLAY -->
     <div id="gameOverlay">
         <div class="img-Container">
-            <img src="img/info.svg" alt="Info">
+            <img onclick="openInfoOverlay()" src="img/info.svg" alt="Info">
             <img onclick="toggleVolume()" id="soundOn" src="img/volume_up.svg" alt="Sound on">
             <img onclick="toggleVolume()" id="soundOff" class="d-None" src="img/volume_off_.svg" alt="Sound off">
-            <img src="img/fullscreen.svg" alt="Fullscreen">
+        </div>
+    </div>
+    <!-- INFO-SCREEN -->
+    <div id="infoScreen" class="screen d-None">
+        <img class="screen-Img" src="img/3. Background/Dark/1.png">
+        <span class="info-header">How to play</span>
+        <img onclick="closeInfoOverlay()" class="close-info-img" src="img/close.svg" alt="close">
+        <div class="info-container">
+            <div class="keybinds-column-container margin-top-minus-40">
+                <img class="info-arrow-keybinds" src="img/6.Botones/Key/arrow keys.png" alt="Pfeiltasten">
+                <span class="info-keybinds-letters">B</span>
+                <span class="info-keybinds-letters">V</span>
+                <img class="info-space-keybind" src="img/6.Botones/Key/Space Bar key.png" alt="Leertaste">
+            </div>
+            <div class="keybinds-column-container">
+                <span class="margin-top-16 font-size-48">Move Shark</span>
+                <span class="margin-top-16 font-size-48">Bubble Attack</span>
+                <span class="margin-top-16 font-size-48">Poison-Bubble Attack</span>
+                <span class="margin-top-16 font-size-48">Fin Attack</span>
+            </div>
         </div>
     </div>
     <!-- WIN-SCREEN -->

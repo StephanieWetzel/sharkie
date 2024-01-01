@@ -91,7 +91,7 @@ class Endboss extends MovableObject {
             if (world && world.character.x > 4400 && !this.hadFirstContact && !endbossMusic) {
                 i = 0;
                 this.hadFirstContact = true;
-                endboss_fight.play();
+                playSound(endboss_fight);
                 endbossMusic = true;
                 game_music.pause();
                 game_music.currentTime = 0;
@@ -148,7 +148,7 @@ class Endboss extends MovableObject {
                     clearAllIntervals();
                     let winScreen = document.getElementById('youWinScreen');
                     winScreen.classList.remove('d-None');
-                    win_game.play();
+                    playSound(win_game);
                     endboss_fight.pause();
                     endboss_fight.currentTime = 0;
                     endbossMusic = false;
