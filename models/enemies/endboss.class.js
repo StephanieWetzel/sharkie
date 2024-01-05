@@ -121,20 +121,19 @@ class Endboss extends MovableObject {
     followCharacter() {
         setInterval(() => {
             // Überprüfe, ob der Charakter in der Nähe ist (z.B., wenn die x-Koordinaten innerhalb eines bestimmten Bereichs liegen)
-
             // Passe die x-Koordinate des Endbosses an die x-Koordinate des Charakters an
-            if (this.x > world.character.x) {
+            if (this.x >= world.character.x) {
                 this.moveLeft();
                 this.otherDirection = false;
-            } else if (this.x < world.character.x) {
+            } else if (this.x <= world.character.x) {
                 this.moveRight();
                 this.otherDirection = true;
             }
 
             // Passe die y-Koordinate des Endbosses an die y-Koordinate des Charakters an
-            if (this.y > world.character.y) {
+            if (this.y >= world.character.y) {
                 this.moveUp();
-            } else if (this.y < world.character.y) {
+            } else if (this.y <= world.character.y) {
                 this.moveDown();
             }
         }, 100); // Ändere die Aktualisierungsrate entsprechend deiner Anforderungen

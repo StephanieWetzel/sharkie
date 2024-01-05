@@ -132,7 +132,7 @@ class Character extends MovableObject {
     height = 160;
     width = 150;
     speed = 10;
-    world; // greift auf World Klasse zu
+    world;
     dead = false;
     movementInterval;
     animationInterval;
@@ -140,7 +140,14 @@ class Character extends MovableObject {
     // for fin-slap
     isProtected = false;
     protectionDuration = 2000;
-
+    // checking for attacks:
+    isBubbleShooting = false;
+    isPoisonBubbleShooting = false;
+    isFinSlapping = false;
+    // for transition to sleeping:
+    lastTimeStamp;
+    currentTimeStamp;
+    secondsPassed;
 
 
     constructor() {
@@ -157,11 +164,13 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_BUBBLE_ATTACK);
         this.loadImages(this.IMAGES_POISON_BUBBLE_ATTACK);
         this.loadImages(this.IMAGES_FIN_ATTACK);
-        this.animate();
-        this.gameOver();
+        this.animateSharkieMovement();
+        this.animateSharkieConditions();
+        this.checkForGameOver();
     }
 
 
+    // CAMERA
     moveCameraSmoothly() {
         const targetCameraX = this.otherDirection ? -this.x + 740 : -this.x + 200; // if (?) otherDirection = true then x + 700, else (:) x + 200
         const smoothness = 0.05; // the smaller the number, the smoother the camera movement
@@ -169,32 +178,29 @@ class Character extends MovableObject {
         this.world.camera_x = this.lerp(this.world.camera_x, targetCameraX, smoothness); // current cameraX position getting updated
     }
 
-
-    // lerp = linear interpolation; used to make a smooth transition between start- and endpoint; 
-    lerp(start, end, t) { // start = starting point of interpolation; end = where interpolation is supposed to lead; t = value between 0 (start) and 1 (end) that shows the progress of interpolation
+    // lerp = linear interpolation (smooth transition between a start- and endpoint)
+    lerp(start, end, t) { // t = value between 0 (start) and 1 (end) that shows progress of interpolation
         return start * (1 - t) + end * t;
     }
 
 
-    animate() {
-        let lastTimeStamp = new Date(); // used to determine how much time has passed since a key was last pressed (for sleep animation)
+    // ANIMATIONS
+    animateSharkieMovement() {
+        this.lastTimeStamp = new Date(); // used to determine how much time has passed since a key was last pressed (for sleep animation)
 
         setInterval(() => {
             if (this.rightArrowDownAndNotAtEndOfMap()) {
                 this.goRight();
-                lastTimeStamp = new Date();
-            }
-            if (this.leftArrowDownAndNotAtStartOfMap()) {
+                this.lastTimeStamp = new Date();
+            } if (this.leftArrowDownAndNotAtStartOfMap()) {
                 this.goLeftAndMirrorImage();
-                lastTimeStamp = new Date();
-            }
-            if (this.upArrowDownAndNotAtTop()) {
+                this.lastTimeStamp = new Date();
+            } if (this.upArrowDownAndNotAtTop()) {
                 this.goUp();
-                lastTimeStamp = new Date();
-            }
-            if (this.downArrowDownAndNotAtBottom()) {
+                this.lastTimeStamp = new Date();
+            } if (this.downArrowDownAndNotAtBottom()) {
                 this.goDown();
-                lastTimeStamp = new Date();
+                this.lastTimeStamp = new Date();
             }
 
             if (this.otherDirection) {
@@ -204,84 +210,138 @@ class Character extends MovableObject {
             }
 
             this.moveCameraSmoothly();
-        }, 1000 / 50); // 60 x pro Sekunde
+        }, 1000 / 50);
+    }
 
 
+    animateSharkieConditions() {
         setInterval(() => {
-            let currentTimeStamp = new Date();
-            let secondsPassed = (currentTimeStamp - lastTimeStamp) / 1000;
-
-            if (this.isDead()) {
-                if (!this.dead) {
-                    if (this.world.damageType == Pufferfish) {
-                        this.playAnimation(this.IMAGES_DEAD_PUFFERFISH);
-                        this.applyGravity();
-                        setInterval(() => {
-                            this.y -= 10;
-                        }, 1000);
-
-                    }
-                    if (this.world.damageType == Jellyfish) {
-                        this.playAnimation(this.IMAGES_DEAD_JELLYFISH);
-                        this.applyGravity();
-                        setInterval(() => {
-                            if (this.y < this.world.level.map_end_y) {
-                                this.y += 20;
-                            }
-                        }, 1000);
-                    }
-
-                    setTimeout(() => {
-                        this.dead = true;
-                    }, 800);
-                }
-            }
-            else if (this.isHurt() && !this.isProtected) {
-                if (this.world.damageType == Pufferfish) {
-                    playSound(hit_by_pufferfish);
-                    this.playAnimation(this.IMAGES_HURT_PUFFERFISH);
-                    lastTimeStamp = new Date();
-                }
-                if (this.world.damageType == Jellyfish) {
-                    playSound(hit_by_jellyfish);
-                    this.playAnimation(this.IMAGES_HURT_JELLYFISH);
-                    lastTimeStamp = new Date();
-                }
-                console.log(this.health);
-            }
-            // ATTACKS
-            else if (this.world.keyboard.B) {
-                this.playAnimation(this.IMAGES_BUBBLE_ATTACK);
-                playSound(bubble_breath);
-                lastTimeStamp = new Date();
-            }
-            else if (this.world.keyboard.V) {
-                this.playAnimation(this.IMAGES_POISON_BUBBLE_ATTACK);
-                playSound(bubble_breath);
-                lastTimeStamp = new Date();
-            }
-            else if (this.world.keyboard.SPACE) {
-                this.playAnimation(this.IMAGES_FIN_ATTACK);
-                playSound(fin_attack);
-                lastTimeStamp = new Date();
-            }
-            else if (this.arrowKeyDown()) {
-                this.playAnimation(this.IMAGES_SWIMMING);
-            }
-            // transition from IDLE to LONG_IDLE to SLEEPING if no arrow key is pressed
-            else {
-                this.playAnimation(this.IMAGES_IDLE);
-                if (secondsPassed >= 10) {
-                    this.transitionToSleeping(secondsPassed);
-                }
-            }
+            this.currentTimeStamp = new Date(); // needed to get the time difference between active- and sleeping-state (for transition to sleeping)
+            this.checkForSleeping();
+            this.checkForCollisions();
+            this.checkForAttacks();
+            this.checkForDeath();
         }, 110);
     }
 
 
-    transitionToSleeping(secondsPassed) {
+    checkForSleeping() {
+        this.secondsPassed = (this.currentTimeStamp - this.lastTimeStamp) / 1000; // time difference between active- and sleeping-state
+
+        if (this.arrowKeyDown()) {
+            this.playAnimation(this.IMAGES_SWIMMING);
+        } else { // transition from IDLE to LONG_IDLE to SLEEPING if no key is pressed
+            this.playAnimation(this.IMAGES_IDLE);
+            if (this.secondsPassed >= 10) {
+                this.transitionToSleeping();
+            }
+        }
+    }
+
+
+    checkForCollisions() {
+        if (this.isHurt() && !this.isProtected) {
+            if (this.world.damageType == Pufferfish) {
+                playSound(hit_by_pufferfish);
+                this.playAnimation(this.IMAGES_HURT_PUFFERFISH);
+                this.lastTimeStamp = new Date();
+            }
+            if (this.world.damageType == Jellyfish) {
+                playSound(hit_by_jellyfish);
+                this.playAnimation(this.IMAGES_HURT_JELLYFISH);
+                this.lastTimeStamp = new Date();
+            }
+            console.log(this.health);
+        }
+    }
+
+
+    checkForDeath() {
+        // setInterval(() => {
+        if (this.isDead()) {
+            if (!this.dead) {
+                if (this.world.damageType == Pufferfish) {
+                    this.playAnimation(this.IMAGES_DEAD_PUFFERFISH);
+                    this.applyGravity();
+                    setInterval(() => {
+                        this.y -= 10;
+                    }, 1000);
+                }
+                if (this.world.damageType == Jellyfish) {
+                    this.playAnimation(this.IMAGES_DEAD_JELLYFISH);
+                    this.applyGravity();
+                    setInterval(() => {
+                        if (this.y < this.world.level.map_end_y) {
+                            this.y += 20;
+                        }
+                    }, 1000);
+                }
+
+                setTimeout(() => {
+                    this.dead = true;
+                }, 800);
+            }
+        }
+        // }, 110);
+    }
+
+
+    // ATTACKS
+    checkForAttacks() {
+        if (!this.isBubbleShooting || !this.isPoisonBubbleShooting || !this.isFinSlapping) {
+            if (this.world.keyboard.B) {
+                this.isBubbleShooting = true;
+                this.animateBubbleAttack();
+                this.lastTimeStamp = new Date();
+            }
+            if (this.world.keyboard.V) {
+                this.isPoisonBubbleShooting = true;
+                this.animatePoisonBubbleAttack();
+                this.lastTimeStamp = new Date();
+            }
+            if (this.world.keyboard.SPACE) {
+                this.isFinSlapping = true;
+                this.animateFinAttack();
+                this.lastTimeStamp = new Date();
+            }
+        }
+    }
+
+
+    animateBubbleAttack() {
+        this.playAnimation(this.IMAGES_BUBBLE_ATTACK);
+        playSound(bubble_breath);
+
+        if (this.currentImage == this.IMAGES_BUBBLE_ATTACK.length - 1) {
+            this.isBubbleShooting = false;
+        }
+    }
+
+
+    animatePoisonBubbleAttack() {
+        this.playAnimation(this.IMAGES_POISON_BUBBLE_ATTACK);
+        playSound(bubble_breath);
+
+        if (this.currentImage == this.IMAGES_POISON_BUBBLE_ATTACK.length - 1) {
+            this.isPoisonBubbleShooting = false;
+        }
+    }
+
+
+    animateFinAttack() {
+        this.playAnimation(this.IMAGES_FIN_ATTACK);
+        playSound(fin_attack);
+
+        if (this.currentImage == this.IMAGES_FIN_ATTACK.length - 1) {
+            this.isFinSlapping = false;
+        }
+    }
+
+
+    // SLEEPING
+    transitionToSleeping() {
         this.playAnimation(this.IMAGES_LONG_IDLE);
-        if (secondsPassed >= 11) {
+        if (this.secondsPassed >= 11) {
             this.playAnimation(this.IMAGES_SLEEPING);
             if (this.y < 500) {
                 this.y++;
@@ -290,6 +350,7 @@ class Character extends MovableObject {
     }
 
 
+    // MOVING
     rightArrowDownAndNotAtEndOfMap() {
         return this.world.keyboard.RIGHT && this.x < this.world.level.map_end_x;
     }
@@ -341,7 +402,8 @@ class Character extends MovableObject {
     }
 
 
-    gameOver() {
+    // GAME OVER
+    checkForGameOver() {
         setInterval(() => {
             if (this.health == 0) {
                 setTimeout(() => {

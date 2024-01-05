@@ -60,10 +60,10 @@ class World {
 
     // THROW
     throwObjects() {
-        if (this.keyboard.B) {
+        if (this.keyboard.B && this.character.isBubbleShooting) {
             this.throwBubble();
         }
-        if (this.keyboard.V && this.percentageBottles != 0) {
+        if (this.keyboard.V && this.character.isPoisonBubbleShooting && this.percentageBottles != 0) {
             this.throwPoisonBubble();
         }
     }
@@ -241,6 +241,7 @@ class World {
         this.bubbles.splice(index, 1);
     }
 
+
     removePoisonBubbleFromCanvas(poisonBubble) {
         let index = this.poisonBubbles.indexOf(poisonBubble);
         this.poisonBubbles.splice(index, 1);
@@ -249,13 +250,14 @@ class World {
 
     checkForFinCollision() {
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy) && this.keyboard.SPACE) {
+            if (this.character.isColliding(enemy) && this.keyboard.SPACE && this.character.isFinSlapping) {
                 if (enemy instanceof Pufferfish) {
                     if (!this.character.isProtected) {
                         this.character.isProtected = true; // protection activated
                         enemy.isHit = true;
                         enemy.health = 0;
                         playSound(jellyfish_defeated);
+                        enemy.otherDirection = this.character.otherDirection; // makes pufferfish fly in character´s direction of view
                         setTimeout(() => {
                             this.character.isProtected = false; // protection deactivated after 2 seconds
                         }, this.character.protectionDuration);
@@ -310,7 +312,7 @@ class World {
         }
 
         mo.draw(this.ctx);
-        this.drawFrames(mo);
+        // this.drawFrames(mo);
 
         if (mo.otherDirection) {
             this.flipImageBack(mo); // ctx wird wieder normal angezeigt (sorgt dafür, dass alle anderen Bilder NICHT spiegelverkehrt gezeichnet werden)
@@ -318,12 +320,12 @@ class World {
     }
 
 
-    drawFrames(mo) {
-        mo.drawFrameAroundCharacter(this.ctx);
-        mo.drawFrameAroundEnemies(this.ctx);
-        mo.drawFrameAroundEndboss(this.ctx);
-        mo.drawFrameAroundBubble(this.ctx);
-    }
+    // drawFrames(mo) {
+    //     mo.drawFrameAroundCharacter(this.ctx);
+    //     mo.drawFrameAroundEnemies(this.ctx);
+    //     mo.drawFrameAroundEndboss(this.ctx);
+    //     mo.drawFrameAroundBubble(this.ctx);
+    // }
 
 
     flipImage(mo) {

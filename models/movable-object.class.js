@@ -36,7 +36,7 @@ class MovableObject extends DrawableObject {
             return this.x + this.width >= mo.x + 25 &&
                 this.x <= (mo.x + 25) + (mo.width - 50) &&
                 this.y + this.height >= mo.y + 20 &&
-                this.y <= (mo.y + 20) + (mo.height - 70); // mo.height also important for bubble collision
+                this.y <= (mo.y + 20) + (mo.height - 65); // mo.height also important for bubble collision
         }
 
         else {
@@ -46,8 +46,6 @@ class MovableObject extends DrawableObject {
                 (this.y + 70) + (this.height - 95) >= mo.y &&
                 this.y + 70 <= mo.y + mo.height;
         }
-
-        // mo.onCollisionCourse -> Optional = hiermit könnten wir schauen, ob ein Objekt sich in die richtige Richtung bewegt. Nur dann kollidieren wir. Nützlich bei Gegenständen, auf denen man stehen kann.
     }
 
 

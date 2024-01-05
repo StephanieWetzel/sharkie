@@ -26,6 +26,7 @@ class Pufferfish extends MovableObject {
     ];
 
     isHit = false;
+    otherDirection = false;
 
 
     constructor() {
@@ -51,8 +52,13 @@ class Pufferfish extends MovableObject {
                 this.loadImage('img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 1 (can animate by going up).png');
                 this.applyGravity();
                 setInterval(() => {
-                    this.x += 5;
-                    this.y -= 10;
+                    if (!this.otherDirection) {
+                        this.x += 10;
+                        this.y -= 10;
+                    } else if (this.otherDirection) {
+                        this.x -= 10;
+                        this.y -= 10;
+                    }
                 }, 15);
             }
 

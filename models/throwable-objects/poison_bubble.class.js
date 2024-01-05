@@ -14,7 +14,7 @@ class PoisonBubble extends MovableObject {
         this.speedY = 10;
         this.applyGravity();
 
-        const throwDirection = world.character.otherDirection; // saves sharkie´s initial line of sight when bubble is thrown
+        let throwDirection = world.character.otherDirection; // saves sharkie´s initial line of sight
 
         setInterval(() => {
             if (!throwDirection) { // line of sight was RIGHT (at time of throwing) -> bubble flies to the right
