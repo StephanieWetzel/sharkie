@@ -15,9 +15,7 @@ class Jellyfish extends MovableObject {
         'img/2.Enemy/2 Jelly fish/Dead/Yellow/y4.png'
     ];
 
-
     direction = 1; // 1 for up, -1 for down
-    verticalMovementInterval;
 
 
     constructor() {
@@ -33,8 +31,7 @@ class Jellyfish extends MovableObject {
 
 
     animate() {
-        this.verticalMovementInterval = setInterval(() => {
-            // Vertical movement
+        let verticalMovement = setInterval(() => {
             if (this.y >= 600) {
                 this.direction = -1; // up
             } else if (this.y <= 0) {
@@ -43,19 +40,27 @@ class Jellyfish extends MovableObject {
             this.y += this.direction * this.speed; // speed
         }, 1000 / 25);
 
-        setInterval(() => {
+        let animations = setInterval(() => {
             if (this.isDead()) {
-                this.playAnimation(this.IMAGES_DEAD);
-                this.applyGravity();
-                clearInterval(this.verticalMovementInterval);
-                setInterval(() => {
-                    this.x += 4;
-                    this.y -= 3;
-                }, 1000 / 25);
-
+                this.animateDeath(animations, verticalMovement);
             } else {
                 this.playAnimation(this.IMAGES_SWIMMING);
             }
         }, 130);
+    }
+
+
+    animateDeath(animations, verticalMovement) {
+        clearInterval(animations);
+        clearInterval(verticalMovement);
+        this.playAnimation(this.IMAGES_DEAD);
+        let deathAnimation = setInterval(() => {
+            this.x += 5;
+            this.y -= 5;
+        }, 1000 / 60);
+
+        setTimeout(() => {
+            clearInterval(deathAnimation);
+        }, 2500);
     }
 }

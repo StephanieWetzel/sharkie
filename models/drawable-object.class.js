@@ -15,6 +15,19 @@ class DrawableObject {
     }
 
 
+    /**
+* 
+* @param {Array} arr - ['img/image1.png', 'img/image2.png', ...]
+*/
+    loadImages(arr) {
+        arr.forEach((path) => { // path ist aktuell nur String, noch kein richtiges Bild
+            let img = new Image(); // Bild (Objekt) wird erstellt
+            img.src = path; // path (String) wird in das Objekt geladen = ein Bild wurde erstellt
+            this.imageCache[path] = img; // imageCache wird mit dem aktuellen Bild aktualisiert; [path] = Schlüssel, mit dem der Wert aufgerufen werden kann -> imageCache['img/image1.png']
+        });
+    }
+
+
     draw(ctx) {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height); // setzt Bild spiegelverkehrt ins Canvas
     }
@@ -66,17 +79,4 @@ class DrawableObject {
     //         ctx.stroke();
     //     }
     // }
-
-
-    /**
- * 
- * @param {Array} arr - ['img/image1.png', 'img/image2.png', ...]
- */
-    loadImages(arr) {
-        arr.forEach((path) => { // path ist aktuell nur String, noch kein richtiges Bild
-            let img = new Image(); // Bild (Objekt) wird erstellt
-            img.src = path; // path (String) wird in das Objekt geladen = ein Bild wurde erstellt
-            this.imageCache[path] = img; // imageCache wird mit dem aktuellen Bild aktualisiert; [path] = Schlüssel, mit dem der Wert aufgerufen werden kann -> imageCache['img/image1.png']
-        });
-    }
 }

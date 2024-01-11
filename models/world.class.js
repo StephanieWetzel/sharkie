@@ -4,30 +4,28 @@ class World {
     canvas;
     ctx;
     keyboard;
-    camera_x = 0; // damit können wir die Welt auf der X-Achse verschieben
-    // statusbars:
+    characterImages;
+    camera_x = 0; // moves world along x-axis
+    // statusbars
     statusbarBottles = new StatusbarBottles();
     statusbarHealth = new StatusbarHealth();
     statusbarCoins = new StatusbarCoins();
-    // collect:
     percentageBottles = 0;
     percentageCoins = 0;
     collectedBottles = [];
     collectedCoins = [];
-    // throw:
+    // throwable objects
     bubbles = [];
     poisonBubbles = [];
+    // hurt character
     damageType;
-    // duration of animations:
-    // lastTimeStamp = new Date();
-    // currentTimeStamp = new Date();
-    // secondsPassed = (this.currentTimeStamp - this.lastTimeStamp) / 1000;
 
 
-    constructor(canvas, keyboard) { // Variable aus game.js wird übergeben
+    constructor(canvas, keyboard, characterImages) { //  values from game.js
         this.ctx = canvas.getContext('2d');
-        this.canvas = canvas; // Wert von canvas aus der game.js wird an das World-canvas übergeben (this.canvas bezieht sich auf Variable, die oben definiert ist)
-        this.keyboard = keyboard; // keyboard aus dieser Klasse bekommt den Wert von keyboard aus game.js übergeben
+        this.canvas = canvas;
+        this.keyboard = keyboard;
+        this.characterImages = characterImages;
         this.draw();
         this.setWorld();
         this.runIntervals();
@@ -54,7 +52,6 @@ class World {
 
     setWorld() { // sets World in character-class
         this.character.world = this;
-        this.character.damageType = this;
     }
 
 

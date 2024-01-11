@@ -1,12 +1,13 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let characterImages = new CharacterImages();
 
 
 function init() {
     initLevel();
     canvas = document.getElementById('canvas');
-    world = new World(canvas, keyboard);
+    world = new World(canvas, keyboard, characterImages);
     let startScreen = document.getElementById('startScreen');
     let winScreen = document.getElementById('youWinScreen');
     let gameOverScreen = document.getElementById('gameOverScreen');

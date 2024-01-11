@@ -60,7 +60,7 @@ class Endboss extends MovableObject {
 
     hadFirstContact = false;
     health = 100;
-    dead = false;
+    hasDied = false;
     // animationInterval;
 
 
@@ -80,7 +80,7 @@ class Endboss extends MovableObject {
     animate() { // aktuelles Bild wird immer wieder ausgetauscht, damit character sich bewegt
         let i = 0;
 
-        setInterval(() => {
+        let animation = setInterval(() => {
             if (i < 10) {
                 this.playAnimation(this.IMAGES_SPAWNING);
             } else {
@@ -102,17 +102,16 @@ class Endboss extends MovableObject {
                 if (this.isHurt()) {
                     this.playAnimation(this.IMAGES_HURT);
                 }
-
-                else if (this.isDead()) {
-                    this.playAnimation(this.IMAGES_DEAD);
-                    if (this.y < -100) {
-                        this.y -= 4;
-                    }
-                    setTimeout(() => {
-                        // this.dead = true;
-                        clearInterval(this.animationInterval);
-                    }, 500);
+            }
+            if (this.isDead() && !this.hasDied) {
+                this.playAnimation(this.IMAGES_DEAD);
+                if (this.y < -100) {
+                    this.y -= 4;
                 }
+                setTimeout(() => {
+                    this.hasDied = true;
+                    clearInterval(animation);
+                }, 600);
             }
         }, 150);
     }

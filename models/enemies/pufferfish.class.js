@@ -25,7 +25,6 @@ class Pufferfish extends MovableObject {
         'img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/1.bubbleswim5.png'
     ];
 
-    isHit = false;
     otherDirection = false;
 
 
@@ -37,44 +36,72 @@ class Pufferfish extends MovableObject {
         this.loadImages(this.IMAGES_BUBBLESWIM);
         this.x = 500 + Math.random() * 4000; // starting point: 200px; pufferfish will spawn somewhere between 200 and 700
         this.y = Math.random() * 600;
-        this.speed = 0.15 + Math.random() * 1; // Pufferfish bewegt sich mit mind. 0.15 Geschwindigkeit; Geschwindigkeit variiert aber bei jedem Fisch
+        this.speed = 0.15 + Math.random() * 1; // Pufferfish moves with at least 0.15 speed; speed varies for every fish
         this.animate();
     }
 
 
-    animate() { // aktuelles Bild wird immer wieder ausgetauscht, damit character sich bewegt
-        setInterval(() => {
+    animate() {
+        let moving = setInterval(() => {
             this.moveLeft();
         }, 1000 / 60);
 
-        setInterval(() => {
+        let i = 0;
+        let animations = setInterval(() => {
             if (this.isDead()) {
-                this.loadImage('img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 1 (can animate by going up).png');
-                this.applyGravity();
-                setInterval(() => {
-                    if (!this.otherDirection) {
-                        this.x += 10;
-                        this.y -= 10;
-                    } else if (this.otherDirection) {
-                        this.x -= 10;
-                        this.y -= 10;
-                    }
-                }, 15);
-            }
-
-            else if (this.isHit) {
-                this.playAnimation(this.IMAGES_TRANSITION);
-
-                this.playAnimation(this.IMAGES_BUBBLESWIM);
-
-                setTimeout(() => {
-                    this.isHit = false; // Zurücksetzen nach einigen Sekunden
-                }, 3000); // Hier kannst du die Dauer der BUBBLESWIM-Animation in Millisekunden einstellen
-            }
-
-            else {
+                this.animateDeath(moving, animations);
+            } else if (this.isHit) {
+                this.animateDefense(i);
+                i++;
+            } else {
                 this.playAnimation(this.IMAGES_SWIMMING);
             }
-        }, 130);
+        }, 100);
+    }
+
+
+    // DEATH
+    animateDeath(moving, animations) {
+        this.loadImage('img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 1 (can animate by going up).png');
+        clearInterval(moving);
+        clearInterval(animations);
+        let deathAnimation = setInterval(() => {
+            if (!this.otherDirection) {
+                this.x += 15;
+                this.y -= 15;
+            } else if (this.otherDirection) {
+                this.x -= 15;
+                this.y -= 15;
+            }
+        }, 1000 / 60);
+
+        setTimeout(() => {
+            clearInterval(deathAnimation);
+        }, 2500);
+    }
+
+
+    // DEFENSE
+    animateDefense(i) {
+        if (i < 5) {
+            this.transition();
+        } else {
+            this.playAnimation(this.IMAGES_BUBBLESWIM);
+        }
+
+        setTimeout(() => {
+            this.isHit = false;
+        }, 4000);
+    }
+
+
+    transition() {
+        let transition = setInterval(() => {
+            this.playAnimation(this.IMAGES_TRANSITION);
+        }, 100);
+
+        setTimeout(() => {
+            clearInterval(transition);
+        }, 200);
     }
 }
