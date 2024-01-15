@@ -8,7 +8,7 @@ class Character extends MovableObject {
     characterImages;
     // for fin-slap
     isProtected = false;
-    protectionDuration = 2000; // protects character from damage (in world.class.js)
+    protectionDuration = 2000; // protects character from damage (world.class.js)
     // check for attacks
     isBubbleShooting = false;
     isPoisonBubbleShooting = false;
@@ -22,6 +22,9 @@ class Character extends MovableObject {
     animationRunning = false;
 
 
+    /**
+     * Creates an instance of Character.
+     */
     constructor() {
         super().loadImage('img/1.Sharkie/3.Swim/1.png');
         this.characterImages = characterImages;
@@ -40,20 +43,9 @@ class Character extends MovableObject {
     }
 
 
-    // CAMERA
-    moveCameraSmoothly() {
-        const targetCameraX = this.otherDirection ? -this.x + 740 : -this.x + 200; // if (?) otherDirection = true then x + 700, else (:) x + 200
-        const smoothness = 0.05; // the smaller the number, the smoother the camera movement
-
-        this.world.camera_x = this.lerp(this.world.camera_x, targetCameraX, smoothness); // current cameraX position getting updated
-    }
-
-    // lerp = linear interpolation (smooth transition between a start- and endpoint)
-    lerp(start, end, t) { // t = value between 0 (start) and 1 (end) that shows progress of interpolation
-        return start * (1 - t) + end * t;
-    }
-
-
+    /**
+     * Handles camera movement.
+     */
     cameraMovement() {
         if (this.otherDirection) {
             this.moveCameraSmoothly();
@@ -64,6 +56,23 @@ class Character extends MovableObject {
     }
 
 
+    moveCameraSmoothly() {
+        const targetCameraX = this.otherDirection ? -this.x + 740 : -this.x + 200; // if (?) otherDirection = true then x + 700, else (:) x + 200
+        const smoothness = 0.05; // the smaller the number, the smoother the camera movement
+
+        this.world.camera_x = this.lerp(this.world.camera_x, targetCameraX, smoothness); // current cameraX position getting updated
+    }
+
+
+    // lerp = linear interpolation (smooth transition between a start- and endpoint)
+    lerp(start, end, t) { // t = value between 0 (start) and 1 (end) that shows progress of interpolation
+        return start * (1 - t) + end * t;
+    }
+
+
+    /**
+     * Controls the animation and behavior of the character.
+     */
     animate() {
         let lastTimeStamp = new Date(); // used to determine how much time has passed since a key was last pressed (for sleep animation)
 
@@ -84,9 +93,8 @@ class Character extends MovableObject {
                 this.goDown();
                 lastTimeStamp = new Date();
             }
-
             this.cameraMovement();
-        }, 1000 / 60);
+        }, 1000 / 50);
 
         let animation = setInterval(() => {
             let currentTimeStamp = new Date();
@@ -123,7 +131,10 @@ class Character extends MovableObject {
     }
 
 
-    // DEATH
+    /**
+     * Handles the death of the character caused by enemies.
+     * @param {number} animation - The ID of the death animation interval.
+     */
     deathByPufferfish(animation) {
         this.killedByPufferfish = true;
         this.world.keyboard = false;
@@ -138,6 +149,9 @@ class Character extends MovableObject {
     }
 
 
+    /**
+     * Plays the death animation based on the cause (pufferfish or jellyfish).
+     */
     playDeathAnimation(animation) {
         if (!this.animationRunning) {
             this.animationRunning = true;
@@ -210,7 +224,9 @@ class Character extends MovableObject {
     }
 
 
-    // HURT
+    /**
+     * Plays the hurt animation for the character depending on the type of enemy.
+     */
     hurtByPufferfish() {
         playSound(hit_by_pufferfish);
         this.playAnimation(this.characterImages.IMAGES_HURT_PUFFERFISH);
@@ -225,6 +241,9 @@ class Character extends MovableObject {
 
 
     // BUBBLE-ATTACK
+    /**
+     * Initiates the animation for attacks depending on the kind of attack.
+     */
     shootBubble() {
         this.isBubbleShooting = true;
         this.activateBubbleAttack();
@@ -304,17 +323,22 @@ class Character extends MovableObject {
     }
 
 
-    // SLEEPING
+    /**
+     * Plays the sleeping animation when the character is not moving for a certain duration.
+     * 
+     * @param {number} secondsPassed - The seconds that have passed since the last time a key was pressed.
+     */
     goToSleep(secondsPassed) {
         if (!this.isDead()) {
             this.playAnimation(this.characterImages.IMAGES_IDLE);
-            if (secondsPassed >= 10) { // transition from IDLE to LONG_IDLE to SLEEPING if no key is pressed
+            if (secondsPassed >= 10) {
                 this.transitionToSleeping(secondsPassed);
             }
         }
     }
 
 
+    // transition from IDLE to LONG_IDLE to SLEEPING if no key is pressed
     transitionToSleeping(secondsPassed) {
         this.playAnimation(this.characterImages.IMAGES_LONG_IDLE);
         if (secondsPassed >= 11) {
@@ -326,7 +350,9 @@ class Character extends MovableObject {
     }
 
 
-    // MOVING
+    /**
+     * Handle the character's movement based on keyboard input.
+     */
     rightArrowDownAndNotAtEndOfMap() {
         return this.world.keyboard.RIGHT && this.x < this.world.level.map_end_x;
     }
@@ -378,7 +404,9 @@ class Character extends MovableObject {
     }
 
 
-    // GAME OVER
+    /**
+     * Ends the game, stops all intervals, and displays the game over screen.
+     */
     gameOver() {
         clearAllIntervals();
         let gameOverScreen = document.getElementById('gameOverScreen');

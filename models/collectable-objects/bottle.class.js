@@ -10,6 +10,11 @@ class PoisonBottle extends MovableObject {
         'img/4. Marcadores/Posión/Animada/8.png'
     ];
 
+
+    /**
+     * Creates an instance of PoisonBottle.
+     * Initializes the poison bottle properties, including image loading, position, and animation.
+     */
     constructor() {
         super();
         this.loadImage('img/4. Marcadores/Posión/Animada/1.png');
@@ -22,9 +27,12 @@ class PoisonBottle extends MovableObject {
     }
 
 
-    animate() { // aktuelles Bild wird immer wieder ausgetauscht, damit character sich bewegt
+    /**
+     * Animates the poison bottle by playing the animation at a regular interval.
+     */
+    animate() {
         setInterval(() => {
-            this.playAnimation(this.IMAGES_POISON_BOTTLE); // s. movable-objects.js
+            this.playAnimation(this.IMAGES_POISON_BOTTLE);
         }, 100);
     }
 }

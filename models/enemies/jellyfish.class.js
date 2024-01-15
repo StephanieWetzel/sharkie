@@ -18,6 +18,9 @@ class Jellyfish extends MovableObject {
     direction = 1; // 1 for up, -1 for down
 
 
+    /**
+    * Represents a jellyfish in the game.
+    */
     constructor() {
         super();
         this.loadImage(this.IMAGES_SWIMMING[0]);
@@ -30,6 +33,9 @@ class Jellyfish extends MovableObject {
     }
 
 
+    /**
+   * Initiates the animation of the jellyfish.
+   */
     animate() {
         let verticalMovement = setInterval(() => {
             if (this.y >= 600) {
@@ -50,13 +56,23 @@ class Jellyfish extends MovableObject {
     }
 
 
+    /**
+ * Initiates the death animation of the jellyfish.
+ * @param {number} animations - The interval for animations.
+ * @param {number} verticalMovement - The interval for vertical movement.
+ */
     animateDeath(animations, verticalMovement) {
         clearInterval(animations);
         clearInterval(verticalMovement);
         this.playAnimation(this.IMAGES_DEAD);
         let deathAnimation = setInterval(() => {
-            this.x += 5;
-            this.y -= 5;
+            if (!world.character.otherDirection) {
+                this.x += 5;
+                this.y -= 5;
+            } else if (world.character.otherDirection) {
+                this.x -= 5;
+                this.y -= 5;
+            }
         }, 1000 / 60);
 
         setTimeout(() => {

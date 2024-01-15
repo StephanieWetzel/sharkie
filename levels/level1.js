@@ -1,5 +1,8 @@
 let level1;
 
+/**
+ * Initializes the game level with specific entities such as enemies, lights, items, and background objects.
+ */
 function initLevel() {
     level1 = new Level(
         [
@@ -50,13 +53,12 @@ function initLevel() {
             new Coin()
         ],
         [
-            // evtl. mit for-Schleife lösen
             new BackgroundObject('img/3. Background/Layers/5. Water/D.png', -2000),
             new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D.png', -2000),
             new BackgroundObject('img/3. Background/Layers/3.Fondo 1/D.png', -2000),
             new BackgroundObject('img/3. Background/Layers/2. Floor/D.png', -2000),
 
-            new BackgroundObject('img/3. Background/Layers/5. Water/D.png', 0), // 0 = X-Koordinate, wo das Bild eingefügt wird
+            new BackgroundObject('img/3. Background/Layers/5. Water/D.png', 0),
             new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D.png', 0),
             new BackgroundObject('img/3. Background/Layers/3.Fondo 1/D.png', 0),
             new BackgroundObject('img/3. Background/Layers/2. Floor/D.png', 0),

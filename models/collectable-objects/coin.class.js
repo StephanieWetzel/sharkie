@@ -6,6 +6,11 @@ class Coin extends MovableObject {
         'img/4. Marcadores/1. Coins/4.png'
     ];
 
+
+    /**
+     * Creates an instance of Coin.
+     * Initializes the coin properties, including image loading, position, and animation.
+     */
     constructor() {
         super();
         this.loadImage('img/4. Marcadores/1. Coins/1.png');
@@ -18,9 +23,12 @@ class Coin extends MovableObject {
     }
 
 
-    animate() { // aktuelles Bild wird immer wieder ausgetauscht, damit character sich bewegt
+    /**
+    * Animates the coin by playing the animation at a regular interval.
+    */
+    animate() {
         setInterval(() => {
-            this.playAnimation(this.IMAGES_COIN); // s. movable-objects.js
+            this.playAnimation(this.IMAGES_COIN);
         }, 130);
     }
 }

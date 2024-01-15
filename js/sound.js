@@ -29,6 +29,9 @@ endboss_fight.loop = true;
 bubble_breath.volume = 0.5;
 
 
+/**
+ * Toggles the volume by changing the visibility of sound icons and controlling the audio state.
+ */
 function toggleVolume() {
     document.getElementById('soundOn').classList.toggle('d-None');
     document.getElementById('soundOff').classList.toggle('d-None');
@@ -43,6 +46,9 @@ function toggleVolume() {
 }
 
 
+/**
+ * Pauses all audio elements in the `allAudio` array and updates the `audioOn` variable to false.
+ */
 function pauseAllAudio() {
     allAudio.forEach((audio) => {
         audio.pause();
@@ -51,7 +57,10 @@ function pauseAllAudio() {
 }
 
 
-function playBackgroundMusic() { // endboss-music if character and endboss have met, otherwise main-music
+/**
+ * Plays the background music based on the `endbossMusic` variable.
+ */
+function playBackgroundMusic() {
     if (endbossMusic) {
         endboss_fight.play();
     } else {
@@ -60,6 +69,11 @@ function playBackgroundMusic() { // endboss-music if character and endboss have 
 }
 
 
+/**
+ * Plays a specified audio element if the audio is turned on.
+ * 
+ * @param {HTMLAudioElement} audioName - The audio element to be played.
+ */
 function playSound(audioName) {
     if (audioOn) {
         audioName.play();

@@ -12,22 +12,22 @@
     <script src="models/movable-object.class.js"></script>
     <script src="models/character_images.class.js"></script>
     <script src="models/character.class.js"></script>
-    <script src="models/statusbars/statusbar_bottles.class.js"></script>
-    <script src="models/statusbars/statusbar_health.class.js"></script>
-    <script src="models/statusbars/statusbar_coins.class.js"></script>
-    <script src="models/world.class.js"></script>
     <script src="models/enemies/pufferfish.class.js"></script>
     <script src="models/enemies/jellyfish.class.js"></script>
     <script src="models/enemies/jellyfish_dangerous.class.js"></script>
-    <script src="models/enemies/endboss.class.js"></script>
-    <script src="models/throwable-objects/bubble.class.js"></script>
-    <script src="models/throwable-objects/poison_bubble.class.js"></script>
+    <script src="models/world.class.js"></script>
     <script src="models/light.class.js"></script>
     <script src="models/background-object.class.js"></script>
     <script src="models/keyboard.class.js"></script>
+    <script src="models/level.class.js"></script>
+    <script src="models/enemies/endboss.class.js"></script>
     <script src="models/collectable-objects/coin.class.js"></script>
     <script src="models/collectable-objects/bottle.class.js"></script>
-    <script src="models/level.class.js"></script>
+    <script src="models/throwable-objects/bubble.class.js"></script>
+    <script src="models/throwable-objects/poison_bubble.class.js"></script>
+    <script src="models/statusbars/statusbar_bottles.class.js"></script>
+    <script src="models/statusbars/statusbar_health.class.js"></script>
+    <script src="models/statusbars/statusbar_coins.class.js"></script>
     <script src="js/sound.js"></script>
     <script src="levels/level1.js"></script>
     <script src="js/game.js"></script>
@@ -61,11 +61,33 @@
     <!-- CANVAS -->
     <canvas class="d-None" id="canvas" width="1100" height="700"></canvas>
     <!-- GAME-OVERLAY -->
-    <div id="gameOverlay">
+    <div id="gameOverlay" class="d-None">
         <div class="img-Container">
             <img onclick="openInfoOverlay()" src="img/info.svg" alt="Info">
             <img onclick="toggleVolume()" id="soundOn" src="img/volume_up.svg" alt="Sound on">
             <img onclick="toggleVolume()" id="soundOff" class="d-None" src="img/volume_off_.svg" alt="Sound off">
+        </div>
+        <!-- mobile-controls -->
+        <div id="mobileControls">
+            <div class="left-Container">
+                <img onke id="arrowLeft" class="mobile-Controls-Img" src="img/6.Botones/Key/arrowLeft.png"
+                    alt="arrow left">
+                <img id="arrowRight" class="mobile-Controls-Img" src="img/6.Botones/Key/arrowRight.png"
+                    alt="arrow right">
+            </div>
+            <div class="right-Container">
+                <div>
+                    <img id="arrowUp" class="mobile-Controls-Img" src="img/6.Botones/Key/arrowUp.png" alt="arrow up">
+                    <img id="arrowDown" class="mobile-Controls-Img" src="img/6.Botones/Key/arrowDown.png"
+                        alt="arrow down">
+                </div>
+                <div class="attack-Controls">
+                    <span id="vKeybind" class="keybinds-letters">V</span>
+                    <img id="spacebar" class="right-Container-Space-Img" src="img/6.Botones/Key/Space Bar key.png"
+                        alt="spacebar">
+                    <span id="bKeybind" class="keybinds-letters">B</span>
+                </div>
+            </div>
         </div>
     </div>
     <!-- INFO-SCREEN -->

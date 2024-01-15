@@ -21,10 +21,18 @@ class World {
     damageType;
 
 
+    /**
+     * Creates a new instance of the World class.
+     * @constructor
+     * @param {HTMLCanvasElement} canvas - The canvas element for rendering.
+     * @param {Keyboard} keyboard - The keyboard input handler.
+     * @param {Object} characterImages - The images used for the character animations.
+     */
     constructor(canvas, keyboard, characterImages) { //  values from game.js
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.keyboard.handleMobileControls();
         this.characterImages = characterImages;
         this.draw();
         this.setWorld();
@@ -32,6 +40,9 @@ class World {
     }
 
 
+    /**
+     * Runs the intervals for various game actions.
+     */
     runIntervals() {
         setInterval(() => {
             this.checkForBubbleCollision();
@@ -50,12 +61,19 @@ class World {
     }
 
 
-    setWorld() { // sets World in character-class
+    /**
+     * Sets the world reference in the character class.
+     */
+    setWorld() {
         this.character.world = this;
     }
 
 
     // THROW
+    /**
+     * Throws objects (bubbles, poison bubbles) in the game world based on keyboard input.
+     * Checks if the character is currently shooting bubbles and if there are enough poison bottles.
+     */
     throwObjects() {
         if (this.keyboard.B && this.character.isBubbleShooting) {
             this.throwBubble();
@@ -88,11 +106,16 @@ class World {
         playSound(new_bubble)
         this.poisonBubbles.push(poisonBubble);
         this.percentageBottles -= 10;
+        this.collectedBottles.splice(-1);
         this.statusbarBottles.setPercentage(this.percentageBottles);
     }
 
 
     // COLLECT
+    /**
+     * Checks for collisions between the character and collectable objects in the game world.
+     * If a collision is detected, it triggers the corresponding collection actions for poison bottles and coins.
+     */
     collectObjects() {
         this.level.collectableObjects.forEach((object) => {
             if (this.character.isColliding(object)) {
@@ -133,16 +156,26 @@ class World {
     }
 
 
+    /**
+     * Handles the collection of a specific object (Coin) that triggers a reward, restoring the character's health to full.
+     *
+     * @param {Coin} object - The Coin object collected to receive the reward.
+     */
     getLifeBack(object) {
         this.removeObjectFromCanvas(object);
         playSound(getLifeBack);
         this.collectedCoins.length = 0; // empties coin-array
         this.percentageCoins = 0;
-        this.statusbarHealth.setPercentage(100); // character gets full health
+        this.statusbarHealth.setPercentage(100); // character gets full health back
         this.statusbarCoins.setPercentage(0);
     }
 
 
+    /**
+     * Removes a specified object from the game world canvas by updating the list of collectable objects.
+     *
+     * @param {DrawableObject} object - The object to be removed from the canvas.
+     */
     removeObjectFromCanvas(object) {
         let index = this.level.collectableObjects.indexOf(object);
         this.level.collectableObjects.splice(index, 1);
@@ -150,6 +183,9 @@ class World {
 
 
     // COLLISIONS
+    /**
+     * Checks for collisions between the player character and enemies, updating the game state accordingly.
+     */
     checkCollisionsWithEnemies() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy)) {
@@ -176,6 +212,9 @@ class World {
     }
 
 
+    /**
+     * Checks for collisions between bubbles and enemies, updating the game state accordingly.
+     */
     checkForBubbleCollision() {
         this.bubbles.forEach((bubble) => {
             this.level.enemies.forEach((enemy) => {
@@ -190,10 +229,12 @@ class World {
                         this.removeBubbleFromCanvas(bubble);
                         playSound(bubble_popped);
                     }
+                    clearInterval(this.throwing);
                 }
             });
         });
     }
+
 
     checkForPoisonBubbleCollision() {
         this.poisonBubbles.forEach((poisonBubble) => {
@@ -213,12 +254,18 @@ class World {
                         playSound(bubble_popped);
                         this.removePoisonBubbleFromCanvas(poisonBubble);
                     }
+                    clearInterval(this.throwing);
                 }
             });
         });
     }
 
 
+    /**
+     * Handles the defeat of an enemy (jellyfish) by a regular bubble.
+     * @param {Bubble} bubbleType - The regular bubble causing the defeat.
+     * @param {Enemy} enemy - The enemy (jellyfish) being defeated.
+     */
     jellyfishDefeated(bubbleType, enemy) {
         enemy.health = 0;
         playSound(jellyfish_defeated);
@@ -226,6 +273,11 @@ class World {
     }
 
 
+    /**
+     * Handles the situation where an enemy cannot be harmed by a regular bubble.
+     * @param {Bubble} bubbleType - The regular bubble that cannot harm the enemy.
+     * @param {Enemy} enemy - The enemy that cannot be harmed.
+     */
     cannotBeHarmed(bubbleType, enemy) {
         enemy.isHit = true;
         this.removeBubbleFromCanvas(bubbleType);
@@ -233,18 +285,30 @@ class World {
     }
 
 
+    /**
+     * Removes a regular bubble from the canvas.
+     * @param {Bubble} bubble - The regular bubble to be removed.
+     */
     removeBubbleFromCanvas(bubble) {
         let index = this.bubbles.indexOf(bubble);
         this.bubbles.splice(index, 1);
     }
 
 
+    /**
+     * Removes a poison bubble from the canvas.
+     * @param {PoisonBubble} poisonBubble - The poison bubble to be removed.
+     */
     removePoisonBubbleFromCanvas(poisonBubble) {
         let index = this.poisonBubbles.indexOf(poisonBubble);
         this.poisonBubbles.splice(index, 1);
     }
 
 
+    /**
+     * Checks for collisions between the character's fin slap and Pufferfish enemies.
+     * Activates protection and defeats Pufferfish if a collision is detected.
+     */
     checkForFinCollision() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy) && this.keyboard.SPACE && this.character.isFinSlapping) {
@@ -265,30 +329,31 @@ class World {
     }
 
 
+    /**
+     * Draws the game elements on the canvas, including background objects, lights, character, enemies,
+     * collectable objects, bubbles, poison bubbles, and status bars.
+     * The drawing order is important for layering.
+     * Coordinates are adjusted based on the camera position.
+     */
     draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // this.canvas = canvas -> wird zu Beginn geleert
-        // this.camera_x hat den Wert von der Klasse Character und wird entsprechend dem Character verschoben (s. Klasse Character)
-        this.ctx.translate(this.camera_x, 0); // schiebt ctx nach links; 0 bezeht sich darauf, wie weit die y-Achse verschoben werden soll (translate benötigt immer zwei Argumente, also (x, y))
-
-        // draw figures (order matters!! - backgroundObjects first):
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // clears canvas to prepare for next frame
+        this.ctx.translate(this.camera_x, 0); // translate = shift; shifts canvas horizontally to make it seem like the camera follows the character
+        // draw figures - order matters!! -> backgroundObjects first
         this.addObjectsToMap(this.level.backgroundObjects);
-
         this.addObjectsToMap(this.level.lights);
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.collectableObjects);
         this.addObjectsToMap(this.bubbles);
         this.addObjectsToMap(this.poisonBubbles);
-
-        // statusbar:
-        this.ctx.translate(-this.camera_x, 0); // Koordinatensystem wird zurückverschoben (Originalposition)
+        // statusbars
+        this.ctx.translate(-this.camera_x, 0); // Shifts canvas back to original position after drawing the game elements that move with the camera.
         this.addToMap(this.statusbarBottles);
-        this.addToMap(this.statusbarHealth); // StatusBar wird gezeichnet
+        this.addToMap(this.statusbarHealth);
         this.addToMap(this.statusbarCoins);
-        this.ctx.translate(this.camera_x, 0); // Koordinatensystem wird nach vorne geschoben, damit Objekte mit dem Charakter wandern
-
-        this.ctx.translate(-this.camera_x, 0); // -this bewirkt das Gegenteil = schiebt ctx wieder nach rechts; wird benötigt, da Welt ansonsten bei jedem Aufruf von draw() weiter nach links geschoben wird - Programm stürzt ab
-        // draw() wird immer wieder aufgerufen / wird benötigt, um die Charaktere gleich zu Beginn (sobald die Seite fertig geladen hat) anzuzeigen
+        this.ctx.translate(this.camera_x, 0); // Shifts canvas forward to align it with the moved game elements.
+        this.ctx.translate(-this.camera_x, 0); // Shifts canvas back to original position to prevent the world from continuously shifting to the left.
+        // Requests the next animation frame and repeatedly calls the draw function, ensuring that the game continuously updates and renders frames:
         let self = this;
         requestAnimationFrame(function () {
             self.draw();
@@ -307,34 +372,23 @@ class World {
         if (mo.otherDirection) {
             this.flipImage(mo);
         }
-
         mo.draw(this.ctx);
-        // this.drawFrames(mo);
-
         if (mo.otherDirection) {
-            this.flipImageBack(mo); // ctx wird wieder normal angezeigt (sorgt dafür, dass alle anderen Bilder NICHT spiegelverkehrt gezeichnet werden)
+            this.flipImageBack(mo);
         }
     }
 
 
-    // drawFrames(mo) {
-    //     mo.drawFrameAroundCharacter(this.ctx);
-    //     mo.drawFrameAroundEnemies(this.ctx);
-    //     mo.drawFrameAroundEndboss(this.ctx);
-    //     mo.drawFrameAroundBubble(this.ctx);
-    // }
-
-
     flipImage(mo) {
-        this.ctx.save(); // speichert Eigenschaften von ctx (dass alle Bilder standardmäßig NICHT spiegelverkehrt gezeichnet werden)
-        this.ctx.translate(mo.width, 0); // Canvas wird um die Breite des Charakters nach rechts verschoben, da nun rechts oben (und nicht mehr links oben) angefangen wird zu zeichnen -> Canvas wird um die Differenz dieser zwei Punkte verschoben
-        this.ctx.scale(-1, 1); // Bild wird horizontal gespiegelt
-        mo.x = mo.x * -1; // X-Koordinate wird umgedreht (notwendig, da wir zuvor mit scale -1 das Bild gespiegelt haben)
+        this.ctx.save(); // Saves the current state of the context, including properties such as transformations and styles. Ensures that only the specific image is flipped and not the entire canvas.
+        this.ctx.translate(mo.width, 0); // Shifts canvas horizontally by the width of the movable object (mo). Necessary to ensure that the image is flipped around its right edge.
+        this.ctx.scale(-1, 1); // Flips image horizontally.
+        mo.x = mo.x * -1; // Adjusting the X-coordinate ensures that the flipped image is drawn at the correct position (flipped back).
     }
 
 
     flipImageBack(mo) {
-        mo.x = mo.x * -1;
-        this.ctx.restore(); // setzt ctx wieder zurück auf den Stand von save() (s. flipImage())
+        mo.x = mo.x * -1; // Necessary to revert the previous adjustment made when flipping the image. It ensures that the original X-coordinate is restored.
+        this.ctx.restore(); // It undoes the translation and scaling applied to flip the image, restoring the canvas context to the state it had when save was called.
     }
 }

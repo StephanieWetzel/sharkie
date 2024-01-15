@@ -16,8 +16,12 @@ class JellyfishDangerous extends MovableObject {
     ];
 
     direction = 1; // 1 for up, -1 for down
+    otherDirection = false;
 
 
+    /**
+      * Represents a dangerous jellyfish in the game.
+      */
     constructor() {
         super();
         this.loadImage(this.IMAGES_SWIMMING[0]);
@@ -30,14 +34,17 @@ class JellyfishDangerous extends MovableObject {
     }
 
 
+    /**
+     * Initiates the animation of the dangerous jellyfish.
+     */
     animate() {
         let verticalMovement = setInterval(() => {
             if (this.y >= 600) {
-                this.direction = -1; // up
+                this.direction = -1;
             } else if (this.y <= 0) {
-                this.direction = 1; // down
+                this.direction = 1;
             }
-            this.y += this.direction * this.speed; // speed
+            this.y += this.direction * this.speed;
         }, 1000 / 25);
 
         let animations = setInterval(() => {
@@ -50,13 +57,23 @@ class JellyfishDangerous extends MovableObject {
     }
 
 
+    /**
+    * Initiates the death animation of the dangerous jellyfish.
+    * @param {number} animations - The interval for animations.
+    * @param {number} verticalMovement - The interval for vertical movement.
+    */
     animateDeath(animations, verticalMovement) {
         clearInterval(animations);
         clearInterval(verticalMovement);
         this.playAnimation(this.IMAGES_DEAD);
         let deathAnimation = setInterval(() => {
-            this.x += 5;
-            this.y -= 5;
+            if (!world.character.otherDirection) {
+                this.x += 5;
+                this.y -= 5;
+            } else if (world.character.otherDirection) {
+                this.x -= 5;
+                this.y -= 5;
+            }
         }, 1000 / 60);
 
         setTimeout(() => {

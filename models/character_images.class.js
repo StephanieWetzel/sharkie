@@ -128,6 +128,8 @@ class CharacterImages {
     ];
 
 
+    /**
+     * Creates an instance of CharacterImages.
+     */
     constructor() { }
-
 }

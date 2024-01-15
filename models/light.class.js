@@ -5,6 +5,9 @@ class Light extends MovableObject {
     direction = -1; // left
 
 
+    /**
+     * Creates a new instance of the Light class.
+     */
     constructor() {
         super();
         this.loadImage('img/3. Background/Layers/1. Light/COMPLETO.png');
@@ -13,13 +16,17 @@ class Light extends MovableObject {
     }
 
 
+    /**
+     * Animates the movement of the light object.
+     * The light moves horizontally, changing direction every 6 seconds.
+     */
     animate() {
         setInterval(() => {
             this.x += this.direction * this.speed; // value of x changes depending on direction (1 or -1)
         }, 1000 / 50);
 
         setInterval(() => {
-            this.direction *= -1; // changes direction every 6 seconds
+            this.direction *= -1;
         }, 6000);
     }
 }

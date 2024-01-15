@@ -1,7 +1,7 @@
 class Endboss extends MovableObject {
     height = 600;
     width = 530;
-    y = -50;
+    y = -500;
     x = 5000;
 
     IMAGES_SPAWNING = [
@@ -58,100 +58,178 @@ class Endboss extends MovableObject {
 
     ];
 
+    speed = 10;
+    // SPAWNING
     hadFirstContact = false;
-    health = 100;
-    hasDied = false;
-    // animationInterval;
+    spawnAnimationDone = false;
+    spawnCounter = 0;
+    // DEATH
+    deathAnimationDone = false;
+    deathCounter = 0;
+    // ATTACK
+    lastAttack = 0;
+    isAttacking = false;
+    secondsPassed;
 
 
+    /**
+     * Creates an instance of Endboss.
+     * Initializes the end boss properties, including image loading and animation.
+     */
     constructor() {
         super();
-        this.loadImage(this.IMAGES_SPAWNING[0]);
+        this.loadImage(this.IMAGES_SWIMMING[0]);
         this.loadImages(this.IMAGES_SPAWNING);
         this.loadImages(this.IMAGES_SWIMMING);
         this.loadImages(this.IMAGES_ATTACK);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
-        this.animate();
-        this.winGame();
+        setTimeout(() => {
+            this.animate();
+        }, 2000);
     }
 
 
-    animate() { // aktuelles Bild wird immer wieder ausgetauscht, damit character sich bewegt
+    /**
+     * Animates the end boss by playing different animations based on its state.
+     */
+    animate() {
         let i = 0;
-
         let animation = setInterval(() => {
-            if (i < 10) {
+            if (i < 10 && this.hadFirstContact) {
+                if (this.y < 0) {
+                    this.y += 100;
+                }
                 this.playAnimation(this.IMAGES_SPAWNING);
-            } else {
+            } else if (this.isDead() && !this.deathAnimationDone) {
+                this.animateDeath();
+                clearInterval(animation);
+
+                setTimeout(() => {
+                    this.winGame();
+                }, 3000);
+            } else if (this.isHurt()) {
+                this.playAnimation(this.IMAGES_HURT);
+            } else if (!this.attackCooldown() && this.spawnAnimationDone && !this.isHurt() && !this.isAttacking) {
                 this.playAnimation(this.IMAGES_SWIMMING);
+                this.followCharacter();
+            } else if (this.attackCooldown() && this.spawnAnimationDone) {
+                this.animateAttack();
+                this.lastAttack = new Date().getTime();
             }
             i++;
 
-            if (world && world.character.x > 4400 && !this.hadFirstContact && !endbossMusic) {
+            if (world.character.x > 4300 && !this.hadFirstContact && !endbossMusic) {
                 i = 0;
-                this.hadFirstContact = true;
-                playSound(endboss_fight);
-                endbossMusic = true;
-                game_music.pause();
-                game_music.currentTime = 0;
-            }
-
-            if (this.hadFirstContact) {
-                this.followCharacter();
-                if (this.isHurt()) {
-                    this.playAnimation(this.IMAGES_HURT);
-                }
-            }
-            if (this.isDead() && !this.hasDied) {
-                this.playAnimation(this.IMAGES_DEAD);
-                if (this.y < -100) {
-                    this.y -= 4;
-                }
-                setTimeout(() => {
-                    this.hasDied = true;
-                    clearInterval(animation);
-                }, 600);
+                this.intro();
             }
         }, 150);
     }
 
 
-    followCharacter() {
-        setInterval(() => {
-            // Überprüfe, ob der Charakter in der Nähe ist (z.B., wenn die x-Koordinaten innerhalb eines bestimmten Bereichs liegen)
-            // Passe die x-Koordinate des Endbosses an die x-Koordinate des Charakters an
-            if (this.x >= world.character.x) {
-                this.moveLeft();
-                this.otherDirection = false;
-            } else if (this.x <= world.character.x) {
-                this.moveRight();
-                this.otherDirection = true;
-            }
-
-            // Passe die y-Koordinate des Endbosses an die y-Koordinate des Charakters an
-            if (this.y >= world.character.y) {
-                this.moveUp();
-            } else if (this.y <= world.character.y) {
-                this.moveDown();
-            }
-        }, 100); // Ändere die Aktualisierungsrate entsprechend deiner Anforderungen
+    /**
+     * Handles the introduction of the end boss.
+     */
+    intro() {
+        this.hadFirstContact = true;
+        this.spawnAnimationDone = true;
+        playSound(endboss_fight);
+        endbossMusic = true;
+        game_music.pause();
+        game_music.currentTime = 0;
     }
 
 
-    winGame() {
-        setInterval(() => {
-            if (this.health == 0) {
-                setTimeout(() => {
-                    clearAllIntervals();
-                    let winScreen = document.getElementById('youWinScreen');
-                    winScreen.classList.remove('d-None');
-                    playSound(win_game);
-                    endboss_fight.pause();
-                    endboss_fight.currentTime = 0;
-                    endbossMusic = false;
-                }, 1000);
+    /**
+     * Animates the death of the end boss.
+     */
+    animateDeath() {
+        let deathAnimation = setInterval(() => {
+            this.deathCounter++;
+            this.playAnimation(this.IMAGES_DEAD);
+            if (this.deathCounter == this.IMAGES_DEAD.length - 1) {
+                clearInterval(deathAnimation);
+                this.deathAnimationDone = true;
+                world.keyboard = false;
+                this.loadImage(this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1])
+                this.floatUp();
             }
-        }, 2000);
+        }, 100);
+    }
+
+
+    /**
+    * Floats the end boss up after death.
+    */
+    floatUp() {
+        let floating = setInterval(() => {
+            if (this.y > -150) {
+                this.y -= 1;
+            } else {
+                clearInterval(floating);
+            }
+        }, 1000 / 60);
+    }
+
+
+    /**
+     * Follows the character to hunt.
+     */
+    followCharacter() {
+        if (this.x >= world.character.x) {
+            this.moveLeft();
+            this.otherDirection = false;
+        } else if (this.x <= world.character.x) {
+            this.moveRight();
+            this.otherDirection = true;
+        }
+
+        if (this.y + 250 >= world.character.y) {
+            this.moveUp();
+        } else if (this.y - 250 <= world.character.y) {
+            this.moveDown();
+        }
+    }
+
+
+    /**
+     * Checks if the attack cooldown is over.
+     */
+    attackCooldown() {
+        const secondsPassed = (new Date().getTime() - this.lastAttack) / 1000;
+        this.secondsPassed = secondsPassed;
+        return secondsPassed > 1.5;
+    }
+
+
+    /**
+     * Animates the attack of the end boss.
+     */
+    animateAttack() {
+        this.currentImage = 0;
+        if (!this.isAttacking) {
+            let attackAnimation = setInterval(() => {
+                this.attacking = true;
+                this.playAnimation(this.IMAGES_ATTACK);
+            }, 150)
+            setTimeout(() => {
+                this.attacking = false;
+                clearInterval(attackAnimation)
+            }, 600)
+        }
+    }
+
+
+    /**
+     * Handles the character winning the game.
+     */
+    winGame() {
+        clearAllIntervals();
+        let winScreen = document.getElementById('youWinScreen');
+        winScreen.classList.remove('d-None');
+        playSound(win_game);
+        endboss_fight.pause();
+        endboss_fight.currentTime = 0;
+        endbossMusic = false;
     }
 }

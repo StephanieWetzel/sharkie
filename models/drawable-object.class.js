@@ -4,11 +4,14 @@ class DrawableObject {
     img;
     height = 120;
     width = 110;
-    imageCache = {}; // JSON benutzt, da somit auf eine Stelle direkt zugegriffen werden kann
-    currentImage = 0; // Variable, um aktuelles Bild anzuzeigen bzw. zu verändern
+    imageCache = {};
+    currentImage = 0;
 
 
-    // how to use: loadImage('img/test.png');
+    /**
+    * Loads an image for the drawable object.
+    * @param {string} path - The path to the image file.
+    */
     loadImage(path) {
         this.img = new Image(); // same as -> this.img = document.getElementById('image') / <img id="image">
         this.img.src = path;
@@ -16,67 +19,23 @@ class DrawableObject {
 
 
     /**
-* 
-* @param {Array} arr - ['img/image1.png', 'img/image2.png', ...]
-*/
+     * Loads multiple images into the image cache.
+     * @param {string[]} arr - An array of image paths to load.
+     */
     loadImages(arr) {
-        arr.forEach((path) => { // path ist aktuell nur String, noch kein richtiges Bild
-            let img = new Image(); // Bild (Objekt) wird erstellt
-            img.src = path; // path (String) wird in das Objekt geladen = ein Bild wurde erstellt
-            this.imageCache[path] = img; // imageCache wird mit dem aktuellen Bild aktualisiert; [path] = Schlüssel, mit dem der Wert aufgerufen werden kann -> imageCache['img/image1.png']
+        arr.forEach((path) => {
+            let img = new Image();
+            img.src = path;
+            this.imageCache[path] = img;
         });
     }
 
 
+    /**
+     * Draws the drawable object on the canvas.
+     * @param {CanvasRenderingContext2D} ctx - The 2D rendering context of the canvas.
+     */
     draw(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height); // setzt Bild spiegelverkehrt ins Canvas
+        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
-
-
-    // drawFrameAroundCharacter(ctx) {
-    //     if (this instanceof Character) { // instanceof = only executes function for character
-    //         // Red rectangle
-    //         ctx.beginPath();
-    //         ctx.lineWidth = '5';
-    //         ctx.strokeStyle = 'red';
-    //         ctx.rect(this.x + 25, this.y + 70, this.width - 50, this.height - 95);
-    //         ctx.stroke();
-    //     }
-    // }
-
-
-    // drawFrameAroundEnemies(ctx) {
-    //     if (this instanceof Pufferfish || this instanceof Jellyfish || this instanceof JellyfishDangerous) {
-    //         // Red rectangle
-    //         ctx.beginPath();
-    //         ctx.lineWidth = '5';
-    //         ctx.strokeStyle = 'red';
-    //         ctx.rect(this.x, this.y, this.width, this.height);
-    //         ctx.stroke();
-    //     }
-    // }
-
-
-    // drawFrameAroundEndboss(ctx) {
-    //     if (this instanceof Endboss) {
-    //         // Red rectangle
-    //         ctx.beginPath();
-    //         ctx.lineWidth = '5';
-    //         ctx.strokeStyle = 'red';
-    //         ctx.rect(this.x + 25, this.y + 190, this.width - 60, this.height - 270);
-    //         ctx.stroke();
-    //     }
-    // }
-
-
-    // drawFrameAroundBubble(ctx) {
-    //     if (this instanceof Bubble || this instanceof PoisonBubble) {
-    //         // Red rectangle
-    //         ctx.beginPath();
-    //         ctx.lineWidth = '5';
-    //         ctx.strokeStyle = 'red';
-    //         ctx.rect(this.x, this.y, this.width, this.height);
-    //         ctx.stroke();
-    //     }
-    // }
 }

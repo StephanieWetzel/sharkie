@@ -4,124 +4,60 @@ let keyboard = new Keyboard();
 let characterImages = new CharacterImages();
 
 
+/**
+ * Initializes the game by setting up the game level, creating the world, and displaying the game canvas.
+ */
 function init() {
     initLevel();
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard, characterImages);
-    let startScreen = document.getElementById('startScreen');
-    let winScreen = document.getElementById('youWinScreen');
-    let gameOverScreen = document.getElementById('gameOverScreen');
     canvas.classList.remove('d-None');
-    startScreen.classList.add('d-None');
-    winScreen.classList.add('d-None');
-    gameOverScreen.classList.add('d-None');
+    document.getElementById('gameOverlay').classList.remove('d-None');
+    document.getElementById('startScreen').classList.add('d-None');
+    document.getElementById('youWinScreen').classList.add('d-None');
+    document.getElementById('gameOverScreen').classList.add('d-None');
     playSound(bubble_popped);
     playSound(game_music);
-    deviceRotated();
+    const checkForRotation = setInterval(() => {
+        mobileCheck();
+    }, 1000 / 60);
 }
 
 
-// function openFullscreen() {
-//     let fullscreen = document.getElementById('fullscreen');
-//     enterFullscreen(fullscreen);
-// }
-
-
-// function enterFullscreen(element) {
-//     if (element.requestFullscreen) {
-//         element.requestFullscreen();
-//     } else if (element.msRequestFullscreen) {      // for IE11 (remove June 15, 2022)
-//         element.msRequestFullscreen();
-//     } else if (element.webkitRequestFullscreen) {  // iOS Safari
-//         element.webkitRequestFullscreen();
-//     }
-// }
-
-
-// function exitFullscreen() {
-//     if (document.exitFullscreen) {
-//         document.exitFullscreen();
-//     } else if (document.webkitExitFullscreen) {
-//         document.webkitExitFullscreen();
-//     }
-// }
-
-
+/**
+ * Opens the information overlay by removing the 'd-None' class from the info screen and adding it to the canvas.
+ */
 function openInfoOverlay() {
     document.getElementById('infoScreen').classList.remove('d-None');
     document.getElementById('canvas').classList.add('d-None');
 }
 
 
+/**
+ * Closes the information overlay by adding the 'd-None' class to the info screen and removing it from the canvas.
+ */
 function closeInfoOverlay() {
     document.getElementById('infoScreen').classList.add('d-None');
     document.getElementById('canvas').classList.remove('d-None');
 }
 
 
-function deviceRotated() {
-    let rotationOverlay = document.getElementById('rotationOverlay');
-    if (rotationOverlay.style.display == 'flex') {
-        pauseAllAudio();
-    }
-}
-
-
+/**
+ * Clears all intervals created using the `window.setInterval` method.
+ */
 function clearAllIntervals() {
     for (let i = 1; i < 9999; i++) window.clearInterval(i);
 }
 
 
-window.addEventListener('keydown', (e) => {
-    if (e.keyCode == 37) {
-        keyboard.LEFT = true;
+/**
+ * Checks the current device orientation and width to determine if the mobile controls should be displayed.
+ * If the conditions are met, the mobile controls are set to be visible; otherwise, they are hidden.
+ */
+function mobileCheck() {
+    if (window.matchMedia('(orientation: landscape) and (max-width: 920px)').matches || window.matchMedia('(max-width: 1024px)').matches) {
+        document.getElementById('mobileControls').style = 'display: flex';
+    } else {
+        document.getElementById('mobileControls').style = 'display: none';
     }
-    if (e.keyCode == 39) {
-        keyboard.RIGHT = true;
-    }
-    if (e.keyCode == 38) {
-        keyboard.UP = true;
-    }
-    if (e.keyCode == 40) {
-        keyboard.DOWN = true;
-    }
-    if (e.keyCode == 32) {
-        keyboard.SPACE = true;
-    }
-    if (e.keyCode == 66) {
-        keyboard.B = true;
-    }
-    if (e.keyCode == 86) {
-        keyboard.V = true;
-    }
-});
-
-
-window.addEventListener('keyup', (e) => {
-    if (e.keyCode == 37) {
-        keyboard.LEFT = false;
-        // left arrow
-    }
-    if (e.keyCode == 39) {
-        keyboard.RIGHT = false;
-        // right arrow
-    }
-    if (e.keyCode == 38) {
-        keyboard.UP = false;
-        // up arrow
-    }
-    if (e.keyCode == 40) {
-        keyboard.DOWN = false;
-        // down arrow
-    }
-    if (e.keyCode == 32) {
-        keyboard.SPACE = false;
-        // down arrow
-    }
-    if (e.keyCode == 66) {
-        keyboard.B = false;
-    }
-    if (e.keyCode == 86) {
-        keyboard.V = false;
-    }
-});
+}

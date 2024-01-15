@@ -200,13 +200,52 @@ canvas {
     margin-top: -40px;
 }
 
+/* mobile controls */
+#mobileControls {
+    display: none;
+    align-items: center;
+    position: absolute;
+    margin-top: 88px;
+    margin-left: -256px;
+    gap: 258px;
+    filter: drop-shadow(2px 4px 6px #AAE6EF);
+}
+
+.mobile-Controls-Img {
+    height: 32px;
+    width: 32px;
+}
+
+.left-Container {
+    display: flex;
+    gap: 16px;
+}
+
+.right-Container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.right-Container-Space-Img {
+    height: 32px;
+}
+
+.right-Container span {
+    padding: 14px;
+}
+
+.attack-Controls {
+    display: flex;
+    gap: 8px;
+}
+
 /* win */
 .try-Again-Img {
     height: 72px;
     width: 280px;
     position: absolute;
     bottom: 120px;
-    /* right: 368px; */
     filter: drop-shadow(2px 4px 6px black);
 }
 
@@ -231,22 +270,32 @@ canvas {
 }
 
 
-/* MEDIA QUERIES */
-
 /* landscape mode for mobile */
-@media only screen and (orientation: portrait) {
+@media screen and (orientation: portrait) {
     #rotationOverlay {
         display: flex;
+    }
+
+    #startScreen {
+        display: none;
+    }
+
+    #youWinScreen {
+        display: none;
+    }
+
+    #gameOverScreen {
+        display: none;
+    }
+
+    #gameOverlay {
+        display: none;
     }
 }
 
 /* Smartphones -------- */
 
 @media only screen and (max-width: 1100px) {
-    #startScreen {
-        width: 100%;
-    }
-
     .screen {
         width: 100%;
     }
@@ -256,17 +305,443 @@ canvas {
     }
 }
 
+
 /* Smartphones -------- */
 @media only screen and (max-height: 700px) {
-    #startScreen {
-        height: 100vh;
-    }
-
     .screen {
         height: 100vh;
     }
 
     canvas {
         height: 100vh;
+    }
+}
+
+
+/* MEDIA QUERIES */
+
+/* Nest Hub */
+@media(min-width: 1000px) and (max-width: 1300px) {
+    .img-Container {
+        top: -260px;
+        right: -440px;
+    }
+
+    .try-Again-Img {
+        bottom: 88px;
+    }
+
+    #mobileControls {
+        margin-left: -456px;
+        gap: 460px;
+        margin-top: 160px;
+    }
+
+    .mobile-Controls-Img {
+        height: 56px;
+        width: 56px;
+    }
+
+    .right-Container span {
+        padding: 20px;
+        font-size: 34px;
+    }
+
+    .right-Container-Space-Img {
+        height: 52px;
+    }
+}
+
+
+/* Nest Hub Max */
+@media(min-width: 1280px) and (max-height: 800px) {
+    .img-Container {
+        top: -312px;
+        right: -488px;
+    }
+}
+
+
+/* iPad */
+@media(min-width: 1024px) and (min-height: 700px) {
+    .img-Container {
+        top: -312px;
+        right: -448px;
+    }
+
+    #mobileControls {
+        margin-left: -456px;
+        gap: 460px;
+        margin-top: 200px;
+    }
+
+    .mobile-Controls-Img {
+        height: 56px;
+        width: 56px;
+    }
+
+    .right-Container span {
+        padding: 20px;
+        font-size: 34px;
+    }
+
+    .right-Container-Space-Img {
+        height: 52px;
+    }
+}
+
+
+/* game over screen */
+@media (max-width: 1000px) {
+    .try-Again-Img {
+        bottom: 16px;
+        height: 56px;
+        width: 192px;
+    }
+}
+
+
+@media (min-width: 700px) and (max-width: 1000px) {
+
+    /* mobile controls */
+    #mobileControls {
+        margin-left: -360px;
+        gap: 472px;
+    }
+
+    .keybinds-container {
+        right: 96px;
+        bottom: 10px;
+    }
+
+    .keybinds-column-container {
+        font-size: 22px;
+        gap: 10px;
+    }
+
+    .arrow-keybinds {
+        height: 56px;
+    }
+
+    .keybinds-letters {
+        font-size: 24px;
+        height: 4px;
+        width: 4px;
+        border-radius: 6px;
+        padding: 11px;
+    }
+
+    .space-keybind {
+        height: 34px;
+    }
+
+    .margin-top-16 {
+        margin-top: 4px;
+    }
+
+    .start-Img {
+        height: 56px;
+        width: 168px;
+        top: 100px;
+        right: 160px;
+    }
+
+    h1 {
+        font-size: 52px;
+    }
+
+    .img-Container {
+        top: -168px;
+        right: -380px;
+    }
+
+    .info-header {
+        top: 16px;
+        font-size: 56px;
+    }
+
+    .info-arrow-keybinds {
+        height: 72px;
+    }
+
+    .info-keybinds-letters {
+        height: 0;
+        width: 0;
+        border-radius: 12px;
+        padding: 16px;
+        font-size: 30px;
+        border: 2px solid white;
+    }
+
+    .info-space-keybind {
+        height: 40px;
+    }
+
+    .font-size-48 {
+        font-size: 32px;
+    }
+}
+
+
+/* samsung galaxy S8 */
+@media (min-width: 740px) and (max-width: 750px) {
+    .keybinds-container {
+        right: 40px;
+    }
+
+    /* mobile controls */
+    #mobileControls {
+        margin-top: 80px;
+        margin-left: -320px;
+        gap: 374px;
+    }
+}
+
+
+@media (min-width: 740px) and (max-width: 800px) {
+    .img-Container {
+        top: -136px;
+        right: -300px;
+    }
+}
+
+
+@media (max-width: 700px) {
+    .keybinds-container {
+        right: 32px;
+        bottom: 10px;
+    }
+
+    .keybinds-column-container {
+        font-size: 20px;
+    }
+
+    .arrow-keybinds {
+        height: 48px;
+    }
+
+    .keybinds-letters {
+        font-size: 20px;
+        height: 0;
+        width: 0;
+        border-radius: 6px;
+        padding: 11px;
+    }
+
+    .space-keybind {
+        height: 30px;
+    }
+
+    .margin-top-16 {
+        margin-top: 4px;
+    }
+
+    .start-Img {
+        height: 48px;
+        width: 144px;
+        top: 88px;
+        right: 144px;
+    }
+
+    h1 {
+        font-size: 48px;
+    }
+
+    .img-Container {
+        top: -136px;
+        right: -256px
+    }
+
+    .img-Container img {
+        height: 24px;
+    }
+
+    .info-header {
+        top: 16px;
+        font-size: 56px;
+    }
+
+    .info-arrow-keybinds {
+        height: 72px;
+    }
+
+    .info-keybinds-letters {
+        height: 0;
+        width: 0;
+        border-radius: 12px;
+        padding: 16px;
+        font-size: 30px;
+        border: 2px solid white;
+    }
+
+    .info-space-keybind {
+        height: 40px;
+    }
+
+    .font-size-48 {
+        font-size: 32px;
+    }
+}
+
+
+/* surface duo */
+@media (min-height: 500px) and (max-height: 550px) {
+    .img-Container {
+        top: -208px;
+        right: -268px;
+    }
+
+    .keybinds-container {
+        bottom: 32px;
+        right: 24px;
+    }
+
+    .start-Img {
+        top: 120px;
+    }
+
+    .try-Again-Img {
+        bottom: 80px;
+    }
+
+    /* mobile controls */
+    #mobileControls {
+        margin-top: 136px;
+        margin-left: -304px;
+        gap: 200px;
+    }
+
+    .mobile-Controls-Img {
+        height: 48px;
+        width: 48px;
+    }
+
+    .right-Container span {
+        padding: 20px;
+        font-size: 34px;
+    }
+
+    .right-Container-Space-Img {
+        height: 48px;
+    }
+}
+
+
+/* pixel 2 */
+@media (min-width: 731px) and (max-width: 732px) {
+    .img-Container {
+        right: -248px;
+    }
+
+    .keybinds-container {
+        right: 32px;
+    }
+
+    #mobileControls {
+        margin-top: 104px;
+        margin-left: -296px;
+        gap: 328px;
+    }
+}
+
+
+/* galaxy fold */
+@media (max-width: 660px) and (max-height: 300px) {
+    .start-Img {
+        height: 42px;
+        width: 128px;
+        top: 68px;
+        right: 168px
+    }
+
+    h1 {
+        font-size: 40px;
+    }
+
+    .keybinds-container {
+        bottom: 4px;
+        right: 40px;
+    }
+
+    .keybinds-column-container {
+        font-size: 18px;
+        margin-top: 16px;
+        gap: 2px;
+    }
+
+    .keybinds-letters {
+        padding: 9px;
+        font-size: 18px;
+        border-radius: 6px;
+    }
+
+    .arrow-keybinds {
+        height: 48px;
+    }
+
+    .space-keybind {
+        height: 32px;
+    }
+
+    .margin-top-16 {
+        margin-top: 4px;
+    }
+
+    /* info-overlay */
+
+    .img-Container {
+        top: -112px;
+        right: -280px
+    }
+
+    .img-Container img {
+        height: 24px;
+    }
+
+    .info-container {
+        margin-top: 44px;
+    }
+
+    .info-header {
+        top: 12px;
+        font-size: 44px;
+    }
+
+    .info-arrow-keybinds {
+        height: 56px;
+    }
+
+    .info-keybinds-letters {
+        padding: 12px;
+        border: 2px solid white;
+        border-radius: 8px;
+        height: 0;
+        width: 0;
+        font-size: 24px;
+    }
+
+    .info-space-keybind {
+        height: 32px;
+    }
+
+    .font-size-48 {
+        font-size: 24px;
+    }
+
+    .close-info-img {
+        top: 16px;
+    }
+
+    .try-Again-Img {
+        height: 48px;
+        width: 192px;
+        bottom: 24px;
+    }
+
+    /* mobile controls */
+    #mobileControls {
+        margin-top: 42px;
+        margin-left: -280px;
+        gap: 288px;
     }
 }

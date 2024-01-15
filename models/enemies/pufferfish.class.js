@@ -28,6 +28,9 @@ class Pufferfish extends MovableObject {
     otherDirection = false;
 
 
+    /**
+     * Represents a pufferfish in the game.
+     */
     constructor() {
         super();
         this.loadImage(this.IMAGES_SWIMMING[0]);
@@ -41,6 +44,9 @@ class Pufferfish extends MovableObject {
     }
 
 
+    /**
+     * Initiates the animation of the pufferfish.
+     */
     animate() {
         let moving = setInterval(() => {
             this.moveLeft();
@@ -60,7 +66,11 @@ class Pufferfish extends MovableObject {
     }
 
 
-    // DEATH
+    /**
+     * Initiates the death animation of the pufferfish.
+     * @param {number} moving - The interval for horizontal movement.
+     * @param {number} animations - The interval for animations.
+     */
     animateDeath(moving, animations) {
         this.loadImage('img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 1 (can animate by going up).png');
         clearInterval(moving);
@@ -81,7 +91,10 @@ class Pufferfish extends MovableObject {
     }
 
 
-    // DEFENSE
+    /**
+     * Initiates the defense animation of the pufferfish.
+     * @param {number} i - The counter variable for defense animation.
+     */
     animateDefense(i) {
         if (i < 5) {
             this.transition();
@@ -95,6 +108,9 @@ class Pufferfish extends MovableObject {
     }
 
 
+    /**
+    * Initiates the transition animation of the pufferfish.
+    */
     transition() {
         let transition = setInterval(() => {
             this.playAnimation(this.IMAGES_TRANSITION);

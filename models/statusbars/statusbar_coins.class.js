@@ -1,16 +1,19 @@
 class StatusbarCoins extends DrawableObject {
     IMAGES_STATUS_BAR_COINS = [
-        'img/4. Marcadores/green/Coin/0_  copia 4.png', // img 0
+        'img/4. Marcadores/green/Coin/0_  copia 4.png',
         'img/4. Marcadores/green/Coin/20_  copia 2.png',
         'img/4. Marcadores/green/Coin/40_  copia 4.png',
         'img/4. Marcadores/green/Coin/60_  copia 4.png',
         'img/4. Marcadores/green/Coin/80_  copia 4.png',
-        'img/4. Marcadores/green/Coin/100_ copia 4.png' // img 5
+        'img/4. Marcadores/green/Coin/100_ copia 4.png'
     ];
 
     percentage = 0;
 
 
+    /**
+     * Represents a status bar for coins in the game.
+     */
     constructor() {
         super();
         this.loadImages(this.IMAGES_STATUS_BAR_COINS);
@@ -22,14 +25,22 @@ class StatusbarCoins extends DrawableObject {
     }
 
 
+    /**
+     * Sets the percentage value of the status bar and updates the displayed image.
+     * @param {number} percentage - The new percentage value.
+     */
     setPercentage(percentage) {
         this.percentage = percentage;
         let path = this.IMAGES_STATUS_BAR_COINS[this.getImageIndex()];
-        this.img = this.imageCache[path]; // current img is replaced, depending on the status of health bar
+        this.img = this.imageCache[path];
     }
 
 
-    getImageIndex() { // gets number between 0 and 5 (index of IMAGES Array)
+    /**
+     * Gets the index of the image in the array based on the current percentage value.
+     * @returns {number} - The index of the image in the array.
+     */
+    getImageIndex() {
         if (this.percentage == 100) {
             return 5;
         } else if (this.percentage >= 80) {
