@@ -58,7 +58,7 @@ class Endboss extends MovableObject {
 
     ];
 
-    speed = 25;
+    speed = 30;
     hadFirstContact = false;
     spawnAnimationDone = false;
     spawnCounter = 0;
