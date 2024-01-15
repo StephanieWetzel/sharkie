@@ -32,15 +32,14 @@ class StatusbarBottles extends DrawableObject {
     setPercentage(percentage) {
         this.percentage = percentage;
         let path = this.IMAGES_STATUS_BAR_BOTTLES[this.getImageIndex()];
-        this.img = this.imageCache[path]; // current img is replaced, depending on the status of health bar
+        this.img = this.imageCache[path];
     }
 
 
     /**
     * Gets the index of the image in the array based on the current percentage value.
-    * @returns {number} - The index of the image in the array.
     */
-    getImageIndex() { // gets number between 0 and 5 (index of IMAGES Array)
+    getImageIndex() {
         if (this.percentage == 100) {
             return 5;
         } else if (this.percentage >= 80) {

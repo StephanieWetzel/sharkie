@@ -22,7 +22,7 @@ class Light extends MovableObject {
      */
     animate() {
         setInterval(() => {
-            this.x += this.direction * this.speed; // value of x changes depending on direction (1 or -1)
+            this.x += this.direction * this.speed;
         }, 1000 / 50);
 
         setInterval(() => {

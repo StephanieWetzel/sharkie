@@ -16,6 +16,10 @@ class Keyboard {
     }
 
 
+    /**
+     * Handles keyboard controls for desktop devices.
+     * Listens for keydown and keyup events and updates the state of the keyboard object accordingly.
+     */
     handleDesktopControls() {
         window.addEventListener('keydown', (e) => {
             if (e.keyCode == 37) {
@@ -68,7 +72,8 @@ class Keyboard {
 
 
     /**
-     * Sets up event listeners for mobile touch controls. (active in world.class.js)
+     * Handles touch controls for mobile devices.
+     * Listens for touchstart and touchend events on specific elements and updates the state of the mobile controls accordingly.
      */
     handleMobileControls() {
         document.getElementById('arrowUp').addEventListener("touchstart", (e) => {

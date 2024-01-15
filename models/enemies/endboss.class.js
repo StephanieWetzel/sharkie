@@ -58,15 +58,12 @@ class Endboss extends MovableObject {
 
     ];
 
-    speed = 10;
-    // SPAWNING
+    speed = 25;
     hadFirstContact = false;
     spawnAnimationDone = false;
     spawnCounter = 0;
-    // DEATH
     deathAnimationDone = false;
     deathCounter = 0;
-    // ATTACK
     lastAttack = 0;
     isAttacking = false;
     secondsPassed;
@@ -119,7 +116,8 @@ class Endboss extends MovableObject {
             }
             i++;
 
-            if (world.character.x > 4300 && !this.hadFirstContact && !endbossMusic) {
+            if (world.character.x > 4300 && !this.hadFirstContact && !endbossMusic && !world.endbossSpawned) {
+                world.endbossSpawned = true;
                 i = 0;
                 this.intro();
             }

@@ -1,24 +1,24 @@
-class StatusbarHealth extends DrawableObject {
+class StatusbarEndboss extends DrawableObject {
     IMAGES_STATUS_BAR_HEALTH = [
-        'img/4. Marcadores/green/Life/0_  copia 3.png',
-        'img/4. Marcadores/green/Life/20_ copia 4.png',
-        'img/4. Marcadores/green/Life/40_  copia 3.png',
-        'img/4. Marcadores/green/Life/60_  copia 3.png',
-        'img/4. Marcadores/green/Life/80_  copia 3.png',
-        'img/4. Marcadores/green/Life/100_  copia 2.png'
+        'img/4. Marcadores/orange/0_  copia.png',
+        'img/4. Marcadores/orange/20_ copia 2.png',
+        'img/4. Marcadores/orange/40_  copia.png',
+        'img/4. Marcadores/orange/60_  copia.png',
+        'img/4. Marcadores/orange/80_  copia.png',
+        'img/4. Marcadores/orange/100_  copia.png'
     ];
 
     percentage = 100;
 
 
     /**
-     * Represents a status bar for health in the game.
+     * Represents a status bar for endboss health in the game.
      */
     constructor() {
         super();
         this.loadImages(this.IMAGES_STATUS_BAR_HEALTH);
-        this.x = 40;
-        this.y = 40;
+        this.x = 850;
+        this.y = 80;
         this.width = 200;
         this.height = 60;
         this.setPercentage(100);

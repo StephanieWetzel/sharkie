@@ -5,30 +5,28 @@ class World {
     ctx;
     keyboard;
     characterImages;
-    camera_x = 0; // moves world along x-axis
-    // statusbars
+    camera_x = 0;
     statusbarBottles = new StatusbarBottles();
     statusbarHealth = new StatusbarHealth();
     statusbarCoins = new StatusbarCoins();
+    statusbarEndboss = new StatusbarEndboss();
     percentageBottles = 0;
     percentageCoins = 0;
     collectedBottles = [];
     collectedCoins = [];
-    // throwable objects
     bubbles = [];
     poisonBubbles = [];
-    // hurt character
     damageType;
+    endbossSpawned = false;
 
 
     /**
      * Creates a new instance of the World class.
-     * @constructor
      * @param {HTMLCanvasElement} canvas - The canvas element for rendering.
      * @param {Keyboard} keyboard - The keyboard input handler.
      * @param {Object} characterImages - The images used for the character animations.
      */
-    constructor(canvas, keyboard, characterImages) { //  values from game.js
+    constructor(canvas, keyboard, characterImages) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
@@ -69,10 +67,8 @@ class World {
     }
 
 
-    // THROW
     /**
      * Throws objects (bubbles, poison bubbles) in the game world based on keyboard input.
-     * Checks if the character is currently shooting bubbles and if there are enough poison bottles.
      */
     throwObjects() {
         if (this.keyboard.B && this.character.isBubbleShooting) {
@@ -84,6 +80,9 @@ class World {
     }
 
 
+    /**
+     * Initiates the process of throwing a bubble.
+     */
     throwBubble() {
         let bubble;
         if (this.character.otherDirection) {
@@ -96,6 +95,9 @@ class World {
     }
 
 
+    /**
+     * Initiates the process of throwing a poison bubble.
+     */
     throwPoisonBubble() {
         let poisonBubble;
         if (this.character.otherDirection) {
@@ -111,10 +113,8 @@ class World {
     }
 
 
-    // COLLECT
     /**
      * Checks for collisions between the character and collectable objects in the game world.
-     * If a collision is detected, it triggers the corresponding collection actions for poison bottles and coins.
      */
     collectObjects() {
         this.level.collectableObjects.forEach((object) => {
@@ -130,8 +130,13 @@ class World {
     }
 
 
+    /**
+    * Handles the collection of a bottle object.
+    * 
+    * @param {object} object - The bottle object to be collected.
+    */
     collectBottle(object) {
-        if (this.collectedBottles.length <= 9) { // character can collect up to 10 bottles
+        if (this.collectedBottles.length <= 9) {
             playSound(collectBottles);
             this.collectedBottles.push(object);
             this.percentageBottles += 10;
@@ -141,6 +146,12 @@ class World {
     }
 
 
+    /**
+     * Handles the collection of a coin object.
+     * If the maximum number of collected coins is reached and the character's health is less than 100, the method triggers a life gain event.
+     * 
+     * @param {object} object - The coin object to be collected.
+     */
     collectCoin(object) {
         if (this.collectedCoins.length <= 8) {
             playSound(collectCoins);
@@ -149,7 +160,6 @@ class World {
             this.statusbarCoins.setPercentage(this.percentageCoins);
             this.removeObjectFromCanvas(object);
         }
-        // reward system
         else if (this.collectedCoins.length > 8 && this.character.health < 100) {
             this.getLifeBack(object);
         }
@@ -157,16 +167,16 @@ class World {
 
 
     /**
-     * Handles the collection of a specific object (Coin) that triggers a reward, restoring the character's health to full.
-     *
-     * @param {Coin} object - The Coin object collected to receive the reward.
+     * Handles the event of gaining a life back.
+     * 
+     * @param {object} object - The object triggering the life gain event.
      */
     getLifeBack(object) {
         this.removeObjectFromCanvas(object);
         playSound(getLifeBack);
-        this.collectedCoins.length = 0; // empties coin-array
+        this.collectedCoins.length = 0;
         this.percentageCoins = 0;
-        this.statusbarHealth.setPercentage(100); // character gets full health back
+        this.statusbarHealth.setPercentage(100);
         this.statusbarCoins.setPercentage(0);
     }
 
@@ -182,7 +192,6 @@ class World {
     }
 
 
-    // COLLISIONS
     /**
      * Checks for collisions between the player character and enemies, updating the game state accordingly.
      */
@@ -236,6 +245,9 @@ class World {
     }
 
 
+    /**
+     * Checks for collisions between poisonbubbles and enemies, updating the game state accordingly.
+     */
     checkForPoisonBubbleCollision() {
         this.poisonBubbles.forEach((poisonBubble) => {
             this.level.enemies.forEach((enemy) => {
@@ -250,9 +262,9 @@ class World {
                     }
                     if (enemy instanceof Endboss) {
                         enemy.hit(20);
-                        console.log(enemy.health);
                         playSound(bubble_popped);
                         this.removePoisonBubbleFromCanvas(poisonBubble);
+                        this.statusbarEndboss.setPercentage(enemy.health);
                     }
                     clearInterval(this.throwing);
                 }
@@ -274,8 +286,8 @@ class World {
 
 
     /**
-     * Handles the situation where an enemy cannot be harmed by a regular bubble.
-     * @param {Bubble} bubbleType - The regular bubble that cannot harm the enemy.
+     * Handles the situation where an enemy (pufferfish) cannot be harmed by any bubble.
+     * @param {Bubble} bubbleType - The bubble that cannot harm the enemy.
      * @param {Enemy} enemy - The enemy that cannot be harmed.
      */
     cannotBeHarmed(bubbleType, enemy) {
@@ -314,13 +326,13 @@ class World {
             if (this.character.isColliding(enemy) && this.keyboard.SPACE && this.character.isFinSlapping) {
                 if (enemy instanceof Pufferfish) {
                     if (!this.character.isProtected) {
-                        this.character.isProtected = true; // protection activated
+                        this.character.isProtected = true;
                         enemy.isHit = true;
                         enemy.health = 0;
                         playSound(jellyfish_defeated);
-                        enemy.otherDirection = this.character.otherDirection; // makes pufferfish fly in character´s direction of view
+                        enemy.otherDirection = this.character.otherDirection;
                         setTimeout(() => {
-                            this.character.isProtected = false; // protection deactivated after 2 seconds
+                            this.character.isProtected = false;
                         }, this.character.protectionDuration);
                     }
                 }
@@ -330,15 +342,13 @@ class World {
 
 
     /**
-     * Draws the game elements on the canvas, including background objects, lights, character, enemies,
-     * collectable objects, bubbles, poison bubbles, and status bars.
+     * Draws the game elements on the canvas.
      * The drawing order is important for layering.
      * Coordinates are adjusted based on the camera position.
      */
     draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // clears canvas to prepare for next frame
-        this.ctx.translate(this.camera_x, 0); // translate = shift; shifts canvas horizontally to make it seem like the camera follows the character
-        // draw figures - order matters!! -> backgroundObjects first
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.backgroundObjects);
         this.addObjectsToMap(this.level.lights);
         this.addToMap(this.character);
@@ -346,14 +356,15 @@ class World {
         this.addObjectsToMap(this.level.collectableObjects);
         this.addObjectsToMap(this.bubbles);
         this.addObjectsToMap(this.poisonBubbles);
-        // statusbars
-        this.ctx.translate(-this.camera_x, 0); // Shifts canvas back to original position after drawing the game elements that move with the camera.
+        this.ctx.translate(-this.camera_x, 0);
         this.addToMap(this.statusbarBottles);
         this.addToMap(this.statusbarHealth);
         this.addToMap(this.statusbarCoins);
-        this.ctx.translate(this.camera_x, 0); // Shifts canvas forward to align it with the moved game elements.
-        this.ctx.translate(-this.camera_x, 0); // Shifts canvas back to original position to prevent the world from continuously shifting to the left.
-        // Requests the next animation frame and repeatedly calls the draw function, ensuring that the game continuously updates and renders frames:
+        if (this.endbossSpawned) {
+            this.addToMap(this.statusbarEndboss);
+        }
+        this.ctx.translate(this.camera_x, 0);
+        this.ctx.translate(-this.camera_x, 0);
         let self = this;
         requestAnimationFrame(function () {
             self.draw();
@@ -361,6 +372,11 @@ class World {
     }
 
 
+    /**
+     * Adds an array of objects to the game map.
+     * 
+     * @param {object[]} objects - An array of objects to be added to the game map.
+     */
     addObjectsToMap(objects) {
         objects.forEach(o => {
             this.addToMap(o);
@@ -368,7 +384,13 @@ class World {
     }
 
 
-    addToMap(mo) { // mo = movableObject
+    /**
+    * Adds a movable object to the game map.
+    * Checks the direction of the object, flips its image if necessary, draws it on the canvas, and reverts the image back to its original state if flipped.
+    *
+    * @param {object} mo - The movable object to be added to the game map.
+    */
+    addToMap(mo) {
         if (mo.otherDirection) {
             this.flipImage(mo);
         }
@@ -379,16 +401,30 @@ class World {
     }
 
 
+    /**
+     * Flips the image of a movable object horizontally on the canvas.
+     * Saves the current state of the context, including properties such as transformations and styles,
+     * shifts the canvas horizontally by the width of the movable object, flips the image horizontally,
+     * and adjusts the X-coordinate to ensure the flipped image is drawn at the correct position.
+     *
+     * @param {object} mo - The movable object whose image is to be flipped.
+     */
     flipImage(mo) {
-        this.ctx.save(); // Saves the current state of the context, including properties such as transformations and styles. Ensures that only the specific image is flipped and not the entire canvas.
-        this.ctx.translate(mo.width, 0); // Shifts canvas horizontally by the width of the movable object (mo). Necessary to ensure that the image is flipped around its right edge.
-        this.ctx.scale(-1, 1); // Flips image horizontally.
-        mo.x = mo.x * -1; // Adjusting the X-coordinate ensures that the flipped image is drawn at the correct position (flipped back).
+        this.ctx.save();
+        this.ctx.translate(mo.width, 0);
+        this.ctx.scale(-1, 1);
+        mo.x = mo.x * -1;
     }
 
 
+    /**
+     * Reverts the adjustment made during image flipping to restore the original X-coordinate of a movable object.
+     * Uses the saved state of the context to undo the translation and scaling applied during image flipping.
+     *
+     * @param {object} mo - The movable object whose image adjustment is to be reverted.
+     */
     flipImageBack(mo) {
-        mo.x = mo.x * -1; // Necessary to revert the previous adjustment made when flipping the image. It ensures that the original X-coordinate is restored.
-        this.ctx.restore(); // It undoes the translation and scaling applied to flip the image, restoring the canvas context to the state it had when save was called.
+        mo.x = mo.x * -1;
+        this.ctx.restore();
     }
 }

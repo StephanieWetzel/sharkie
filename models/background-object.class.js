@@ -8,8 +8,8 @@ class BackgroundObject extends MovableObject {
      * @param {number} x - The initial x-coordinate of the background object.
      */
     constructor(imagePath, x) {
-        super().loadImage(imagePath); // path as parameter for dynamic background
+        super().loadImage(imagePath);
         this.x = x;
-        this.y = 700 - this.height; // height canvas - height object = position y-axis
+        this.y = 700 - this.height;
     }
 }

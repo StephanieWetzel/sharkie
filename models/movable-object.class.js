@@ -1,10 +1,10 @@
 class MovableObject extends DrawableObject {
     speed = 0.15;
-    otherDirection = false; // img mirrored = false;
+    otherDirection = false;
     health = 100;
     lastHit = 0;
     speedY = 0;
-    acceleration = 1; // how fast object is accelerating
+    acceleration = 1;
     currentImage = 0;
 
 
@@ -45,11 +45,10 @@ class MovableObject extends DrawableObject {
             return this.x + this.width >= mo.x + 25 &&
                 this.x <= (mo.x + 25) + (mo.width - 50) &&
                 this.y + this.height >= mo.y + 20 &&
-                this.y <= (mo.y + 25) + (mo.height - 75); // mo.height also important for bubble collision
+                this.y <= (mo.y + 25) + (mo.height - 75);
         }
 
         else {
-            // used these dimensions: this.x + 25, this.y + 70, this.width - 50, this.height - 95 = from previous draw frame-function in drawable-object.class.js
             return (this.x + 25) + (this.width - 50) >= mo.x &&
                 this.x + 25 <= mo.x + mo.width &&
                 (this.y + 70) + (this.height - 95) >= mo.y &&
@@ -66,8 +65,8 @@ class MovableObject extends DrawableObject {
         this.health -= damage;
         if (this.health < 0) {
             this.health = 0;
-        } else { // if character still has health left when hit
-            this.lastHit = new Date().getTime(); // get moment (time) of hit
+        } else {
+            this.lastHit = new Date().getTime();
         }
     }
 
@@ -76,9 +75,9 @@ class MovableObject extends DrawableObject {
      * Checks if the movable object is currently hurt.
      */
     isHurt() {
-        let timepassed = new Date().getTime() - this.lastHit; // difference in ms - shows how much time passed since the last hit by an enemy
-        timepassed = timepassed / 1000; // difference in s
-        return timepassed < 1; // if the time that´s passed is less than 1 second - function becomes TRUE, else it´s FALSE
+        let timepassed = new Date().getTime() - this.lastHit;
+        timepassed = timepassed / 1000;
+        return timepassed < 1;
     }
 
 
@@ -123,12 +122,14 @@ class MovableObject extends DrawableObject {
 
 
     /**
-     * Plays the animation for the movable object using the provided images.
-     * @param {string[]} images - The array of image paths for the animation.
+     * Plays an animation by updating the character's image based on a sequence of images.
+     * The animation cycles through the provided array of image paths in a loop by using the modulo operation.
+     * i = 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 1, ...
+     * 
+     * @param {string[]} images - An array of image paths representing the frames of the animation.
      */
     playAnimation(images) {
-        let i = this.currentImage % images.length; // modulo = remainder of a division => 6 % 6 (length array) = 6 : 6 = 1, remainder 0 => currentImage = 0;
-        // i = 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 1, ... => starts anew, so character keeps moving
+        let i = this.currentImage % images.length;
         let path = images[i];
         this.img = this.imageCache[path];
         this.currentImage++;

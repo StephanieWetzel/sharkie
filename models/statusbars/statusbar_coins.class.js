@@ -38,7 +38,6 @@ class StatusbarCoins extends DrawableObject {
 
     /**
      * Gets the index of the image in the array based on the current percentage value.
-     * @returns {number} - The index of the image in the array.
      */
     getImageIndex() {
         if (this.percentage == 100) {

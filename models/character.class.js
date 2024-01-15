@@ -6,19 +6,15 @@ class Character extends MovableObject {
     speed = 10;
     world;
     characterImages;
-    // for fin-slap
     isProtected = false;
-    protectionDuration = 2000; // protects character from damage (world.class.js)
-    // check for attacks
+    protectionDuration = 2000;
     isBubbleShooting = false;
     isPoisonBubbleShooting = false;
     isFinSlapping = false;
-    // check for collisions
     hitByJellyfish = false;
     hitByPufferfish = false;
     killedByJellyfish = false;
     killedByPufferfish = false;
-    // boolean
     animationRunning = false;
 
 
@@ -56,16 +52,25 @@ class Character extends MovableObject {
     }
 
 
+    /**
+     * Moves the camera smoothly towards a target position based on the 'otherDirection' property.
+     */
     moveCameraSmoothly() {
-        const targetCameraX = this.otherDirection ? -this.x + 740 : -this.x + 200; // if (?) otherDirection = true then x + 700, else (:) x + 200
-        const smoothness = 0.05; // the smaller the number, the smoother the camera movement
+        const targetCameraX = this.otherDirection ? -this.x + 740 : -this.x + 200;
+        const smoothness = 0.05;
 
-        this.world.camera_x = this.lerp(this.world.camera_x, targetCameraX, smoothness); // current cameraX position getting updated
+        this.world.camera_x = this.lerp(this.world.camera_x, targetCameraX, smoothness);
     }
 
 
-    // lerp = linear interpolation (smooth transition between a start- and endpoint)
-    lerp(start, end, t) { // t = value between 0 (start) and 1 (end) that shows progress of interpolation
+    /**
+     * Performs linear interpolation between two values.
+     *
+     * @param {number} start - The starting value.
+     * @param {number} end - The ending value.
+     * @param {number} t - The interpolation parameter (usually between 0 and 1).
+     */
+    lerp(start, end, t) {
         return start * (1 - t) + end * t;
     }
 
@@ -74,7 +79,7 @@ class Character extends MovableObject {
      * Controls the animation and behavior of the character.
      */
     animate() {
-        let lastTimeStamp = new Date(); // used to determine how much time has passed since a key was last pressed (for sleep animation)
+        let lastTimeStamp = new Date();
 
         setInterval(() => {
             if (this.rightArrowDownAndNotAtEndOfMap()) {
@@ -99,19 +104,16 @@ class Character extends MovableObject {
         let animation = setInterval(() => {
             let currentTimeStamp = new Date();
             let secondsPassed = (currentTimeStamp - lastTimeStamp) / 1000;
-            // DEAD
             if (this.isDead() && this.world.damageType == Pufferfish) {
                 this.deathByPufferfish(animation);
             } else if (this.isDead()) {
                 this.deathByJellyfish(animation);
-                // HURT
             } else if (this.isHurt() && !this.isProtected && this.world.damageType == Pufferfish) {
                 this.hurtByPufferfish();
                 lastTimeStamp = new Date();
             } else if (this.isHurt() && !this.isProtected && this.world.damageType == Jellyfish) {
                 this.hurtByJellyfish();
                 lastTimeStamp = new Date();
-                // ATTACKS
             } else if (this.world.keyboard.B) {
                 this.shootBubble();
                 lastTimeStamp = new Date();
@@ -121,7 +123,6 @@ class Character extends MovableObject {
             } else if (this.world.keyboard.SPACE) {
                 this.slapFin();
                 lastTimeStamp = new Date();
-                // SWIMMING
             } else if (this.arrowKeyDown()) {
                 this.playAnimation(this.characterImages.IMAGES_SWIMMING);
             } else {
@@ -132,7 +133,7 @@ class Character extends MovableObject {
 
 
     /**
-     * Handles the death of the character caused by enemies.
+     * Handles the death of the character caused by a pufferfish.
      * @param {number} animation - The ID of the death animation interval.
      */
     deathByPufferfish(animation) {
@@ -142,6 +143,10 @@ class Character extends MovableObject {
     }
 
 
+    /**
+    * Handles the death of the character caused by a jellyfish.
+    * @param {number} animation - The ID of the death animation interval.
+    */
     deathByJellyfish(animation) {
         this.killedByJellyfish = true;
         this.world.keyboard = false;
@@ -150,8 +155,10 @@ class Character extends MovableObject {
 
 
     /**
-     * Plays the death animation based on the cause (pufferfish or jellyfish).
-     */
+    * Initiates the death animation for the player.
+    *
+    * @param {AnimationType} animation - The type of animation to play.
+    */
     playDeathAnimation(animation) {
         if (!this.animationRunning) {
             this.animationRunning = true;
@@ -168,6 +175,11 @@ class Character extends MovableObject {
     }
 
 
+    /**
+     * Initiates the death animation specific to a player killed by a pufferfish.
+     *
+     * @param {AnimationType} animation - The type of animation to play.
+     */
     playPufferfishDeathAnimation(animation) {
         this.currentImage = 0;
         let deathAnimation = setInterval(() => {
@@ -185,6 +197,11 @@ class Character extends MovableObject {
     }
 
 
+    /**
+     * Initiates the death animation specific to a player killed by a jellyfish.
+     *
+     * @param {AnimationType} animation - The type of animation to play.
+     */
     playJellyfishDeathAnimation(animation) {
         this.currentImage = 0;
         let deathAnimation = setInterval(() => {
@@ -202,6 +219,9 @@ class Character extends MovableObject {
     }
 
 
+    /**
+     * Initiates a floating animation by gradually moving the player character upward until they reach a specific y-coordinate threshold.
+     */
     floatUp() {
         let floating = setInterval(() => {
             if (this.y > -60) {
@@ -213,6 +233,9 @@ class Character extends MovableObject {
     }
 
 
+    /**
+     * Initiates a sinking animation by gradually moving the player character downward until they reach a specific y-coordinate threshold.
+     */
     sinkDown() {
         let sinking = setInterval(() => {
             if (this.y < this.world.level.map_end_y) {
@@ -225,24 +248,25 @@ class Character extends MovableObject {
 
 
     /**
-     * Plays the hurt animation for the character depending on the type of enemy.
-     */
+      * Handles the player character being hurt by a pufferfish.
+      */
     hurtByPufferfish() {
         playSound(hit_by_pufferfish);
         this.playAnimation(this.characterImages.IMAGES_HURT_PUFFERFISH);
     }
 
 
+    /**
+     * Handles the player character being hurt by a jellyfish.
+     */
     hurtByJellyfish() {
         playSound(hit_by_jellyfish);
         this.playAnimation(this.characterImages.IMAGES_HURT_JELLYFISH);
     }
 
 
-
-    // BUBBLE-ATTACK
     /**
-     * Initiates the animation for attacks depending on the kind of attack.
+     * Initiates the player character shooting a bubble.
      */
     shootBubble() {
         this.isBubbleShooting = true;
@@ -251,6 +275,9 @@ class Character extends MovableObject {
     }
 
 
+    /**
+     * Activates the bubble attack, simulating the player character pressing the 'B' key to shoot bubbles.
+     */
     activateBubbleAttack() {
         if (!this.animationRunning) {
             this.currentImage = 0;
@@ -270,7 +297,9 @@ class Character extends MovableObject {
     }
 
 
-    // POISON-BUBBLE-ATTACK
+    /**
+     * Initiates the player character shooting a poison bubble.
+     */
     shootPoisonBubble() {
         this.isPoisonBubbleShooting = true;
         this.activatePoisonBubbleAttack();
@@ -278,6 +307,9 @@ class Character extends MovableObject {
     }
 
 
+    /**
+     * Activates the poison bubble attack, simulating the player character pressing the 'V' key to shoot poison bubbles.
+     */
     activatePoisonBubbleAttack() {
         if (!this.animationRunning) {
             this.currentImage = 0;
@@ -297,13 +329,19 @@ class Character extends MovableObject {
     }
 
 
-    // FIN-SLAP
+    /**
+     * Initiates the player character slapping with its fin.
+     */
     slapFin() {
         this.isFinSlapping = true;
         this.activateFinSlap();
         this.playAnimation(this.characterImages.IMAGES_FIN_ATTACK);
     }
 
+
+    /**
+     * Activates the fin slap, simulating the player character pressing the 'SPACE' key to perform a fin slap.
+     */
     activateFinSlap() {
         if (!this.animationRunning) {
             this.currentImage = 0;
@@ -338,7 +376,11 @@ class Character extends MovableObject {
     }
 
 
-    // transition from IDLE to LONG_IDLE to SLEEPING if no key is pressed
+    /**
+     * Initiates the transition of the player character to a sleeping state based on the elapsed time.
+     * 
+     * @param {number} secondsPassed - The elapsed time in seconds since the start of the transition.
+     */
     transitionToSleeping(secondsPassed) {
         this.playAnimation(this.characterImages.IMAGES_LONG_IDLE);
         if (secondsPassed >= 11) {
@@ -351,54 +393,78 @@ class Character extends MovableObject {
 
 
     /**
-     * Handle the character's movement based on keyboard input.
+     * Checks if the right arrow key is pressed and the player character is not at the end of the map.
      */
     rightArrowDownAndNotAtEndOfMap() {
         return this.world.keyboard.RIGHT && this.x < this.world.level.map_end_x;
     }
 
 
+    /**
+     * Initiates the player character movement to the right.
+     */
     goRight() {
         this.moveRight();
-        this.otherDirection = false; // img not mirrored
+        this.otherDirection = false;
         playSound(characterSwimming);
     }
 
 
+    /**
+     * Checks if the left arrow key is pressed and the player character is not at the start of the map.
+     */
     leftArrowDownAndNotAtStartOfMap() {
         return this.world.keyboard.LEFT && this.x > 0;
     }
 
 
+    /**
+     * Initiates the player character movement to the left and mirrors the character's image.
+     */
     goLeftAndMirrorImage() {
         this.moveLeft();
-        this.otherDirection = true; // img mirrored
+        this.otherDirection = true;
         playSound(characterSwimming);
     }
 
 
+    /**
+     * Checks if the up arrow key is pressed and the player character is not at the top of the allowed y-coordinate range.
+     */
     upArrowDownAndNotAtTop() {
         return this.world.keyboard.UP && this.y >= -25;
     }
 
 
+    /**
+     * Initiates the player character movement upward.
+     */
     goUp() {
         this.moveUp();
         playSound(characterSwimming);
     }
 
 
+    /**
+     * Checks if the down arrow key is pressed and the player character is not at the bottom of the map.
+     */
     downArrowDownAndNotAtBottom() {
         return this.world.keyboard.DOWN && this.y < this.world.level.map_end_y;
     }
 
 
+    /**
+     * Initiates the player character movement downward.
+     */
     goDown() {
         this.moveDown();
         playSound(characterSwimming);
     }
 
 
+    /**
+     * Checks if any of the arrow keys (RIGHT, LEFT, UP, or DOWN) are currently pressed.
+     */
     arrowKeyDown() {
         return this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.UP || this.world.keyboard.DOWN;
     }

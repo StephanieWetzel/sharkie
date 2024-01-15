@@ -39,11 +39,11 @@ class Jellyfish extends MovableObject {
     animate() {
         let verticalMovement = setInterval(() => {
             if (this.y >= 600) {
-                this.direction = -1; // up
+                this.direction = -1;
             } else if (this.y <= 0) {
-                this.direction = 1; // down
+                this.direction = 1;
             }
-            this.y += this.direction * this.speed; // speed
+            this.y += this.direction * this.speed;
         }, 1000 / 25);
 
         let animations = setInterval(() => {
