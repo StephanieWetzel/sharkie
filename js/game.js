@@ -18,9 +18,6 @@ function init() {
     document.getElementById('gameOverScreen').classList.add('d-None');
     playSound(bubble_popped);
     playSound(game_music);
-    const checkForRotation = setInterval(() => {
-        mobileCheck();
-    }, 1000 / 60);
 }
 
 
@@ -51,13 +48,23 @@ function clearAllIntervals() {
 
 
 /**
- * Checks the current device orientation and width to determine if the mobile controls should be displayed.
- * If the conditions are met, the mobile controls are set to be visible; otherwise, they are hidden.
+ * Checks the viewport size and touch device status to adjust mobile controls visibility and hover behavior.
  */
 function mobileCheck() {
-    if (window.matchMedia('(orientation: landscape) and (max-width: 920px)').matches || window.matchMedia('(max-width: 1024px)').matches) {
-        document.getElementById('mobileControls').style = 'display: flex';
+    const mobileControls = document.getElementById('mobileControls');
+    const isMobile = window.matchMedia('(max-width: 1368px)').matches;
+    const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0);
+
+    if (isMobile && isTouchDevice) {
+        mobileControls.style.display = 'flex';
+        mobileControls.style.pointerEvents = 'none';
     } else {
-        document.getElementById('mobileControls').style = 'display: none';
+        mobileControls.style.display = 'none';
+        mobileControls.style.pointerEvents = 'auto';
     }
 }
+
+
+// Event listeners for changes in viewport size or orientation
+window.addEventListener('resize', mobileCheck);
+window.addEventListener('orientationchange', mobileCheck);

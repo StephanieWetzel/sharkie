@@ -327,7 +327,7 @@ canvas {
 /* MEDIA QUERIES */
 
 /* Nest Hub */
-@media(min-width: 1000px) and (max-width: 1300px) {
+@media(min-width: 1000px) and (max-width: 1300px) and (hover: none) {
     .img-Container {
         top: -260px;
         right: -440px;
@@ -407,7 +407,7 @@ canvas {
 }
 
 
-@media (min-width: 700px) and (max-width: 1000px) {
+@media (min-width: 700px) and (max-width: 1000px) and (hover: none) {
 
     /* mobile controls */
     #mobileControls {
