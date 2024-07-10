@@ -18,6 +18,10 @@ function init() {
     document.getElementById('gameOverScreen').classList.add('d-None');
     playSound(bubble_popped);
     playSound(game_music);
+
+    setInterval(() => {
+        this.mobileCheck();
+    }, 1000 / 60);
 }
 
 

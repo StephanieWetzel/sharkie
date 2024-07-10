@@ -398,7 +398,8 @@ canvas {
 
 
 /* game over screen */
-@media (max-width: 1000px) {
+/* mobile */
+@media (max-width: 1000px) and (hover: none) {
     .try-Again-Img {
         bottom: 16px;
         height: 56px;
